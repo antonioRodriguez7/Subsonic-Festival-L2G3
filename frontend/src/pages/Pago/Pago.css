@@ -1,0 +1,201 @@
+/* CONTENEDOR GENERAL */
+.pago-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image: url("/imgEntradas.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.pago-card {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 560px;
+    background: rgba(15, 15, 15, 0.92);
+    border-radius: 22px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* TITULOS */
+.pago-title {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+}
+
+/* RESUMEN */
+.pedido-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 15px;
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+
+    font-size: 24px;
+    font-weight: bold;
+
+    color: #ff4b2b;
+}
+
+/* MÉTODOS DE PAGO */
+.metodos {
+    margin-top: 25px;
+}
+
+.metodos-title {
+    margin-bottom: 10px;
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+/* BOTONES DE MÉTODO */
+.metodos-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.metodo-btn {
+    flex: 1;
+    padding: 14px;
+
+    border-radius: 12px;
+    border: none;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* COLORES */
+.metodo-btn.stripe {
+    background: #635bff;
+}
+
+.metodo-btn.paypal {
+    background: #003087;
+}
+
+.metodo-btn.bizum {
+    background: #00a082;
+}
+
+/* HOVER */
+.metodo-btn:hover {
+    transform: scale(1.05);
+}
+
+/* SELECCIONADO */
+.metodo-btn.active {
+    border: 2px solid white;
+}
+
+/* BOTÓN PAGAR */
+.pagar-btn {
+    width: 100%;
+    margin-top: 25px;
+    padding: 16px;
+
+    border-radius: 12px;
+    border: none;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.pagar-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 10px 30px rgba(255, 75, 43, 0.4);
+}
+
+.pagar-btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+}
+
+/* LOADING */
+.loading-text {
+    text-align: center;
+    margin-top: 15px;
+    opacity: 0.7;
+}
+
+.metodo-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.25s ease;
+    color: white;
+}
+
+/* HOVER MÁS SUAVE */
+.metodo-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ACTIVO MÁS CLARO */
+.metodo-btn.active {
+    outline: 2px solid white;
+}
+
+.pago-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 40px 20px;
+}
+
+.pago-content::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+}
+
+.divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
+}
+
+.pago-content {
+    position: relative;
+    z-index: 2;
+}

@@ -1,0 +1,63 @@
+.faq-page {
+  min-height: 100vh;
+  background: #0b0b0f;
+  color: #fff;
+}
+
+/* CONTENIDO (más espacio arriba para que el título se vea bien) */
+.faq-content {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 120px 18px 60px; /* <-- antes 40, ahora 80 */
+}
+
+/* TÍTULO PRINCIPAL */
+.faq-title {
+  text-align: center;
+  font-size: 40px;
+  margin: 0 0 28px; /* mejor control del margen */
+  color: #20e6ff;
+  font-weight: 800;
+}
+
+/* SUBTÍTULOS */
+.faq-subtitle {
+  font-size: 22px;
+  margin: 18px 0 14px;
+  font-weight: 700;
+}
+
+/* TARJETAS FAQ */
+.faq-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+/* CABECERA PREGUNTA (texto + flecha) */
+.faq-q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-arrow {
+  opacity: 0.8;
+}
+
+/* RESPUESTA */
+.faq-a {
+  margin-top: 10px;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+/* DIVISOR */
+.faq-divider {
+  margin: 26px 0;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}

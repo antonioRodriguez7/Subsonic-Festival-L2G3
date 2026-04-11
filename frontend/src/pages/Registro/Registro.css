@@ -1,0 +1,204 @@
+.registro-wrapper {
+    min-height: 100vh;
+    background-color: #121212;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.registro-top {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.registro-logo {
+    height: 50px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.registro-top h2 {
+    color: #00e5ff;
+    letter-spacing: 2px;
+}
+
+.registro-container {
+    display: flex;
+    background-color: #1e1e1e;
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 900px;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    border: 1px solid #333;
+}
+
+.section-title {
+    margin-bottom: 25px;
+    font-size: 18px;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- COLUMNA IZQUIERDA --- */
+.registro-left {
+    flex: 1;
+    padding-right: 30px;
+}
+
+.registro-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.registro-form input,
+.descripcion-box {
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background-color: #121212;
+    color: white;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.registro-form input:focus,
+.descripcion-box:focus {
+    border-color: #00e5ff;
+}
+
+/* --- LÍNEA DIVISORIA --- */
+.registro-divider {
+    width: 1px;
+    background-color: #333;
+    margin: 0 15px;
+}
+
+/* --- COLUMNA DERECHA --- */
+.registro-right {
+    flex: 1;
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tipo-usuario-selector {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.tipo-card {
+    flex: 1;
+    padding: 10px; /* Reducido de 20px a 10px para evitar forzar la anchura horizontal */
+    text-align: center;
+    border: 2px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #aaa;
+    transition: all 0.3s;
+    font-size: 14px; /* Opcional: reducir un poco en pantallas ajustadas */
+}
+
+.tipo-card:hover {
+    border-color: #df188a;
+}
+
+.tipo-card.active {
+    border-color: #df188a;
+    background-color: rgba(223, 24, 138, 0.1);
+    color: #df188a;
+    box-shadow: 0 0 15px rgba(223, 24, 138, 0.3);
+}
+
+.descripcion-box {
+    width: 100%;
+    resize: none;
+    margin-bottom: 20px;
+}
+
+.terms-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: auto;
+    /* Empuja esto hacia abajo */
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: #aaa;
+}
+
+.btn-crear {
+    padding: 15px;
+    background-color: #00e5ff;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-crear:hover {
+    background-color: #00b3cc;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #aaa;
+}
+
+.login-link span {
+    color: #df188a;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-link span:hover {
+    text-decoration: underline;
+}
+
+/* Responsividad para pantallas por debajo de 850px */
+@media (max-width: 850px) {
+    .registro-container {
+        flex-direction: column;
+        padding: 30px 20px;
+        width: 100%;
+        max-width: 500px; /* Al apilarse, se ve mejor más estrecha */
+    }
+
+    .registro-left {
+        padding-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .registro-divider {
+        width: 100%;
+        height: 1px;
+        margin: 20px 0;
+    }
+
+    .registro-right {
+        padding-left: 0;
+    }
+
+    .tipo-usuario-selector {
+        flex-direction: column; /* Apilar los botones de administrador/usuario si no hay espacio */
+    }
+}

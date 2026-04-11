@@ -1,0 +1,40 @@
+.policy-main {
+    padding-top: 100px; /* Para que el header no lo tape */
+    min-height: 100vh;
+    background: #050505;
+    color: white;
+}
+
+.policy-hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(180deg, #111 0%, #050505 100%);
+}
+
+.policy-hero h1 {
+    font-size: 3rem;
+    color: #ff0055; /* Color neón de tu festival */
+    text-transform: uppercase;
+}
+
+.policy-text-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.policy-block {
+    margin-bottom: 40px;
+}
+
+.policy-block h2 {
+    color: #00f2ff; /* Otro color de acento */
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.policy-block p, .policy-block li {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #ccc;
+}

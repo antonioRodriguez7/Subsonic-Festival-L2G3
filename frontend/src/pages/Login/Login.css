@@ -1,0 +1,119 @@
+.login-container {
+    display: flex;
+    height: 100vh; /* Ocupa exactamente el 100% de la altura de la pantalla */
+    width: 100vw;
+    background-color: #121212;
+    color: white;
+}
+
+/* --- LADO IZQUIERDO (Formulario) --- */
+.login-left {
+    flex: 1; /* Ocupa la mitad */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.login-logo {
+    position: absolute;
+    top: 40px;
+    left: 50px;
+    cursor: pointer;
+}
+
+.login-logo img {
+    height: 40px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px; /* Para que el formulario no sea exageradamente ancho */
+}
+
+.login-box h2 {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+    color: #00e5ff;
+}
+
+.login-box p {
+    color: #aaa;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.input-group input {
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background-color: #1e1e1e;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #df188a; /* Borde rosa al escribir */
+}
+
+.btn-entrar {
+    width: 100%;
+    padding: 15px;
+    background-color: #df188a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.btn-entrar:hover {
+    background-color: #ff2aab;
+    box-shadow: 0 0 15px rgba(223, 24, 138, 0.5);
+}
+
+.login-links {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.login-links a {
+    color: #00e5ff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-links a:hover {
+    text-decoration: underline;
+}
+
+.link-olvido {
+    display: block;
+    margin-bottom: 15px;
+    color: #aaa !important;
+    font-weight: normal !important;
+}
+
+/* --- LADO DERECHO (Imagen) --- */
+.login-right {
+    flex: 1; /* Ocupa la otra mitad */
+    background: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+}

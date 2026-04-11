@@ -1,0 +1,313 @@
+.perfil-page {
+    min-height: 100vh;
+    background-color: #121212;
+    color: white;
+    padding-bottom: 50px;
+}
+
+/* Navegación superior (Reemplaza a la cabecera normal) */
+.perfil-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: #0a0a0a;
+    border-bottom: 1px solid #333;
+}
+
+.perfil-logo {
+    height: 35px;
+}
+
+.btn-atras,
+.btn-logout-nav {
+    background: transparent;
+    border: 1px solid #555;
+    color: #ccc;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-atras:hover {
+    border-color: #00e5ff;
+    color: #00e5ff;
+}
+
+.btn-logout-nav:hover {
+    border-color: #df188a;
+    color: #df188a;
+}
+
+/* Contenedor principal */
+.perfil-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    background-color: #1a1a1a;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+}
+
+/* Parte superior (Grid 2 columnas) */
+.perfil-top-section {
+    display: flex;
+    gap: 50px;
+}
+
+/* Izquierda: Avatar y texto */
+.perfil-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.avatar-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #00e5ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    font-weight: bold;
+    color: #00e5ff;
+    margin-bottom: 20px;
+    background-color: #121212;
+}
+
+.perfil-username {
+    font-size: 24px;
+    margin-bottom: 6px;
+}
+
+.perfil-at-username {
+    color: #00e5ff;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    opacity: 0.75;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.role-badge.admin {
+    background-color: rgba(223, 24, 138, 0.2);
+    color: #df188a;
+    border: 1px solid rgba(223, 24, 138, 0.4);
+}
+
+.role-badge.proveedor {
+    background-color: rgba(0, 229, 255, 0.2);
+    color: #00e5ff;
+    border: 1px solid rgba(0, 229, 255, 0.4);
+}
+
+.role-badge.user {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.perfil-desc-text {
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Derecha: Formulario */
+.perfil-right {
+    flex: 2;
+}
+
+.perfil-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.perfil-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.perfil-form-group label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #00e5ff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 2px;
+}
+
+.perfil-form input {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background-color: #121212;
+    color: white;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.password-hint {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+    margin-left: 2px;
+}
+
+.perfil-form input:focus {
+    border-color: #00e5ff;
+}
+
+.btn-guardar {
+    padding: 15px;
+    background-color: #df188a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.btn-guardar:hover {
+    background-color: #ff2aab;
+    box-shadow: 0 0 15px rgba(223, 24, 138, 0.5);
+}
+
+/* Línea divisoria */
+.perfil-divider {
+    border: none;
+    height: 1px;
+    background-color: #333;
+    margin: 40px 0;
+}
+
+/* Parte Inferior: Productos */
+.section-title {
+    margin-bottom: 25px;
+    font-size: 20px;
+    color: #00e5ff;
+}
+
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.producto-card {
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.producto-img {
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.producto-card:hover .producto-img img {
+    transform: scale(1.1);
+}
+
+
+.producto-img img {
+    width: 210px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: 0.3s;
+    transition: transform 0.3s ease;
+}
+
+.producto-card p {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    color: #ccc;
+    margin-top: 7px;
+}
+
+.producto-card.empty {
+    border: 2px dashed #555;
+    color: #555;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.producto-card.empty:hover {
+    border-color: #ccc;
+    color: #ccc;
+}
+
+/* Wrapper panel admin/proveedor en sección inferior */
+.panel-admin-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(223, 24, 138, 0.05), rgba(0, 229, 255, 0.05));
+}
+
+.panel-admin-wrapper .btn-panel-admin {
+    max-width: 320px;
+}
+
+/* Botón Panel de Administración */
+.btn-panel-admin {
+    margin-top: 20px;
+    padding: 12px 20px;
+    width: 100%;
+    background: linear-gradient(135deg, #df188a, #00e5ff);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.btn-panel-admin:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(223, 24, 138, 0.5);
+    filter: brightness(1.1);
+}
+
+.cantidad-badge {
+    background: #00ffff;
+    color: black;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 5px;
+    display: inline-block;
+}
