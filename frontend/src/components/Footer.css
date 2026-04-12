@@ -58,22 +58,17 @@
   justify-content: flex-end;
 }
 
-.spotify-placeholder {
-  padding: 12px 22px;
-  border-radius: 999px;
-  background: transparent;
-  border: 2px solid #1db954;
-  color: #1db954;
-  font-weight: 800;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.25s ease;
+.spotify-container {
+  width: clamp(320px, 30vw, 480px);
+  display: flex;
+  align-items: center;
 }
 
-.spotify-placeholder:hover {
-  background: #1db954;
-  color: #000;
-  transform: translateY(-1px);
+.spotify-embed {
+  width: 100%;
+  min-height: 152px;
+  border-radius: 12px;
+  display: block;
 }
 
 /* Responsive */

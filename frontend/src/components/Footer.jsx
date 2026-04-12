@@ -15,8 +15,19 @@ function Footer() {
       </div>
 
       <div className="footer-right">
-        <div className="spotify-placeholder">
-          Música, API SPOTIFY
+        <div className="spotify-container">
+          <iframe
+            data-testid="embed-iframe"
+            className="spotify-embed"
+            src="https://open.spotify.com/embed/playlist/3mSEthCx9XauDTZMQ0AV67?utm_source=generator&theme=0"
+
+            width="100%"
+            height="152"
+            frameBorder="0"
+            allowFullScreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
         </div>
       </div>
     </footer>
