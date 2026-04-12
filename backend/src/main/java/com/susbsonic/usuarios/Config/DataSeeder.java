@@ -122,35 +122,39 @@ public class DataSeeder {
                     createArtist("Charlotte de Witte", viernes, "/artists/charlotte.jpg", "https://open.spotify.com/intl-es/artist/1lJhME1ZpzsEa5M0wW6Mso"),
                     createArtist("Saiko", viernes, "/artists/saiko.jpg", "https://open.spotify.com/intl-es/artist/2O8vbr4RYPpk6MRA4fio7u"),
                     createArtist("Trueno", viernes, "/artists/trueno.jpg", "https://open.spotify.com/intl-es/artist/2x7PC78TmgqpEIjaGAZ0Oz"),
-                    createArtist("Anuel AA", viernes, "/artists/anuel.jpg", "https://open.spotify.com/search/Anuel%20AA"),
-                    createArtist("Amelie Lens", viernes, "/artists/amelielens.webp", "https://open.spotify.com/search/Amelie%20Lens"),
-                    createArtist("Mora", viernes, "/artists/mora.jpg", "https://open.spotify.com/search/Mora"),
-                    createArtist("Don Diablo", viernes, "/artists/dondiablo.jpg", "https://open.spotify.com/search/Don%20Diablo"),
-                    createArtist("Vintage Culture", viernes, "/artists/vintage.jpg", "https://open.spotify.com/search/Vintage%20Culture"),
+                    createArtist("Anuel AA", viernes, "/artists/anuel.jpg", "https://open.spotify.com/intl-es/artist/2R21vXR83lH98kGeO99Y66"),
+                    createArtist("Amelie Lens", viernes, "/artists/amelielens.webp", "https://open.spotify.com/intl-es/artist/5Ho1vKl1Uz8bJlk4vbmvmf"),
+                    createArtist("Mora", viernes, "/artists/mora.jpg", "https://open.spotify.com/intl-es/artist/0Q8NcsJwoCbZOHHW63su5S"),
+                    createArtist("Don Diablo", viernes, "/artists/dondiablo.jpg", "https://open.spotify.com/intl-es/artist/1l2ekx5skC4gJH8djERwh1"),
+                    createArtist("Vintage Culture", viernes, "/artists/vintage.jpg", "https://open.spotify.com/intl-es/artist/28uJnu5EsrGml2tBd7y8ts"),
 
                     // Sabado 18
-                    createArtist("Feid", sabado, "/artists/feid.webp", "https://open.spotify.com/search/Feid"),
-                    createArtist("David Guetta", sabado, "/artists/davidguetta.jpeg", "https://open.spotify.com/search/David%20Guetta"),
-                    createArtist("Karol G", sabado, "/artists/karolg.jpg", "https://open.spotify.com/search/Karol%20G"),
-                    createArtist("Myke Towers", sabado, "/artists/myketowers.webp", "https://open.spotify.com/search/Myke%20Towers"),
-                    createArtist("Carl Cox", sabado, "/artists/carlcox.jpg", "https://open.spotify.com/search/Carl%20Cox"),
-                    createArtist("Tale Of Us", sabado, "/artists/tale.jpg", "https://open.spotify.com/search/Tale%20Of%20Us"),
-                    createArtist("Dellafuente", sabado, "/artists/dellafuente.avif", "https://open.spotify.com/search/Dellafuente"),
-                    createArtist("Peggy Gou", sabado, "/artists/peggy.webp", "https://open.spotify.com/search/Peggy%20Gou"),
-                    createArtist("Anyma", sabado, "/artists/anyma.png", "https://open.spotify.com/search/Anyma"),
+                    createArtist("Feid", sabado, "/artists/feid.webp", "https://open.spotify.com/intl-es/artist/2LRoIwlKmHjgvigdNGBHNo"),
+                    createArtist("David Guetta", sabado, "/artists/davidguetta.jpeg", "https://open.spotify.com/intl-es/artist/1Cs0zKBU1kc0i8ypK3B9ai"),
+                    createArtist("Karol G", sabado, "/artists/karolg.jpg", "https://open.spotify.com/intl-es/artist/790FomKkXshlbRYZFtlgla"),
+                    createArtist("Myke Towers", sabado, "/artists/myketowers.webp", "https://open.spotify.com/intl-es/artist/7iK8PXO48WeuP03g8YR51W"),
+                    createArtist("Carl Cox", sabado, "/artists/carlcox.jpg", "https://open.spotify.com/intl-es/artist/19SmlbABtI4bXz864MLqOS"),
+                    createArtist("Tale Of Us", sabado, "/artists/tale.jpg", "https://open.spotify.com/intl-es/artist/1UL813H5aj3e8ekE5RqWqc"),
+                    createArtist("Dellafuente", sabado, "/artists/dellafuente.avif", "https://open.spotify.com/intl-es/artist/4bJh7sMPcVRiqe5jlnsWQV"),
+                    createArtist("Peggy Gou", sabado, "/artists/peggy.webp", "https://open.spotify.com/intl-es/artist/2mLA48B366zkELXYx7hcDN"),
+                    createArtist("Anyma", sabado, "/artists/anyma.png", "https://open.spotify.com/intl-es/artist/4iBwchw0U0GZv5RfVYSMxN"),
+/* 
+No se quien es Marco Trujillo
                     createArtist("Marco Trujillo", sabado, "/artists/trujillo.webp", "https://open.spotify.com/search/Marco%20Trujillo"),
-                    createArtist("Aidan DJ", sabado, "/artists/aidan.webp", "https://open.spotify.com/search/Aidan%20DJ"),
+ Aiden DJ es Aiden Music
+ 
+ */                    createArtist("Aidan DJ", sabado, "/artists/aidan.webp", "https://open.spotify.com/intl-es/artist/6M4QfNzj433rXVijCYpKoB"),
 
                     // Domingo 19
-                    createArtist("J Balvin", domingo, "/artists/jbalvin.jpg", "https://open.spotify.com/search/J%20Balvin"),
-                    createArtist("Rauw Alejandro", domingo, "/artists/rauw.webp", "https://open.spotify.com/search/Rauw%20Alejandro"),
-                    createArtist("Eladio Carrion", domingo, "/artists/eladio.jpeg", "https://open.spotify.com/search/Eladio%20Carrion"),
-                    createArtist("Steve Aoki", domingo, "/artists/aoki.jpg", "https://open.spotify.com/search/Steve%20Aoki"),
-                    createArtist("Central Cee", domingo, "/artists/centralcee.jpg", "https://open.spotify.com/search/Central%20Cee"),
-                    createArtist("Bad Gyal", domingo, "/artists/badgyal.webp", "https://open.spotify.com/search/Bad%20Gyal"),
-                    createArtist("Duki", domingo, "/artists/duki.jpg", "https://open.spotify.com/search/Duki"),
-                    createArtist("Solomun", domingo, "/artists/solomun.jpg", "https://open.spotify.com/search/Solomun"),
-                    createArtist("Alesso", domingo, "/artists/alesso.jpg", "https://open.spotify.com/search/Alesso")
+                    createArtist("J Balvin", domingo, "/artists/jbalvin.jpg", "https://open.spotify.com/intl-es/artist/1vyhD5VmyZ7KMfW5gqLgo5"),
+                    createArtist("Rauw Alejandro", domingo, "/artists/rauw.webp", "https://open.spotify.com/intl-es/artist/1mcTU81TzQhprhouKaTkpq"),
+                    createArtist("Eladio Carrion", domingo, "/artists/eladio.jpeg", "https://open.spotify.com/intl-es/artist/5XJDexmWFLWOkjOEjOVX3e"),
+                    createArtist("Steve Aoki", domingo, "/artists/aoki.jpg", "https://open.spotify.com/intl-es/artist/77AiFEVeAVj2ORpC85QVJs"),
+                    createArtist("Central Cee", domingo, "/artists/centralcee.jpg", "https://open.spotify.com/intl-es/artist/5H4yInM5zmHqpKIoMNAx4r"),
+                    createArtist("Bad Gyal", domingo, "/artists/badgyal.webp", "https://open.spotify.com/intl-es/artist/4F4pp8NUW08JuXwnoxglpN"),
+                    createArtist("Duki", domingo, "/artists/duki.jpg", "https://open.spotify.com/intl-es/artist/1bAftSH8umNcGZ0uyV7LMg"),
+                    createArtist("Solomun", domingo, "/artists/solomun.jpg", "https://open.spotify.com/intl-es/artist/5wJK4kQAkVGjqM9x46KQOC"),
+                    createArtist("Alesso", domingo, "/artists/alesso.jpg", "https://open.spotify.com/intl-es/artist/4AVFqumd2ogHFlRbKIjp1t")
             );
 
             artistRepository.saveAll(artistas);

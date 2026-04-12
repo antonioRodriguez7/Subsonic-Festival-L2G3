@@ -80,6 +80,14 @@ export async function updateArtist(id, artistData) {
     return response.data;
 }
 
+/* ========== SPOTIFY (Spotify - 8080) ========== */
+
+export async function syncSpotifyPlaylist() {
+    console.log("🚀 Solicitando sincronización a Java...");
+    const response = await api.post('/spotify/sync');
+    return response.data;
+}
+
 /* ========== ENTRADAS / TICKETS (Tickets - 8080) ========== */
 export async function getEntradas() {
     const response = await api.get('/tickets/all');

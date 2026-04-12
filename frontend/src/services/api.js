@@ -64,7 +64,13 @@ export const deleteSpace = real.deleteSpace;
 export const rentSpace = real.rentSpace;         // PUT /api/spaces/:id (marcar como alquilado)
 
 /* ------------------------------------------------------------
-   4. LOGÍSTICA ESPECÍFICA PROVEEDORES
+   5. SPOTIFY SYNC
+   ------------------------------------------------------------ */
+
+export const syncSpotifyPlaylist = real.syncSpotifyPlaylist;
+
+/* ------------------------------------------------------------
+   6. LOGÍSTICA ESPECÍFICA PROVEEDORES
    ------------------------------------------------------------ */
 
 export const getEspaciosContratadosProveedor = backend.getEspaciosContratadosProveedor;

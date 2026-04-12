@@ -14,7 +14,8 @@ import {
     updateTicket,
     createSpace,
     deleteSpace,
-    updateSpace
+    updateSpace,
+    syncSpotifyPlaylist
 } from "../../services/api";
 
 function Perfil_Admin() {
@@ -49,6 +50,8 @@ function Perfil_Admin() {
 
     const [loadingAdmin, setLoadingAdmin] = useState(true);
     const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
+
+    const [sincronizando, setSincronizando] = useState(false);
 
     // --- CARGA DE DATOS ---
     const loadAllData = async () => {
@@ -193,6 +196,21 @@ function Perfil_Admin() {
             mostrarMensaje("Error al eliminar", "error");
         }
     };
+
+
+
+  const handleSincronizarSpotify = async () => {
+    setSincronizando(true);
+    try {
+      await syncSpotifyPlaylist();
+      alert("✅ ¡Playlist actualizada en Spotify con éxito!");
+    } catch (error) {
+      console.error("Error al sincronizar:", error);
+      alert("❌ Hubo un error al actualizar la playlist.");
+    } finally {
+      setSincronizando(false); // Volvemos a habilitar el botón
+    }
+  };
 
     // --- LÓGICA ENTRADAS ---
     const handleEditTicketClick = (entrada) => {
@@ -609,6 +627,17 @@ function Perfil_Admin() {
                                             </div>
                                         ))}
                                     </div>
+
+{/* // Spotify Sync Button*/}
+<button 
+    onClick={handleSincronizarSpotify} 
+    disabled={sincronizando}
+    className="btn-sync-spotify"
+>
+    {sincronizando ? 'Sincronizando...' : '🎧 Actualizar Playlist de Spotify'}
+</button> 
+
+
                                     <div className="entradas-save">
                                         <button className="btn-guardar" onClick={handleSaveAllArtistas}>
                                             Guardar cambios
