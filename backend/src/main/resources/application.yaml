@@ -23,6 +23,20 @@ google:
   client:
     id: TU_CLIENT_ID_DE_GOOGLE.apps.googleusercontent.com
 
+# ==========================================
+# CONFIGURACIÓN DE LA API DE SPOTIFY
+# ==========================================
+
+spotify:
+  client:
+    id: "AQUI_PONDRAS_TU_CLIENT_ID_MAÑANA"
+    secret: "AQUI_PONDRAS_TU_CLIENT_SECRET_MAÑANA"
+  refresh:
+    token: "AQUI_PONDRAS_EL_REFRESH_TOKEN_MAÑANA"
+  playlist:
+    id: "3mSEthCx9XauDTZMQ0AV67"
+
+
 paypal:
   client-id: AflOCYdbF2GcWXzhclwsNUscftIddp_kUIOjLAVd7O73EC9GOxTFOuOlHUss_3H-SstaAOcsSgoCRdjh
   client-secret: EDZkqZEDrj_ZcS7b2wv6oM21rZizY4r9svXpAOgdH5aqGehUrZdmgEsoBIZLns8J80vdhMFIiI5ov7Sr
