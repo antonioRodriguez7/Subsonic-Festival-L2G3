@@ -14,6 +14,12 @@ function Entradas() {
     const navigate = useNavigate();
 
     const handleBuy = () => {
+        const token = localStorage.getItem('subsonic_token');
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+
         if (totalEntradas === 0) {
             alert("Selecciona al menos una entrada");
             return;
