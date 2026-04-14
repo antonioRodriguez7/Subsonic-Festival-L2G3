@@ -183,6 +183,8 @@ No se quien es Marco Trujillo
             Space espacioCamping  = espacios.get(0); // Zona Velar
             Space espacioComida   = espacios.get(1); // Zona Paseo Central
             Space espacioTransp   = espacios.get(2); // Zona Relax
+            Space espacioMerch    = espacios.get(6); // Zona Boutique
+            Space espacioTaquilla = espacios.get(4); // Zona Innova
 
             List<ProviderService> servicios = List.of(
                     ProviderService.builder()
@@ -211,6 +213,24 @@ No se quien es Marco Trujillo
                             .imagenUrl("/servicios/camping.jpeg")
                             .provider(proveedor)
                             .space(espacioCamping)
+                            .build(),
+                    ProviderService.builder()
+                            .nombre("Merchandising Subsonic")
+                            .tipo("Merchandising")
+                            .descripcion("Ll\u00e9vate un recuerdo \u00fanico del festival. Camisetas y sudaderas oficiales, ediciones limitadas y accesorios exclusivos.")
+                            .fechas("17-19 Julio 2026")
+                            .imagenUrl("/servicios/merchandising.jpg")
+                            .provider(proveedor)
+                            .space(espacioMerch)
+                            .build(),
+                    ProviderService.builder()
+                            .nombre("Taquillas Seguras")
+                            .tipo("Otro")
+                            .descripcion("Guarda tus pertenencias de forma segura. Taquillas individuales y grupales, acceso ilimitado durante el evento y carga de dispositivos.")
+                            .fechas("17-19 Julio 2026")
+                            .imagenUrl("/servicios/taquillas.jpg")
+                            .provider(proveedor)
+                            .space(espacioTaquilla)
                             .build()
             );
             providerServiceRepository.saveAll(servicios);
