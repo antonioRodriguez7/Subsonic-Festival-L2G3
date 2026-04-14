@@ -194,20 +194,24 @@ export async function deleteSpace(id) {
 // Nota: Como no hay ServiceController aún, usamos localStorage o simulamos la persistencia
 // para que el usuario vea que "se crea" y luego pueda elegirlo al contratar el espacio.
 
+export async function getAllServices() {
+    const response = await api.get('/services');
+    return response.data;
+}
+
 export async function getServiciosProveedor() {
-    const servicios = JSON.parse(localStorage.getItem('subsonic_servicios_proveedor') || '[]');
-    return Promise.resolve(servicios);
+    const response = await api.get('/services/provider');
+    return response.data;
 }
 
 export async function createService(serviceData) {
-    const servicios = JSON.parse(localStorage.getItem('subsonic_servicios_proveedor') || '[]');
-    const nuevoServicio = {
-        ...serviceData,
-        id: Date.now()
-    };
-    servicios.push(nuevoServicio);
-    localStorage.setItem('subsonic_servicios_proveedor', JSON.stringify(servicios));
-    return Promise.resolve(nuevoServicio);
+    const response = await api.post('/services', serviceData);
+    return response.data;
+}
+
+export async function assignSpaceToService(serviceId, spaceId) {
+    const response = await api.put(`/services/${serviceId}/space/${spaceId}`);
+    return response.data;
 }
 
 /* ========== USUARIOS & AUTENTICACIÓN ========== */

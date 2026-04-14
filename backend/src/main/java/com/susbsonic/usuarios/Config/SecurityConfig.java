@@ -45,7 +45,7 @@ public class SecurityConfig {
 
                         // 2. CONTENIDO PÚBLICO (Lectura para el Home/Cartel)
                         // He añadido /api/spaces/** porque también lo tienes en el proyecto
-                        .requestMatchers(HttpMethod.GET, "/api/artists/**", "/api/tickets/**", "/api/spaces/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/artists/**", "/api/tickets/**", "/api/spaces/**", "/api/services").permitAll()
 
                         // 3. GESTIÓN (Solo Admin)
                         // Esto protege la creación/borrado de artistas, tickets y espacios

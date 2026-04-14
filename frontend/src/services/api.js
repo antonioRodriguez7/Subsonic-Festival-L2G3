@@ -62,6 +62,7 @@ export const createSpace = real.createSpace;
 export const updateSpace = real.updateSpace;
 export const deleteSpace = real.deleteSpace;
 export const rentSpace = real.rentSpace;         // PUT /api/spaces/:id (marcar como alquilado)
+export const assignSpaceToService = real.assignSpaceToService;
 
 /* ------------------------------------------------------------
    5. SPOTIFY SYNC
@@ -76,3 +77,4 @@ export const syncSpotifyPlaylist = real.syncSpotifyPlaylist;
 export const getEspaciosContratadosProveedor = backend.getEspaciosContratadosProveedor;
 export const getServiciosProveedor = backend.getServiciosProveedor;
 export const createService = real.createService; // Simulación creación de servicio (localStorage)
+export const getAllServices = real.getAllServices;

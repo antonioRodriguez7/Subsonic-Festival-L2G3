@@ -7,7 +7,8 @@ import {
     getEspaciosDisponibles,
     createService,
     rentSpace,
-    getEspacios
+    getEspacios,
+    assignSpaceToService
 } from '../../services/api';
 
 function Perfil_Proveedor() {
@@ -36,7 +37,7 @@ function Perfil_Proveedor() {
         tipo: 'Restauración',
         descripcion: '',
         fechas: '17-20 Julio 2026',
-        imagenUrl: ''
+        imagen: null
     });
 
     const fetchProveedorData = async () => {
@@ -114,9 +115,19 @@ function Perfil_Proveedor() {
     const handleCreateService = async () => {
         if (!formServicio.nombre) return;
         try {
-            await createService(formServicio);
+            const imagenUrl = formServicio.imagen
+                ? URL.createObjectURL(formServicio.imagen)
+                : '';
+            const dataToSend = {
+                nombre: formServicio.nombre,
+                tipo: formServicio.tipo,
+                descripcion: formServicio.descripcion,
+                fechas: formServicio.fechas,
+                imagenUrl
+            };
+            await createService(dataToSend);
             alert("Servicio creado correctamente. Ahora puedes asignarlo a un espacio en la sección 'CONTRATAR ESPACIOS'.");
-            setFormServicio({ nombre: '', tipo: 'Restauración', descripcion: '', fechas: '17-20 Julio 2026', imagenUrl: '' });
+            setFormServicio({ nombre: '', tipo: 'Restauración', descripcion: '', fechas: '17-20 Julio 2026', imagen: null });
             fetchProveedorData();
         } catch (err) {
             alert("Error al crear el servicio");
@@ -145,7 +156,10 @@ function Perfil_Proveedor() {
             
             await rentSpace(espacio.id, normalizedSpace);
             
-            alert(`¡Espacio "${normalizedSpace.name}" contratado con éxito!`);
+            // También asignar el espacio al servicio
+            await assignSpaceToService(idServicioSeleccionado, espacio.id);
+            
+            alert(`¡Espacio "${normalizedSpace.name}" contratado y asignado al servicio con éxito!`);
             setSelectedEspacio(null);
             setIdServicioSeleccionado('');
             fetchProveedorData();
@@ -269,13 +283,27 @@ function Perfil_Proveedor() {
                                         </div>
 
                                         <div className="field-group">
-                                            <label>URL Imagen del Negocio</label>
-                                            <input
-                                                type="text"
-                                                placeholder="https://..."
-                                                value={formServicio.imagenUrl}
-                                                onChange={(e) => setFormServicio({ ...formServicio, imagenUrl: e.target.value })}
-                                            />
+                                            <label>Imagen del Negocio</label>
+                                            <label className="artista-imagen-upload">
+                                                {formServicio.imagen ? (
+                                                    <div className="artista-imagen-preview-wrapper">
+                                                        <img
+                                                            src={URL.createObjectURL(formServicio.imagen)}
+                                                            alt="preview"
+                                                            className="artista-imagen-preview"
+                                                        />
+                                                        <span className="artista-imagen-change-label">🖼️ Cambiar imagen</span>
+                                                    </div>
+                                                ) : (
+                                                    <span>🖼️ Seleccionar imagen</span>
+                                                )}
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    style={{ display: 'none' }}
+                                                    onChange={e => setFormServicio(p => ({ ...p, imagen: e.target.files[0] || null }))}
+                                                />
+                                            </label>
                                         </div>
 
                                         <div className="field-group" style={{gridColumn: '1 / -1'}}>
