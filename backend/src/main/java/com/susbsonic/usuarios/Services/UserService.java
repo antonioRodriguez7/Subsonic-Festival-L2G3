@@ -44,6 +44,10 @@ public class UserService {
         return userRepository.findByEmail(email).map(this::convertToUserProfileDTO);
     }
 
+    public Optional<UserProfileDTO> getUserByUsername(String username) {
+        return userRepository.findByUsername(username).map(this::convertToUserProfileDTO);
+    }
+
     public UserProfileDTO updateUser(Long id, UserProfileDTO updatedUser) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));

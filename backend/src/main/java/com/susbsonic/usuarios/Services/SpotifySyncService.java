@@ -40,6 +40,7 @@ public class SpotifySyncService {
 
 // PASO 4: Método para obtener las Top Tracks de un artista usando su ID de Spotify
 // Pide a Spotify las canciones de un ID concreto
+    @SuppressWarnings("unchecked")
     private List<String> obtenerTopTracksDeArtista(String artistId, String accessToken) {
         List<String> urisCanciones = new ArrayList<>();
 
@@ -168,6 +169,7 @@ public class SpotifySyncService {
     }
 
     // Usa clientId, clientSecret y refreshToken para pedir el token temporal
+    @SuppressWarnings("unchecked")
     private String obtenerNuevoAccessToken() {
         System.out.println("🔄 Solicitando un nuevo Access Token a Spotify...");
 
