@@ -28,6 +28,12 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        // 0. OMITIR FILTRO PARA PETICIONES OPTIONS (PREFLIGHT)
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 1. OMITIR FILTRO PARA RUTAS PÚBLICAS DE AUTENTICACIÓN
         // Si la petición va a /api/auth o /api/payments/paypal, no comprobamos nada y seguimos
         String path = request.getServletPath();

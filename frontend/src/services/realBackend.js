@@ -209,6 +209,16 @@ export async function createService(serviceData) {
     return response.data;
 }
 
+export async function updateService(id, serviceData) {
+    const response = await api.put(`/services/${id}`, serviceData);
+    return response.data;
+}
+
+export async function deleteService(id) {
+    const response = await api.delete(`/services/${id}`);
+    return response.data;
+}
+
 export async function assignSpaceToService(serviceId, spaceId) {
     const response = await api.put(`/services/${serviceId}/space/${spaceId}`);
     return response.data;

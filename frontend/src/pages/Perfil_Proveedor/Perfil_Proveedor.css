@@ -257,6 +257,64 @@
     cursor: not-allowed;
 }
 
+.btn-cancel-edit {
+    padding: 15px 30px;
+    background-color: transparent;
+    color: #aaa;
+    border: 1px solid #333;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-right: 15px;
+}
+
+.btn-cancel-edit:hover {
+    background-color: #1a1a1a;
+    color: white;
+    border-color: #555;
+}
+
+/* Estilos para botones de acción en la lista de servicios */
+.servicio-actions-btns {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit-inline, .btn-delete-inline {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: white;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-edit-inline:hover {
+    border-color: #00e5ff;
+    background: rgba(0, 229, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.btn-delete-inline:hover {
+    border-color: #df188a;
+    background: rgba(223, 24, 138, 0.1);
+    transform: scale(1.1);
+}
+
+.contratado-sub {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 8px;
+}
+
 /* Estilos para MIS ESPACIOS */
 .mis-espacios-container {
     display: grid;

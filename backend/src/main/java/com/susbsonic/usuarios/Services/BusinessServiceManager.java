@@ -28,8 +28,10 @@ public class BusinessServiceManager {
                 .collect(Collectors.toList());
     }
 
-    public ProviderServiceDTO createService(ProviderServiceDTO dto, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    public ProviderServiceDTO createService(ProviderServiceDTO dto, String identifier) {
+        User user = userRepository.findByEmail(identifier)
+                .orElseGet(() -> userRepository.findByUsername(identifier)
+                .orElseThrow(() -> new RuntimeException("User not found with identifier: " + identifier)));
         
         ProviderService entity = ProviderService.builder()
                 .nombre(dto.getNombre())
@@ -49,12 +51,75 @@ public class BusinessServiceManager {
         return mapToDTO(saved);
     }
 
-    public List<ProviderServiceDTO> getServicesByProvider(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    public List<ProviderServiceDTO> getServicesByProvider(String identifier) {
+        User user = userRepository.findByEmail(identifier)
+                .orElseGet(() -> userRepository.findByUsername(identifier)
+                .orElseThrow(() -> new RuntimeException("User not found with identifier: " + identifier)));
+
         return serviceRepository.findByProviderId(user.getId())
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public ProviderServiceDTO updateService(Long id, ProviderServiceDTO dto, String identifier) {
+        ProviderService entity = serviceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Service not found with ID: " + id));
+
+        // Validamos que el usuario logueado es el dueño del servicio (buscando por email o username)
+        User user = userRepository.findByEmail(identifier)
+                .orElseGet(() -> userRepository.findByUsername(identifier)
+                .orElseThrow(() -> new RuntimeException("User not found: " + identifier)));
+
+        if (!entity.getProvider().getId().equals(user.getId())) {
+            throw new RuntimeException("Unauthorized: This is not your service");
+        }
+
+        System.out.println("Updating service: " + id + " with name: " + dto.getNombre());
+
+        entity.setNombre(dto.getNombre());
+        entity.setTipo(dto.getTipo());
+        entity.setDescripcion(dto.getDescripcion());
+        entity.setFechas(dto.getFechas());
+        
+        // Solo actualizamos la imagen si se envía una (para no borrar la anterior accidentalmente)
+        if (dto.getImagenUrl() != null && !dto.getImagenUrl().isEmpty()) {
+            entity.setImagenUrl(dto.getImagenUrl());
+        }
+
+        // Solo cambiamos el espacio si viene en el DTO (si es nulo, mantenemos el que hay)
+        if (dto.getSpaceId() != null) {
+            Space space = spaceRepository.findById(dto.getSpaceId())
+                    .orElseThrow(() -> new RuntimeException("Space not found with ID: " + dto.getSpaceId()));
+            entity.setSpace(space);
+        }
+
+        ProviderService updated = serviceRepository.save(entity);
+        return mapToDTO(updated);
+    }
+
+    public void deleteService(Long id, String identifier) {
+        ProviderService service = serviceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Service not found with ID: " + id));
+        
+        // Validamos que el usuario logueado es el dueño del servicio
+        User user = userRepository.findByEmail(identifier)
+                .orElseGet(() -> userRepository.findByUsername(identifier)
+                .orElseThrow(() -> new RuntimeException("User not found: " + identifier)));
+
+        if (!service.getProvider().getId().equals(user.getId())) {
+            throw new RuntimeException("Unauthorized: This is not your service");
+        }
+
+        // Si el servicio tiene un espacio asignado, debemos liberarlo antes o marcarlo como disponible
+        if (service.getSpace() != null) {
+            Space space = service.getSpace();
+            space.setIsRented(false); // Liberamos el espacio al borrar el negocio
+            spaceRepository.save(space);
+            service.setSpace(null);
+        }
+
+        serviceRepository.delete(service);
     }
 
     public ProviderServiceDTO assignSpaceToService(Long serviceId, Long spaceId) {

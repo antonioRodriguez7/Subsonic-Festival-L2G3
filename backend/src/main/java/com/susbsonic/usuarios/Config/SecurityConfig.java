@@ -40,19 +40,24 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
+                        // 0. Permitir OPTIONS para evitar bloqueos de CORS preflight
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        
                         // 1. Todo lo relacionado con AUTH es público
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // 2. CONTENIDO PÚBLICO (Lectura para el Home/Cartel)
-                        // He añadido /api/spaces/** porque también lo tienes en el proyecto
-                        .requestMatchers(HttpMethod.GET, "/api/artists/**", "/api/tickets/**", "/api/spaces/**", "/api/services").permitAll()
+                        // 2. CONTENIDO PÚBLICO
+                        .requestMatchers(HttpMethod.GET, "/api/artists/**", "/api/tickets/**", "/api/spaces/**", "/api/services", "/api/services/provider").permitAll()
 
                         // 3. GESTIÓN (Solo Admin)
-                        // Esto protege la creación/borrado de artistas, tickets y espacios
                         .requestMatchers(HttpMethod.POST, "/api/artists/**", "/api/tickets/**", "/api/spaces/**").hasAnyAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/artists/**", "/api/tickets/**").hasAnyAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/spaces/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_PROVEEDOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/artists/**", "/api/tickets/**", "/api/spaces/**").hasAnyAuthority("ROLE_ADMIN")
+                        
+                        // SERVICIOS PROVEEDORES: Re-aseguramos ahora que funciona
+                        .requestMatchers("/api/services/**").authenticated()
+
                         // 4. COMPRAS Y PERFIL: Requiere Token
                         .requestMatchers("/api/purchases/**", "/api/users/**").authenticated()
                         .requestMatchers("/api/payments/paypal/**").permitAll()

@@ -76,5 +76,7 @@ export const syncSpotifyPlaylist = real.syncSpotifyPlaylist;
 
 export const getEspaciosContratadosProveedor = backend.getEspaciosContratadosProveedor;
 export const getServiciosProveedor = backend.getServiciosProveedor;
-export const createService = real.createService; // Simulación creación de servicio (localStorage)
-export const getAllServices = real.getAllServices;
+export const createService = real.createService;
+export const updateService = real.updateService;
+export const deleteService = real.deleteService;
+export const getAllServices = real.getAllServices;
