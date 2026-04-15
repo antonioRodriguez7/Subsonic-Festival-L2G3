@@ -33,6 +33,22 @@ export async function createArtist(artistData) {
     const diaLimpio = (artistData.diaMes || '18').toString().padStart(2, '0');
     const isoDate = `2026-${mesISO}-${diaLimpio}`;
 
+    if (artistData.imageFile) {
+        const formData = new FormData();
+        formData.append("name", artistData.nombre || artistData.name || "Nuevo Artista");
+        formData.append("spotifyUrl", artistData.spotifyUrl || "");
+        formData.append("performanceDate", isoDate);
+        formData.append("genre", artistData.genero || artistData.genre || "Electronic");
+        formData.append("description", artistData.description || "Artista añadido desde el panel");
+        formData.append("stage", artistData.escenario || artistData.stage || "Main Stage");
+        formData.append("image", artistData.imageFile);
+
+        const response = await api.post('/artists/withImage', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        return response.data;
+    }
+
     // 2. Mapeo
     const dataParaJava = {
         name: artistData.nombre || artistData.name || "Nuevo Artista",
@@ -66,6 +82,22 @@ export async function updateArtist(id, artistData) {
     const diaLimpio = (artistData.diaMes || '18').toString().padStart(2, '0');
     const isoDate = `2026-${mesISO}-${diaLimpio}`;
 
+    if (artistData.imageFile) {
+        const formData = new FormData();
+        formData.append("name", artistData.nombre || artistData.name);
+        formData.append("spotifyUrl", artistData.spotifyUrl || "");
+        formData.append("performanceDate", isoDate);
+        formData.append("genre", artistData.genero || artistData.genre || "Electronic");
+        formData.append("description", artistData.description || "Artista actualizado desde el panel");
+        formData.append("stage", artistData.escenario || artistData.stage || "Main Stage");
+        formData.append("image", artistData.imageFile);
+
+        const response = await api.put(`/artists/${id}/withImage`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        return response.data;
+    }
+
     // 2. Mapeo
     const dataParaJava = {
         name: artistData.nombre || artistData.name,
@@ -95,15 +127,23 @@ export async function getEntradas() {
 }
 
 export async function createTicket(ticketData) {
-    const dataParaJava = {
-        category: ticketData.categoria || ticketData.category,
-        description: ticketData.descripcion || ticketData.description,
-        price: parseFloat(ticketData.precio || ticketData.price),
-        feature: ticketData.caracteristica || ticketData.feature || "Acceso estándar",
-        imageUrl: ticketData.imagenUrl || ticketData.imageUrl || "https://via.placeholder.com/300",
-        stock: parseInt(ticketData.stock) || 100
-    };
-    const response = await api.post('/tickets', dataParaJava);
+    const formData = new FormData();
+    formData.append("category", ticketData.category || ticketData.categoria);
+    const description = ticketData.description || ticketData.descripcion;
+    if (description) formData.append("description", description);
+    formData.append("price", parseFloat(ticketData.price || ticketData.precio));
+    formData.append("feature", ticketData.feature || ticketData.caracteristica || "Acceso estándar");
+    formData.append("stock", ticketData.stock !== undefined && !isNaN(parseInt(ticketData.stock)) ? parseInt(ticketData.stock) : 100);
+
+    if (ticketData.imageFile) {
+        formData.append("image", ticketData.imageFile);
+    } // If no image, Backend @RequestParam is now required=false and assigns a default.
+
+    const response = await api.post('/tickets', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
     return response.data;
 }
 
@@ -122,6 +162,15 @@ export async function updateTicket(id, ticketData) {
         stock: parseInt(ticketData.stock) || 100
     };
     const response = await api.put(`/tickets/${id}`, dataParaJava);
+    return response.data;
+}
+
+export async function updateTicketWithImage(id, formData) {
+    const response = await api.put(`/tickets/${id}/withImage`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
     return response.data;
 }
 
@@ -194,20 +243,34 @@ export async function deleteSpace(id) {
 // Nota: Como no hay ServiceController aún, usamos localStorage o simulamos la persistencia
 // para que el usuario vea que "se crea" y luego pueda elegirlo al contratar el espacio.
 
+export async function getAllServices() {
+    const response = await api.get('/services');
+    return response.data;
+}
+
 export async function getServiciosProveedor() {
-    const servicios = JSON.parse(localStorage.getItem('subsonic_servicios_proveedor') || '[]');
-    return Promise.resolve(servicios);
+    const response = await api.get('/services/provider');
+    return response.data;
 }
 
 export async function createService(serviceData) {
-    const servicios = JSON.parse(localStorage.getItem('subsonic_servicios_proveedor') || '[]');
-    const nuevoServicio = {
-        ...serviceData,
-        id: Date.now()
-    };
-    servicios.push(nuevoServicio);
-    localStorage.setItem('subsonic_servicios_proveedor', JSON.stringify(servicios));
-    return Promise.resolve(nuevoServicio);
+    const response = await api.post('/services', serviceData);
+    return response.data;
+}
+
+export async function updateService(id, serviceData) {
+    const response = await api.put(`/services/${id}`, serviceData);
+    return response.data;
+}
+
+export async function deleteService(id) {
+    const response = await api.delete(`/services/${id}`);
+    return response.data;
+}
+
+export async function assignSpaceToService(serviceId, spaceId) {
+    const response = await api.put(`/services/${serviceId}/space/${spaceId}`);
+    return response.data;
 }
 
 /* ========== USUARIOS & AUTENTICACIÓN ========== */

@@ -27,8 +27,8 @@ public class UserController {
      */
     @GetMapping("/me")
     public ResponseEntity<UserProfileDTO> getCurrentUser() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<UserProfileDTO> user = userService.getUserByEmail(email);
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<UserProfileDTO> user = userService.getUserByUsername(username);
         return user.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

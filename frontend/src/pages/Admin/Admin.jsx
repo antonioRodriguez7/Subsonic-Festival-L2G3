@@ -49,17 +49,20 @@ function Admin() {
         setLoading(true);
         setError(null);
         try {
-            const payload = {
-                category: tempTicketData.nombre,
-                description: tempTicketData.descripcion,
-                price: parseFloat(tempTicketData.precio),
-                feature: tempTicketData.etiqueta || "Acceso estándar",
-                imageUrl: tempTicketData.img,
-                stock: parseInt(tempTicketData.stock)
-            };
+            const formData = new FormData();
+
+            formData.append("category", tempTicketData.nombre);
+            formData.append("description", tempTicketData.descripcion);
+            formData.append("price", parseFloat(tempTicketData.precio));
+            formData.append("feature", tempTicketData.etiqueta || "Acceso estándar");
+            formData.append("stock", parseInt(tempTicketData.stock));
+
+            if (tempTicketData.imageFile) {
+                formData.append("image", tempTicketData.imageFile);
+            }
             console.log("Saving ticket with ID:", id);
-            console.log("Payload being sent:", payload);
-            await api.updateTicket(id, payload);
+            console.log("FormData:", formData);
+            await api.updateTicketWithImage(id, formData);
             setEditingTicketId(null);
             setTempTicketData({});
             fetchTickets(); // Re-fetch to show updated data
@@ -217,13 +220,17 @@ function Admin() {
                                                 <td>
                                                     {editingTicketId === ticket.id ? (
                                                         <input
-                                                            type="text"
-                                                            name="img"
-                                                            value={tempTicketData.img || ''}
-                                                            onChange={handleInputChange}
+                                                            type="file"
+                                                            onChange={(e) => {
+                                                                const file = e.target.files[0];
+                                                                setTempTicketData(prev => ({
+                                                                    ...prev,
+                                                                    imageFile: file
+                                                                }));
+                                                            }}
                                                         />
                                                     ) : (
-                                                        <img src={ticket.img} alt={ticket.nombre} className="ticket-img-preview" />
+                                                        <img src={ticket.imageUrl} alt={ticket.nombre} className="ticket-img-preview" />
                                                     )}
                                                 </td>
                                                 <td>

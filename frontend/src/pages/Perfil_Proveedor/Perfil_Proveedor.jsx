@@ -6,8 +6,11 @@ import {
     getServiciosProveedor,
     getEspaciosDisponibles,
     createService,
+    updateService,
+    deleteService,
     rentSpace,
-    getEspacios
+    getEspacios,
+    assignSpaceToService
 } from '../../services/api';
 
 function Perfil_Proveedor() {
@@ -31,11 +34,15 @@ function Perfil_Proveedor() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingServiceId, setEditingServiceId] = useState(null);
+
     const [formServicio, setFormServicio] = useState({
         nombre: '',
         tipo: 'Restauración',
         descripcion: '',
         fechas: '17-20 Julio 2026',
+        imagen: null,
         imagenUrl: ''
     });
 
@@ -111,15 +118,69 @@ function Perfil_Proveedor() {
         return true;
     });
 
-    const handleCreateService = async () => {
+    const handleEditClick = (servicio) => {
+        setIsEditing(true);
+        setEditingServiceId(servicio.id);
+        setFormServicio({
+            nombre: servicio.nombre,
+            tipo: servicio.tipo,
+            descripcion: servicio.descripcion,
+            fechas: servicio.fechas,
+            imagen: null,
+            imagenUrl: servicio.imagenUrl || ''
+        });
+        // Scroll to form
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleCancelEdit = () => {
+        setIsEditing(false);
+        setEditingServiceId(null);
+        setFormServicio({ nombre: '', tipo: 'Restauración', descripcion: '', fechas: '17-20 Julio 2026', imagen: null, imagenUrl: '' });
+    };
+
+    const handleSaveService = async () => {
         if (!formServicio.nombre) return;
         try {
-            await createService(formServicio);
-            alert("Servicio creado correctamente. Ahora puedes asignarlo a un espacio en la sección 'CONTRATAR ESPACIOS'.");
-            setFormServicio({ nombre: '', tipo: 'Restauración', descripcion: '', fechas: '17-20 Julio 2026', imagenUrl: '' });
+            let finalImagenUrl = formServicio.imagenUrl;
+            
+            if (formServicio.imagen) {
+                // En un caso real, aquí se subiría a S3/Cloudinary y se obtendría la URL real.
+                // Por ahora simulamos con el blob local para que se vea algo.
+                finalImagenUrl = URL.createObjectURL(formServicio.imagen);
+            }
+
+            const dataToSend = {
+                nombre: formServicio.nombre,
+                tipo: formServicio.tipo,
+                descripcion: formServicio.descripcion,
+                fechas: formServicio.fechas,
+                imagenUrl: finalImagenUrl
+            };
+
+            if (isEditing) {
+                await updateService(editingServiceId, dataToSend);
+                alert("Servicio actualizado correctamente.");
+            } else {
+                await createService(dataToSend);
+                alert("Servicio creado correctamente. Ahora puedes asignarlo a un espacio en la sección 'CONTRATAR ESPACIOS'.");
+            }
+
+            handleCancelEdit();
             fetchProveedorData();
         } catch (err) {
-            alert("Error al crear el servicio");
+            alert(`Error al ${isEditing ? 'actualizar' : 'crear'} el servicio`);
+        }
+    };
+
+    const handleDeleteService = async (id) => {
+        if (!window.confirm("¿Estás seguro de que quieres eliminar este servicio?")) return;
+        try {
+            await deleteService(id);
+            alert("Servicio eliminado correctamente.");
+            fetchProveedorData();
+        } catch (err) {
+            alert("Error al eliminar el servicio");
         }
     };
 
@@ -145,7 +206,10 @@ function Perfil_Proveedor() {
             
             await rentSpace(espacio.id, normalizedSpace);
             
-            alert(`¡Espacio "${normalizedSpace.name}" contratado con éxito!`);
+            // También asignar el espacio al servicio
+            await assignSpaceToService(idServicioSeleccionado, espacio.id);
+            
+            alert(`¡Espacio "${normalizedSpace.name}" contratado y asignado al servicio con éxito!`);
             setSelectedEspacio(null);
             setIdServicioSeleccionado('');
             fetchProveedorData();
@@ -227,9 +291,27 @@ function Perfil_Proveedor() {
                                             <div key={servicio.id} className="espacio-contratado-item">
                                                 <div className="contratado-header">
                                                     <h4>{servicio.nombre}</h4>
-                                                    <span className="tipo-badge">{servicio.tipo}</span>
+                                                    <div className="servicio-actions-btns">
+                                                        <button 
+                                                            className="btn-edit-inline" 
+                                                            title="Editar"
+                                                            onClick={() => handleEditClick(servicio)}
+                                                        >
+                                                            ✏️
+                                                        </button>
+                                                        <button 
+                                                            className="btn-delete-inline" 
+                                                            title="Eliminar"
+                                                            onClick={() => handleDeleteService(servicio.id)}
+                                                        >
+                                                            🗑️
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                <p className="contratado-detalle">📅 {servicio.fechas}</p>
+                                                <div className="contratado-sub">
+                                                    <span className="tipo-badge">{servicio.tipo}</span>
+                                                    <span className="contratado-detalle">📅 {servicio.fechas}</span>
+                                                </div>
                                                 <p className="servicio-asignado-descripcion">{servicio.descripcion}</p>
                                             </div>
                                         ))}
@@ -238,10 +320,12 @@ function Perfil_Proveedor() {
                             </div>
                         </div>
 
-                        {/* Lado derecho: Formulario para crear servicio */}
+                        {/* Lado derecho: Formulario para crear/editar servicio */}
                         <div className="mis-espacios-right">
                             <div className="admin-content-box">
-                                <h3 className="form-title">REGISTRAR NUEVO NEGOCIO / SERVICIO</h3>
+                                <h3 className="form-title">
+                                    {isEditing ? `EDITANDO: ${formServicio.nombre.toUpperCase()}` : 'REGISTRAR NUEVO NEGOCIO / SERVICIO'}
+                                </h3>
                                 <form className="admin-form">
                                     <div className="form-grid">
                                         <div className="field-group" style={{gridColumn: '1 / -1'}}>
@@ -269,13 +353,27 @@ function Perfil_Proveedor() {
                                         </div>
 
                                         <div className="field-group">
-                                            <label>URL Imagen del Negocio</label>
-                                            <input
-                                                type="text"
-                                                placeholder="https://..."
-                                                value={formServicio.imagenUrl}
-                                                onChange={(e) => setFormServicio({ ...formServicio, imagenUrl: e.target.value })}
-                                            />
+                                            <label>Imagen del Negocio</label>
+                                            <label className="artista-imagen-upload">
+                                                {formServicio.imagen || formServicio.imagenUrl ? (
+                                                    <div className="artista-imagen-preview-wrapper">
+                                                        <img
+                                                            src={formServicio.imagen ? URL.createObjectURL(formServicio.imagen) : formServicio.imagenUrl}
+                                                            alt="preview"
+                                                            className="artista-imagen-preview"
+                                                        />
+                                                        <span className="artista-imagen-change-label">🖼️ Cambiar imagen</span>
+                                                    </div>
+                                                ) : (
+                                                    <span>🖼️ Seleccionar imagen</span>
+                                                )}
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    style={{ display: 'none' }}
+                                                    onChange={e => setFormServicio(p => ({ ...p, imagen: e.target.files[0] || null }))}
+                                                />
+                                            </label>
                                         </div>
 
                                         <div className="field-group" style={{gridColumn: '1 / -1'}}>
@@ -289,13 +387,22 @@ function Perfil_Proveedor() {
                                     </div>
 
                                     <div className="form-actions">
+                                        {isEditing && (
+                                            <button
+                                                type="button"
+                                                className="btn-cancel-edit"
+                                                onClick={handleCancelEdit}
+                                            >
+                                                Cancelar
+                                            </button>
+                                        )}
                                         <button
                                             type="button"
                                             className="btn-add-artist"
                                             disabled={!formServicio.nombre}
-                                            onClick={handleCreateService}
+                                            onClick={handleSaveService}
                                         >
-                                            Crear Servicio
+                                            {isEditing ? 'Guardar Cambios' : 'Crear Servicio'}
                                         </button>
                                     </div>
                                 </form>

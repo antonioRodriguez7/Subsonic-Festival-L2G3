@@ -34,21 +34,33 @@ function Perfil() {
     });
 
     useEffect(() => {
-        const fetchTickets = async () => {
+        const fetchUserData = async () => {
             try {
-                const data = await getMyTickets();
-                setMisEntradas(data);
-            } catch (e) {
-                console.error("Error cargando compras", e);
+                const userData = await getCurrentUser();
+                if (userData) {
+                    setPerfil(prev => ({
+                        ...prev,
+                        id: userData.id,
+                        nombre: userData.name || '',
+                        apellidos: userData.surname || '',
+                        username: userData.username || '',
+                        email: userData.email || prev.email,
+                        descripcion: userData.bio || ''
+                    }));
+                }
+            } catch (error) {
+                console.error('Error al obtener los datos del usuario:', error);
             }
         };
 
-        fetchTickets();
-    }, []);
+        if (token) {
+            fetchUserData();
+        }
+    }, [token]);
 
     const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
 
-    // Consultar al backend el usuario autenticado con el token JWT
+    // Obtener y agrupar las compras de entradas
     useEffect(() => {
         const fetchTickets = async () => {
             try {
@@ -208,25 +220,7 @@ function Perfil() {
                                     onChange={e => handleChange('email', e.target.value)}
                                 />
                             </div>
-                            <div className="perfil-form-group">
-                                <label>Contraseña Actual</label>
-                                <input
-                                    type="password"
-                                    placeholder="Requerido si quieres cambiar a una nueva"
-                                    value={perfil.currentPassword}
-                                    onChange={e => handleChange('currentPassword', e.target.value)}
-                                />
-                            </div>
-                            <div className="perfil-form-group">
-                                <label>Nueva Contraseña</label>
-                                <input
-                                    type="password"
-                                    placeholder="Dejar en blanco para no cambiar"
-                                    value={perfil.password}
-                                    onChange={e => handleChange('password', e.target.value)}
-                                />
-                                <small className="password-hint">Solo rellénalo si deseas cambiar tu clave actual.</small>
-                            </div>
+
 
                             <button type="button" className="btn-guardar" onClick={handleSave}>Guardar Cambios</button>
                         </form>
@@ -253,44 +247,26 @@ function Perfil() {
                         <>
                             <h3 className="section-title">Productos adquiridos</h3>
 
-                            {/* 🔥 TIPOS FIJOS */}
+                            {/* 🔥 MOSTRAR TICKETS COMPRADOS DINÁMICAMENTE */}
                             <div className="productos-grid">
-                                {[
-                                    "ABONO GENERAL",
-                                    "ABONO VIP",
-                                    "DREAM VIP"
-                                ].map((tipo, index) => {
-
-                                    const compra = misEntradas.find(c => c.category === tipo);
-
-                                    return (
-                                        <div className={`producto-card ${!compra ? "empty" : ""}`} key={index}>
-
-                                            {compra ? (
-                                                <>
-                                                    <div className="producto-img">
-                                                        <img
-                                                            src={compra.imageUrl}
-                                                            alt={tipo}
-                                                        />
-                                                    </div>
-
-                                                    <p>{tipo}</p>
-
-                                                    <span className="cantidad-badge">
-                                                        x{compra.cantidad}
-                                                    </span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <div className="producto-img">+</div>
-                                                    <p>{tipo}</p>
-                                                </>
-                                            )}
-
+                                {misEntradas.length > 0 ? (
+                                    misEntradas.map((compra, index) => (
+                                        <div className="producto-card" key={index}>
+                                            <div className="producto-img">
+                                                <img
+                                                    src={compra.imageUrl || "https://via.placeholder.com/300"}
+                                                    alt={compra.category}
+                                                />
+                                            </div>
+                                            <p>{compra.category}</p>
+                                            <span className="cantidad-badge">
+                                                x{compra.cantidad}
+                                            </span>
                                         </div>
-                                    );
-                                })}
+                                    ))
+                                ) : (
+                                    <p className="no-tickets-msg">Aún no has adquirido ninguna entrada.</p>
+                                )}
                             </div>
                         </>
                     )}

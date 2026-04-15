@@ -1,9 +1,12 @@
 package com.susbsonic.usuarios.Controller;
 
 import com.susbsonic.usuarios.Services.ArtistService;
+import com.susbsonic.usuarios.Services.ImageService;
 import com.susbsonic.usuarios.models.DTO.ArtistDTO; // Asumo que crearéis este DTO
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.time.LocalDate;
 
 import java.util.List;
 
@@ -16,9 +19,11 @@ import java.util.List;
 public class ArtistController {
 
     private final ArtistService artistService;
+    private final ImageService imageService;
 
-    public ArtistController(ArtistService artistService) {
+    public ArtistController(ArtistService artistService, ImageService imageService) {
         this.artistService = artistService;
+        this.imageService = imageService;
     }
 
     // ----------------- CREATE -----------------
@@ -33,6 +38,43 @@ public class ArtistController {
             ArtistDTO createdArtist = artistService.createArtist(dto);
             return ResponseEntity.status(201).body(createdArtist);
         } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/withImage")
+    public ResponseEntity<ArtistDTO> createArtistWithImage(
+            @RequestParam String name,
+            @RequestParam(required = false) String spotifyUrl,
+            @RequestParam(required = false) String performanceDate,
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) String stage,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) MultipartFile image
+    ) {
+        try {
+            String imageUrl = "https://via.placeholder.com/300";
+            if (image != null && !image.isEmpty()) {
+                imageUrl = imageService.save(image);
+            }
+
+            LocalDate parsedDate = null;
+            if (performanceDate != null && !performanceDate.trim().isEmpty()) {
+                parsedDate = LocalDate.parse(performanceDate.trim());
+            }
+
+            ArtistDTO dto = new ArtistDTO();
+            dto.setName(name);
+            dto.setSpotifyUrl(spotifyUrl);
+            dto.setPerformanceDate(parsedDate);
+            dto.setGenre(genre);
+            dto.setStage(stage);
+            dto.setDescription(description);
+            dto.setImageUrl(imageUrl);
+
+            ArtistDTO createdArtist = artistService.createArtist(dto);
+            return ResponseEntity.status(201).body(createdArtist);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -78,6 +120,44 @@ public class ArtistController {
         try {
             return ResponseEntity.ok(artistService.updateArtist(id, dto));
         } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{id}/withImage")
+    public ResponseEntity<ArtistDTO> updateArtistWithImage(
+            @PathVariable Long id,
+            @RequestParam String name,
+            @RequestParam(required = false) String spotifyUrl,
+            @RequestParam(required = false) String performanceDate,
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) String stage,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) MultipartFile image
+    ) {
+        try {
+            ArtistDTO existing = artistService.getArtistById(id);
+            String imageUrl = existing.getImageUrl();
+            if (image != null && !image.isEmpty()) {
+                imageUrl = imageService.save(image);
+            }
+
+            LocalDate parsedDate = null;
+            if (performanceDate != null && !performanceDate.trim().isEmpty()) {
+                parsedDate = LocalDate.parse(performanceDate.trim());
+            }
+
+            ArtistDTO dto = new ArtistDTO();
+            dto.setName(name);
+            dto.setSpotifyUrl(spotifyUrl);
+            dto.setPerformanceDate(parsedDate);
+            dto.setGenre(genre);
+            dto.setStage(stage);
+            dto.setDescription(description);
+            dto.setImageUrl(imageUrl);
+
+            return ResponseEntity.ok(artistService.updateArtist(id, dto));
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }

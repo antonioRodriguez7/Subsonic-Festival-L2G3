@@ -55,6 +55,7 @@ export const deleteArtist = real.deleteArtist;
 // --- TICKETS / ENTRADAS ---
 export const createTicket = real.createTicket;
 export const updateTicket = real.updateTicket;
+export const updateTicketWithImage = real.updateTicketWithImage;
 export const deleteTicket = real.deleteTicket;
 
 // --- ESPACIOS (NUEVO) ---
@@ -62,6 +63,7 @@ export const createSpace = real.createSpace;
 export const updateSpace = real.updateSpace;
 export const deleteSpace = real.deleteSpace;
 export const rentSpace = real.rentSpace;         // PUT /api/spaces/:id (marcar como alquilado)
+export const assignSpaceToService = real.assignSpaceToService;
 
 /* ------------------------------------------------------------
    5. SPOTIFY SYNC
@@ -75,4 +77,7 @@ export const syncSpotifyPlaylist = real.syncSpotifyPlaylist;
 
 export const getEspaciosContratadosProveedor = backend.getEspaciosContratadosProveedor;
 export const getServiciosProveedor = backend.getServiciosProveedor;
-export const createService = real.createService; // Simulación creación de servicio (localStorage)
+export const createService = real.createService;
+export const updateService = real.updateService;
+export const deleteService = real.deleteService;
+export const getAllServices = real.getAllServices;

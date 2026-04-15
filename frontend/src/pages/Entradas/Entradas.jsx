@@ -174,7 +174,10 @@ function Entradas() {
                                                 value={cantidades[entrada.id] || 0}
                                                 onChange={(e) => handleCantidad(entrada.id, e.target.value)}
                                             >
-                                                {[0, 1, 2, 3, 4, 5, 6].map(num => (
+                                                {Array.from(
+                                                    { length: Math.min(7, (entrada.stock !== null && entrada.stock !== undefined) ? entrada.stock + 1 : 7) }, 
+                                                    (_, i) => i
+                                                ).map(num => (
                                                     <option key={num} value={num}>
                                                         {num} {num === 1 ? 'entrada' : 'entradas'}
                                                     </option>

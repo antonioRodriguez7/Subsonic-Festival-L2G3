@@ -34,63 +34,128 @@
     margin: 0 auto;
     padding: 60px 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 30px;
 }
 
+/* Loading y empty states */
+.servicios-loading,
+.servicios-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    gap: 20px;
+    color: #aaa;
+}
+
+.servicios-empty span {
+    font-size: 4rem;
+}
+
+.servicios-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(102, 126, 234, 0.2);
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
 .servicio-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
-    padding: 30px;
-    transition: all 0.3s ease;
+    overflow: hidden;
+    transition: all 0.35s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .servicio-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(102, 126, 234, 0.5);
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+    transform: translateY(-6px);
+    border-color: rgba(102, 126, 234, 0.6);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.2);
 }
 
+/* Imagen superior de la tarjeta */
+.servicio-card-img {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.servicio-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.servicio-card:hover .servicio-card-img img {
+    transform: scale(1.06);
+}
+
+/* Icono cuando no hay imagen */
 .servicio-icon {
-    font-size: 3rem;
-    margin-bottom: 20px;
+    font-size: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+}
+
+/* Cuerpo de la tarjeta */
+.servicio-card-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+/* Badge de tipo */
+.servicio-tipo-badge {
     display: inline-block;
+    padding: 4px 12px;
+    background: rgba(102, 126, 234, 0.15);
+    border: 1px solid rgba(102, 126, 234, 0.4);
+    border-radius: 20px;
+    color: #667eea;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
 }
 
 .servicio-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: #667eea;
-    font-weight: 600;
+    font-size: 1.4rem;
+    color: #fff;
+    font-weight: 700;
+    margin: 0;
 }
 
 .servicio-card p {
-    margin-bottom: 20px;
-    line-height: 1.6;
-    opacity: 0.9;
+    margin: 0;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.75);
+    font-size: 0.95rem;
 }
 
-.servicio-card ul {
-    list-style: none;
-    padding: 0;
-}
-
-.servicio-card ul li {
-    padding: 8px 0;
-    padding-left: 25px;
-    position: relative;
-    opacity: 0.8;
-}
-
-.servicio-card ul li:before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: #667eea;
-    font-weight: bold;
+.servicio-fechas {
+    color: #667eea !important;
+    font-weight: 600;
+    font-size: 0.88rem !important;
 }
 
 .servicios-info {
@@ -160,4 +225,131 @@
     .info-boxes {
         grid-template-columns: 1fr;
     }
+
+    .servicios-proveedores-grid {
+        grid-template-columns: 1fr;
+    }
 }
+
+/* ================================================
+   SECCIÓN NEGOCIOS DE PROVEEDORES
+   ================================================ */
+
+.servicios-proveedores-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 20px 60px;
+}
+
+.servicios-proveedores-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.servicios-proveedores-header h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #00e5ff, #df188a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+
+.servicios-proveedores-header p {
+    color: #aaa;
+    font-size: 1.1rem;
+}
+
+.servicios-proveedores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.proveedor-servicio-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 229, 255, 0.15);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.35s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.proveedor-servicio-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0, 229, 255, 0.5);
+    box-shadow: 0 12px 40px rgba(0, 229, 255, 0.12);
+}
+
+.proveedor-servicio-img {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.proveedor-servicio-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.proveedor-servicio-card:hover .proveedor-servicio-img img {
+    transform: scale(1.05);
+}
+
+.proveedor-servicio-img--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.08), rgba(223, 24, 138, 0.08));
+    font-size: 4rem;
+}
+
+.proveedor-servicio-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.proveedor-servicio-tipo {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(0, 229, 255, 0.12);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    border-radius: 20px;
+    color: #00e5ff;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+}
+
+.proveedor-servicio-body h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.proveedor-servicio-body p {
+    color: #aaa;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.proveedor-servicio-fechas {
+    color: #df188a !important;
+    font-weight: 600;
+    font-size: 0.85rem !important;
+    margin-top: 4px !important;
+}
+

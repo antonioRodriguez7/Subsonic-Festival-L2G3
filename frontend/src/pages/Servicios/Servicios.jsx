@@ -1,14 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Servicios.css';
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import { getAllServices } from '../../services/api';
 
+const TIPO_ICON = {
+    'Restauración': '🍔',
+    'Bebidas': '🍹',
+    'Merchandising': '🛍️',
+    'Entretenimiento': '🎭',
+    'Transporte': '🚌',
+    'Otro': '✨',
+};
 
 function Servicios() {
 
+    const [servicios, setServicios] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchServicios = async () => {
+            try {
+                const data = await getAllServices();
+                setServicios(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error('Error cargando servicios:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchServicios();
+    }, []);
+
     return (
         <div className="servicios-container">
-           <Header />
+            <Header />
 
             <main className="servicios-main">
                 <section className="servicios-hero">
@@ -16,105 +42,41 @@ function Servicios() {
                     <p>Todo lo que necesitas para disfrutar al máximo de Subsonic 2026</p>
                 </section>
 
+                {/* SERVICIOS DINÁMICOS DESDE EL BACKEND */}
                 <section className="servicios-grid">
-                    <div className="servicio-card">
-                        <div className="servicio-icon">🍔</div>
-                        <h3>Food & Drinks</h3>
-                        <p>Amplia variedad de foodtrucks y barras premium con opciones para todos los gustos.</p>
-                        <ul>
-                            <li>Cocina internacional</li>
-                            <li>Opciones veganas y vegetarianas</li>
-                            <li>Cócteles y bebidas premium</li>
-                        </ul>
-                    </div>
-
-                    <div className="servicio-card">
-                        <div className="servicio-icon">🚌</div>
-                        <h3>Transporte</h3>
-                        <p>Facilita tu llegada al festival con nuestras opciones de transporte.</p>
-                        <ul>
-                            <li>Lanzaderas desde principales ciudades</li>
-                            <li>Parking gratuito disponible</li>
-                            <li>Zona de taxis y VTC</li>
-                        </ul>
-                    </div>
-
-                    <div className="servicio-card">
-                        <div className="servicio-icon">🏕️</div>
-                        <h3>Camping</h3>
-                        <p>Zona de acampada para que vivas la experiencia completa.</p>
-                        <ul>
-                            <li>Camping general y glamping</li>
-                            <li>Duchas y baños 24h</li>
-                            <li>Zona de descanso y sombra</li>
-                        </ul>
-                    </div>
-
-                    <div className="servicio-card">
-                        <div className="servicio-icon">🛍️</div>
-                        <h3>Merchandising</h3>
-                        <p>Llévate un recuerdo único del festival.</p>
-                        <ul>
-                            <li>Camisetas y sudaderas oficiales</li>
-                            <li>Ediciones limitadas</li>
-                            <li>Accesorios exclusivos</li>
-                        </ul>
-                    </div>
-
-                    <div className="servicio-card">
-                        <div className="servicio-icon">🏥</div>
-                        <h3>Servicios Médicos</h3>
-                        <p>Tu seguridad es nuestra prioridad.</p>
-                        <ul>
-                            <li>Enfermería 24h</li>
-                            <li>Personal sanitario cualificado</li>
-                            <li>Ambulancia disponible</li>
-                        </ul>
-                    </div>
-
-                    <div className="servicio-card">
-                        <div className="servicio-icon">💳</div>
-                        <h3>Cashless</h3>
-                        <p>Paga de forma rápida y segura en todo el recinto.</p>
-                        <ul>
-                            <li>Pulsera NFC incluida</li>
-                            <li>Recarga online o en el festival</li>
-                            <li>Sin efectivo, sin preocupaciones</li>
-                        </ul>
-                    </div>
-
-                    <div className="servicio-card">
-                        <div className="servicio-icon">📱</div>
-                        <h3>App Oficial</h3>
-                        <p>Toda la información del festival en tu móvil.</p>
-                        <ul>
-                            <li>Horarios actualizados</li>
-                            <li>Mapa interactivo</li>
-                            <li>Notificaciones en directo</li>
-                        </ul>
-                    </div>
-
-                    <div className="servicio-card">
-                        <div className="servicio-icon">♿</div>
-                        <h3>Accesibilidad</h3>
-                        <p>Festival inclusivo para todas las personas.</p>
-                        <ul>
-                            <li>Zonas PMR adaptadas</li>
-                            <li>Intérpretes de lengua de signos</li>
-                            <li>Acceso preferente</li>
-                        </ul>
-                    </div>
-
-                    <div className="servicio-card">
-                        <div className="servicio-icon">🔒</div>
-                        <h3>Taquillas</h3>
-                        <p>Guarda tus pertenencias de forma segura.</p>
-                        <ul>
-                            <li>Taquillas individuales y grupales</li>
-                            <li>Acceso ilimitado durante el evento</li>
-                            <li>Carga de dispositivos móviles</li>
-                        </ul>
-                    </div>
+                    {loading ? (
+                        <div className="servicios-loading">
+                            <div className="servicios-spinner"></div>
+                            <p>Cargando servicios...</p>
+                        </div>
+                    ) : servicios.length === 0 ? (
+                        <div className="servicios-empty">
+                            <span>🎪</span>
+                            <p>Los servicios del festival se anunciarán próximamente.</p>
+                        </div>
+                    ) : (
+                        servicios.map(servicio => (
+                            <div key={servicio.id} className="servicio-card servicio-card--dynamic">
+                                {servicio.imagenUrl ? (
+                                    <div className="servicio-card-img">
+                                        <img src={servicio.imagenUrl} alt={servicio.nombre} />
+                                    </div>
+                                ) : (
+                                    <div className="servicio-icon">
+                                        {TIPO_ICON[servicio.tipo] || '✨'}
+                                    </div>
+                                )}
+                                <div className="servicio-card-body">
+                                    <span className="servicio-tipo-badge">{servicio.tipo}</span>
+                                    <h3>{servicio.nombre}</h3>
+                                    {servicio.descripcion && <p>{servicio.descripcion}</p>}
+                                    {servicio.fechas && (
+                                        <p className="servicio-fechas">📅 {servicio.fechas}</p>
+                                    )}
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </section>
 
                 <section className="servicios-info">
@@ -140,7 +102,7 @@ function Servicios() {
                 </section>
             </main>
 
-          <Footer />
+            <Footer />
         </div>
     );
 }
