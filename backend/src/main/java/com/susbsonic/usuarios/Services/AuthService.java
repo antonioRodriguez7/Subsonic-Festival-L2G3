@@ -28,8 +28,23 @@ public class AuthService {
     @Value("${google.client.id}")
     private String googleClientId;
 
+    // Método para validar la fortaleza de la contraseña
+    private boolean isPasswordStrong(String password) {
+        return password != null &&
+               password.length() >= 8 &&
+               password.matches(".*[a-z].*") &&
+               password.matches(".*[A-Z].*") &&
+               password.matches(".*\\d.*") &&
+               password.matches(".*[!@#$%^&*()_+-=\\[\\]{};':\"\\\\|,.<>/?].*");
+    }
+
     // --- REGISTRO MANUAL ---
     public AuthResponseDTO register(UserRegisterDTO registerDTO) {
+
+        // Validar fortaleza de la contraseña
+        if (!isPasswordStrong(registerDTO.getPassword())) {
+            throw new RuntimeException("La contraseña no cumple con los requisitos de seguridad. Debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.");
+        }
 
         if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
             throw new RuntimeException("El email ya está registrado");

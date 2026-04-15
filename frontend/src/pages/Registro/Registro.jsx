@@ -19,6 +19,7 @@ function Registro() {
     const [tipoUsuario, setTipoUsuario] = useState('CLIENTE');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [passwordStrength, setPasswordStrength] = useState('');
 
     const handleChange = (e) => {
         setFormData({
@@ -26,6 +27,27 @@ function Registro() {
             [e.target.name]: e.target.value
         });
         if (error) setError('');
+        if (e.target.name === 'password') {
+            setPasswordStrength(getPasswordStrength(e.target.value));
+        }
+    };
+
+    // Función para validar la fortaleza de la contraseña
+    const getPasswordStrength = (password) => {
+        if (password.length < 8) return 'Débil: Mínimo 8 caracteres';
+        if (!/[a-z]/.test(password)) return 'Débil: Debe contener al menos una letra minúscula';
+        if (!/[A-Z]/.test(password)) return 'Débil: Debe contener al menos una letra mayúscula';
+        if (!/\d/.test(password)) return 'Débil: Debe contener al menos un número';
+        if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) return 'Débil: Debe contener al menos un carácter especial';
+        return 'Fuerte';
+    };
+
+    const isPasswordStrong = (password) => {
+        return password.length >= 8 &&
+               /[a-z]/.test(password) &&
+               /[A-Z]/.test(password) &&
+               /\d/.test(password) &&
+               /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
     };
 
     // 2. Función de registro con el mapeo correcto a las columnas de tu DB
@@ -41,6 +63,11 @@ function Registro() {
 
         if (formData.password !== formData.confirmPassword) {
             setError("Las contraseñas no coinciden.");
+            return;
+        }
+
+        if (!isPasswordStrong(formData.password)) {
+            setError("La contraseña no cumple con los requisitos de seguridad. Debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial.");
             return;
         }
 
@@ -119,6 +146,15 @@ function Registro() {
                         <input name="email" type="email" placeholder="Correo electrónico" value={formData.email} onChange={handleChange} required />
                         <input name="username" type="text" placeholder="Nombre de usuario" value={formData.username} onChange={handleChange} required />
                         <input name="password" type="password" placeholder="Contraseña" value={formData.password} onChange={handleChange} required />
+                        {formData.password && (
+                            <p style={{
+                                fontSize: '12px',
+                                color: passwordStrength.startsWith('Débil') ? '#ff4d6d' : '#4CAF50',
+                                margin: '5px 0'
+                            }}>
+                                Fortaleza: {passwordStrength}
+                            </p>
+                        )}
                         <input name="confirmPassword" type="password" placeholder="Confirmar contraseña" value={formData.confirmPassword} onChange={handleChange} required />
                     </form>
                 </div>
