@@ -16,6 +16,10 @@ import PreguntasFrecuentes from "./pages/FAQS/PreguntasFrecuentes";
 import PoliticaPrivacidad from "./pages/PoliticaPrivacidad/PoliticaPrivacidad";
 import Pago from "./pages/Pago/Pago";
 
+// 1️⃣ NUEVO: Importa el manejador
+import OAuth2RedirectHandler from "./pages/Login/OAuth2RedirectHandler";
+
+
 function App() {
     const [user, setUser] = useState(null);
 
@@ -44,6 +48,9 @@ function App() {
                 <Route path="/" element={<Home user={user} />} />
                 <Route path="/login" element={<Login setUser={setUser} />} />
                 <Route path="/registro" element={<Registro />} />
+
+                {/* 2️⃣ NUEVO: La ruta a la que nos redirige Spring Boot con el token */}
+                <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler setUser={setUser} />} />
 
                 {/* RUTAS DE PERFIL SEGÚN ROL */}
                 <Route path="/perfil" element={<Perfil user={user} onLogout={handleLogout} />} />

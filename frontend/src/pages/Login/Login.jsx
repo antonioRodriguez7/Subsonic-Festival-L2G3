@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
 import './Login.css';
 import { loginUsuario } from '../../services/api';
 
@@ -47,6 +48,14 @@ function Login() {
         }
     };
 
+// --- OAUTH2 GOOGLE ---
+    const handleGoogleLogin = () => {
+        // Redirige al backend de Spring Boot para iniciar el login con Google
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    };
+    // ---------------------
+
+
     return (
         <div className="login-container">
             <div className="login-left">
@@ -92,6 +101,17 @@ function Login() {
                             {loading ? 'CONECTANDO...' : 'ENTRAR'}
                         </button>
                     </form>
+
+                    {/* --- OAUTH2 GOOGLE BOTÓN --- */}
+                    <div className="divider"><span>O</span></div>
+                    
+                    <button type="button" className="btn-google" onClick={handleGoogleLogin}>
+                        <FcGoogle className="google-icon" />
+                        Continuar con Google
+                    </button>
+                    {/* --------------------------- */}
+
+
 
                     {/* ✅ AQUÍ ESTÁN LOS ENLACES QUE FALTABAN */}
                     <div className="login-links">

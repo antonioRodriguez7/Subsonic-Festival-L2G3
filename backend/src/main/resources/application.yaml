@@ -13,15 +13,26 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 1066356702795-ho4rfgnn52465fmscesjkjntb2g7ltqq.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - profile
+              - email
+
+
 # Configuración JWT externalizada
 jwt:
   secret: tu_llave_secreta_super_larga_para_el_festival_subsonic
   expiration: 36000000  # 10 horas en milisegundos
 
-# Configuración login con Google
-google:
-  client:
-    id: TU_CLIENT_ID_DE_GOOGLE.apps.googleusercontent.com
+
+
+
 
 # ==========================================
 # CONFIGURACIÓN DE LA API DE SPOTIFY

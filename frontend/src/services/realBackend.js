@@ -187,6 +187,10 @@ export async function buyTicket(ticketId, quantity) {
 export async function getMyTickets() {
     const userId = localStorage.getItem("user_id");
 
+    if (!userId || userId === "null" || userId === "undefined") {
+        return [];
+    }
+
     const response = await api.get(`/purchases/user/${userId}`);
 
     return response.data;

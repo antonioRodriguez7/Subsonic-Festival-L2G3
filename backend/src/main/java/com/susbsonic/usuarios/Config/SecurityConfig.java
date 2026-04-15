@@ -1,6 +1,8 @@
 package com.susbsonic.usuarios.Config;
 
+import com.susbsonic.usuarios.Services.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +24,13 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
+
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
+
+    // Inyectamos el manejador de éxito de OAuth2
+    @Autowired
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -64,6 +73,14 @@ public class SecurityConfig {
 
                         // 5. CUALQUIER OTRA RUTA
                         .anyRequest().authenticated()
+                )
+
+                // GOOGLE OAUTH2: Añadimos el flujo de login con OAuth2
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService) // Nuestro servicio que guarda en BD
+                        )
+                        .successHandler(oAuth2LoginSuccessHandler) // Nuestro manejador de éxito
                 )
 
                 // 4. GESTIÓN DE SESIÓN STATELESS (JWT)
