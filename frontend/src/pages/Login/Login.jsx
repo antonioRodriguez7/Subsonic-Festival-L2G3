@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
 import './Login.css';
 import { loginUsuario } from '../../services/api';
 
@@ -105,7 +106,7 @@ function Login() {
                     <div className="divider"><span>O</span></div>
                     
                     <button type="button" className="btn-google" onClick={handleGoogleLogin}>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Icono de Google" />
+                        <FcGoogle className="google-icon" />
                         Continuar con Google
                     </button>
                     {/* --------------------------- */}

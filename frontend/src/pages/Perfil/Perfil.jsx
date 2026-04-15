@@ -1,11 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Perfil.css';
 import { getCurrentUser, updateUser } from '../../services/api';
 import { getMyTickets } from "../../services/realBackend";
 
 function Perfil() {
     const navigate = useNavigate();
+    const location = useLocation();
+
+// 1. INTERCEPTAR DATOS DE GOOGLE EN LA URL ANTES DE NADA
+    const queryParams = new URLSearchParams(location.search);
+    const tokenUrl = queryParams.get('token');
+    const emailUrl = queryParams.get('email');
+    const roleUrl = queryParams.get('role');
+
+    if (tokenUrl) {
+        // Si venimos de Google, guardamos todo en localStorage inmediatamente
+        localStorage.setItem('subsonic_token', tokenUrl);
+        if (emailUrl) localStorage.setItem('user_email', emailUrl);
+        if (roleUrl) localStorage.setItem('user_role', roleUrl);
+        
+        // Limpiamos la URL para que quede bonita (/perfil) sin recargar la página
+        window.history.replaceState({}, document.title, "/perfil");
+    }
 
     // 1. LEER LOS DATOS REALES (Los que guardamos en Login.jsx)
     const token = localStorage.getItem('subsonic_token');
@@ -38,6 +55,7 @@ function Perfil() {
             try {
                 const userData = await getCurrentUser();
                 if (userData) {
+                    localStorage.setItem('user_id', String(userData.id));
                     setPerfil(prev => ({
                         ...prev,
                         id: userData.id,
@@ -62,6 +80,8 @@ function Perfil() {
 
     // Obtener y agrupar las compras de entradas
     useEffect(() => {
+        if (!perfil.id) return;
+
         const fetchTickets = async () => {
             try {
                 const data = await getMyTickets();
@@ -87,7 +107,7 @@ function Perfil() {
         };
 
         fetchTickets();
-    }, []);
+    }, [perfil.id]);
 
     const handleChange = (field, value) =>
         setPerfil(prev => ({ ...prev, [field]: value }));

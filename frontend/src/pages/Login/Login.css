@@ -147,20 +147,27 @@
     padding: 12px;
     background-color: #fff;
     color: #121212;
-    border: none;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    font-weight: bold;
-    font-size: 16px;
+    font-weight: 600;
+    font-size: 15px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    gap: 10px;
 }
 
-.btn-google img {
-    width: 22px;
-    margin-right: 12px;
+.google-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
 }
 
 .btn-google:hover {
-    background-color: #e6e6e6;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    background-color: #f8f8f8;
+    border-color: #999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-google:active {
+    transform: scale(0.98);
 }
