@@ -55,27 +55,10 @@ function Cartel() {
         <div className="cartel-page">
             <Header />
 
-            {/* SECCIÓN 1: EL "CARTEL OFICIAL" (Borde Neón Naranja) */}
+            {/* SECCIÓN 1: EL "CARTEL OFICIAL" */}
             <section className="cartel-hero-section">
-                <div className="cartel-neon-frame">
-                    <h1 className="cartel-main-title">LINEUP 2026</h1>
-
-                    {isLoading ? (
-                        <p className="loading-text">SINCRONIZANDO CON EL BACKEND...</p>
-                    ) : error ? (
-                        <p className="error-text">{error}</p>
-                    ) : artistasFiltrados.length > 0 ? (
-                        <div className="neon-artists-list">
-                            {artistasFiltrados.map((artista) => (
-                                <h2 className="neon-artist-name" key={`neon-${artista.id}`}>
-                                    {artista.name}
-                                    {artista.spotifyUrl && <FaSpotify className="neon-spoty-icon" />}
-                                </h2>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className="no-results">EL CARTEL ESTÁ PENDIENTE DE CONFIRMACIONES...</p>
-                    )}
+                <div className="cartel-image-wrapper">
+                    <img src="/cartel.jpg" alt="Cartel Oficial" className="cartel-main-img" />
                 </div>
             </section>
 

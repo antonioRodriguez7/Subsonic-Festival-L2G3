@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
 
                         // 2. CONTENIDO PÚBLICO
-                        .requestMatchers(HttpMethod.GET, "/api/artists/**", "/api/tickets/**", "/api/spaces/**", "/api/services", "/api/services/provider").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/artists/**", "/api/tickets/**", "/api/spaces/**", "/api/services", "/api/services/provider", "/uploads/**").permitAll()
 
                         // 3. GESTIÓN (Solo Admin)
                         .requestMatchers(HttpMethod.POST, "/api/artists/**", "/api/tickets/**", "/api/spaces/**").hasAnyAuthority("ROLE_ADMIN")

@@ -55,6 +55,7 @@ export const deleteArtist = real.deleteArtist;
 // --- TICKETS / ENTRADAS ---
 export const createTicket = real.createTicket;
 export const updateTicket = real.updateTicket;
+export const updateTicketWithImage = real.updateTicketWithImage;
 export const deleteTicket = real.deleteTicket;
 
 // --- ESPACIOS (NUEVO) ---

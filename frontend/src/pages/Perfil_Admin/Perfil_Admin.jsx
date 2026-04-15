@@ -15,7 +15,8 @@ import {
     createSpace,
     deleteSpace,
     updateSpace,
-    syncSpotifyPlaylist
+    syncSpotifyPlaylist,
+    updateTicketWithImage
 } from "../../services/api";
 
 function Perfil_Admin() {
@@ -33,7 +34,7 @@ function Perfil_Admin() {
     });
 
     const [nuevaEntrada, setNuevaEntrada] = useState({
-        categoria: '', descripcion: '', precio: '', caracteristica: '', imagen: null
+        categoria: '', descripcion: '', precio: '', stock: '', caracteristica: '', imagen: null
     });
 
 
@@ -143,9 +144,9 @@ function Perfil_Admin() {
                 mes: nuevoArtista.mes,
                 performanceDate: `${diaSemCalculado} ${nuevoArtista.diaMes} ${nuevoArtista.mes}`,
                 spotifyUrl: nuevoArtista.spotifyUrl,
-                imageUrl: nuevoArtista.imagen ? URL.createObjectURL(nuevoArtista.imagen) : "https://via.placeholder.com/300",
                 genre: nuevoArtista.genero,
-                stage: nuevoArtista.escenario
+                stage: nuevoArtista.escenario,
+                imageFile: nuevoArtista.imagen
             };
 
             await createArtist(artistDTO);
@@ -229,14 +230,29 @@ function Perfil_Admin() {
         if (!nuevaEntrada.categoria || !nuevaEntrada.precio) return;
         try {
             const ticketDTO = {
+                categoria: nuevaEntrada.categoria,
                 category: nuevaEntrada.categoria,
+                descripcion: nuevaEntrada.descripcion,
                 description: nuevaEntrada.descripcion,
+                precio: parseFloat(nuevaEntrada.precio),
                 price: parseFloat(nuevaEntrada.precio),
-                imageUrl: nuevaEntrada.imagen ? URL.createObjectURL(nuevaEntrada.imagen) : "https://via.placeholder.com/300"
+                stock: parseInt(nuevaEntrada.stock) || 0,
+                caracteristica: editingTicketId ? nuevaEntrada.caracteristica : "Novedad",
+                feature: editingTicketId ? nuevaEntrada.caracteristica : "Novedad",
+                imageFile: nuevaEntrada.imagen // Pasar el archivo físico
             };
 
             if (editingTicketId) {
-                await updateTicket(editingTicketId, ticketDTO);
+                const formData = new FormData();
+                formData.append("category", ticketDTO.categoria);
+                formData.append("description", ticketDTO.descripcion);
+                formData.append("price", ticketDTO.precio);
+                formData.append("feature", ticketDTO.caracteristica || "Acceso estándar");
+                if (ticketDTO.imageFile) {
+                    formData.append("image", ticketDTO.imageFile);
+                }
+                // Si no hay imagen, enviamos form sin imagen y el backend lo ignora con updateTicketWithImage
+                await updateTicketWithImage(editingTicketId, formData);
                 mostrarMensaje("Entrada actualizada correctamente", "success");
                 setEditingTicketId(null);
             } else {
@@ -421,30 +437,23 @@ function Perfil_Admin() {
                                     <div className="artista-field artista-field-full">
                                         <label>Fecha de actuación</label>
                                         <div className="fecha-selects">
-                                            <input
-                                                type="text"
-                                                value={calcularDiaSemana(nuevoArtista.diaMes, nuevoArtista.mes)}
-                                                placeholder="Día semana"
-                                                disabled
-                                                style={{ width: '30%', backgroundColor: '#222', cursor: 'not-allowed', color: '#fff', border: '1px solid #555', padding: '10px', borderRadius: '4px' }}
-                                            />
                                             <select
-                                                value={nuevoArtista.diaMes}
-                                                onChange={e => setNuevoArtista(p => ({ ...p, diaMes: e.target.value }))}
+                                                value={`${nuevoArtista.diaMes}-${nuevoArtista.mes}`}
+                                                onChange={e => {
+                                                    const val = e.target.value;
+                                                    if (val === "-") {
+                                                        setNuevoArtista(p => ({ ...p, diaMes: "", mes: "" }));
+                                                    } else {
+                                                        const [d, m] = val.split('-');
+                                                        setNuevoArtista(p => ({ ...p, diaMes: d, mes: m }));
+                                                    }
+                                                }}
+                                                style={{ width: '100%', padding: '12px', borderRadius: '4px', border: '1px solid #333', backgroundColor: '#111', color: 'white' }}
                                             >
-                                                <option value="">Día</option>
-                                                {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
-                                                    <option key={d} value={d}>{d}</option>
-                                                ))}
-                                            </select>
-                                            <select
-                                                value={nuevoArtista.mes}
-                                                onChange={e => setNuevoArtista(p => ({ ...p, mes: e.target.value }))}
-                                            >
-                                                <option value="">Mes</option>
-                                                {['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'].map(m => (
-                                                    <option key={m} value={m}>{m}</option>
-                                                ))}
+                                                <option value="-">Seleccionar día del festival...</option>
+                                                <option value="17-Julio">Viernes, 17 de Julio (Día 1)</option>
+                                                <option value="18-Julio">Sábado, 18 de Julio (Día 2)</option>
+                                                <option value="19-Julio">Domingo, 19 de Julio (Día 3)</option>
                                             </select>
                                         </div>
                                     </div>
@@ -578,32 +587,23 @@ function Perfil_Admin() {
                                                 />
 
                                                 <div className="artista-card-fecha">
-                                                    <input
-                                                        type="text"
-                                                        value={calcularDiaSemana(artista.diaMes, artista.mes) || artista.diaSemana}
-                                                        disabled
-                                                        className="artista-edit-select"
-                                                        style={{ width: '30%', minWidth: '80px', backgroundColor: '#2f2f2f', border: '1px solid #444', color: '#ccc', cursor: 'not-allowed', opacity: 0.8 }}
-                                                    />
                                                     <select
                                                         className="artista-edit-select"
-                                                        value={artista.diaMes}
-                                                        onChange={e => handleUpdateArtista(artista.id, 'diaMes', e.target.value)}
+                                                        style={{ width: '100%' }}
+                                                        value={`${artista.diaMes}-${artista.mes}`}
+                                                        onChange={e => {
+                                                            const val = e.target.value;
+                                                            if (val !== "-") {
+                                                                const [d, m] = val.split('-');
+                                                                handleUpdateArtista(artista.id, 'diaMes', d);
+                                                                handleUpdateArtista(artista.id, 'mes', m);
+                                                            }
+                                                        }}
                                                     >
-                                                        <option value="">Día</option>
-                                                        {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
-                                                            <option key={d} value={d}>{d}</option>
-                                                        ))}
-                                                    </select>
-                                                    <select
-                                                        className="artista-edit-select"
-                                                        value={artista.mes}
-                                                        onChange={e => handleUpdateArtista(artista.id, 'mes', e.target.value)}
-                                                    >
-                                                        <option value="">Mes</option>
-                                                        {['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'].map(m => (
-                                                            <option key={m} value={m}>{m}</option>
-                                                        ))}
+                                                        <option value="-">Asignar día...</option>
+                                                        <option value="17-Julio">Viernes, 17 Jul</option>
+                                                        <option value="18-Julio">Sábado, 18 Jul</option>
+                                                        <option value="19-Julio">Domingo, 19 Jul</option>
                                                     </select>
                                                 </div>
 
@@ -700,19 +700,21 @@ function Perfil_Admin() {
                                 <div className="entradas-form-field">
                                     <label>Precio</label>
                                     <input
-                                        type="text"
-                                        placeholder="Ej: 99€"
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        placeholder="Ej: 49.99"
                                         value={nuevaEntrada.precio}
-                                        onChange={e => setNuevaEntrada(p => ({ ...p, precio: e.target.value }))}
+                                        onChange={e => setNuevaEntrada(p => ({ ...p, precio: e.target.value.replace(/[^0-9.]/g, '') }))}
                                     />
                                 </div>
                                 <div className="entradas-form-field">
-                                    <label>Etiqueta</label>
+                                    <label>Stock</label>
                                     <input
-                                        type="text"
-                                        placeholder="Ej: Válida 3 días"
-                                        value={nuevaEntrada.caracteristica}
-                                        onChange={e => setNuevaEntrada(p => ({ ...p, caracteristica: e.target.value }))}
+                                        type="number"
+                                        placeholder="Ej: 100"
+                                        value={nuevaEntrada.stock}
+                                        onChange={e => setNuevaEntrada(p => ({ ...p, stock: e.target.value }))}
                                     />
                                 </div>
                                 <div className="entradas-form-field entradas-form-imagen">

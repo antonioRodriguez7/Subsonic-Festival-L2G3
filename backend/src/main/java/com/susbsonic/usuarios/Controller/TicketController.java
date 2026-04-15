@@ -4,8 +4,10 @@ import com.susbsonic.usuarios.Services.TicketService;
 import com.susbsonic.usuarios.models.DTO.TicketDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
+import com.susbsonic.usuarios.Services.ImageService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Controlador REST para la gestión de Entradas (Tickets) del Subsonic Festival.
@@ -18,9 +20,11 @@ import java.util.List;
 public class TicketController {
 
     private final TicketService ticketService;
+    private final ImageService imageService;
 
-    public TicketController(TicketService ticketService) {
+    public TicketController(TicketService ticketService, ImageService imageService) {
         this.ticketService = ticketService;
+        this.imageService = imageService;
     }
 
     // ==========================================
@@ -31,11 +35,34 @@ public class TicketController {
      * Endpoint para crear una nueva entrada.
      */
     @PostMapping
-    public ResponseEntity<TicketDTO> createTicket(@RequestBody TicketDTO dto) {
+    public ResponseEntity<TicketDTO> createTicket(
+            @RequestParam String category,
+            @RequestParam Double price,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) Integer stock,
+            @RequestParam(required = false) String feature,
+            @RequestParam(required = false) MultipartFile image
+    ) {
         try {
+            String imageUrl = "https://via.placeholder.com/300";
+            if (image != null && !image.isEmpty()) {
+                imageUrl = imageService.save(image);
+            }
+
+            TicketDTO dto = new TicketDTO();
+            dto.setCategory(category);
+            dto.setPrice(price);
+            dto.setDescription(description);
+            dto.setStock(stock);
+            dto.setFeature(feature);
+            dto.setImageUrl(imageUrl);
+
             TicketDTO createdTicket = ticketService.createTicket(dto);
+
             return ResponseEntity.status(201).body(createdTicket);
-        } catch (RuntimeException e) {
+
+        } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
@@ -49,6 +76,40 @@ public class TicketController {
             return ResponseEntity.ok(ticketService.updateTicket(id, dto));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Endpoint para actualizar una entrada enviando un archivo nuevo.
+     */
+    @PutMapping("/{id}/withImage")
+    public ResponseEntity<TicketDTO> updateTicketWithImage(
+            @PathVariable Long id,
+            @RequestParam String category,
+            @RequestParam Double price,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) Integer stock,
+            @RequestParam(required = false) String feature,
+            @RequestParam(required = false) MultipartFile image
+    ) {
+        try {
+            TicketDTO existingTicket = ticketService.getTicketById(id);
+            
+            existingTicket.setCategory(category);
+            existingTicket.setPrice(price);
+            existingTicket.setDescription(description);
+            existingTicket.setStock(stock);
+            existingTicket.setFeature(feature);
+
+            if (image != null && !image.isEmpty()) {
+                String imageUrl = imageService.save(image);
+                existingTicket.setImageUrl(imageUrl);
+            }
+
+            return ResponseEntity.ok(ticketService.updateTicket(id, existingTicket));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
         }
     }
 

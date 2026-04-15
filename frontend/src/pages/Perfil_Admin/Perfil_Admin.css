@@ -3,6 +3,44 @@
     height: 100vh;
     background-color: #0a0a0a;
     color: white;
+    position: relative;
+}
+
+/* --- TOAST NOTIFICATIONS --- */
+.admin-alert {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    z-index: 9999;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.3s ease-out forwards;
+    letter-spacing: 0.5px;
+}
+
+.admin-alert.success {
+    background-color: rgba(0, 229, 255, 0.9);
+    color: #000;
+    border-left: 5px solid #000;
+}
+
+.admin-alert.error {
+    background-color: rgba(223, 24, 138, 0.9);
+    color: #fff;
+    border-left: 5px solid #fff;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 /* --- SIDEBAR (Izquierda) --- */
