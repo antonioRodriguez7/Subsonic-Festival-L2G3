@@ -7,6 +7,7 @@ import com.susbsonic.usuarios.models.DTO.UserRegisterDTO;
 import com.susbsonic.usuarios.Services.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -21,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDTO> register(@RequestBody UserRegisterDTO registerDTO) {
+    public ResponseEntity<AuthResponseDTO> register(@Valid @RequestBody UserRegisterDTO registerDTO) {
         try {
             AuthResponseDTO response = authService.register(registerDTO);
             return ResponseEntity.ok(response);
