@@ -16,6 +16,11 @@ function Registro() {
         confirmPassword: ''
     });
 
+    const validarPassword = (password) => {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+        return regex.test(password);
+    };
+
     const [tipoUsuario, setTipoUsuario] = useState('CLIENTE');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -36,6 +41,11 @@ function Registro() {
         // Validación de campos obligatorios
         if (!formData.name || !formData.surname || !formData.email || !formData.password) {
             setError("Por favor, rellena todos los campos (Nombre, Apellidos, Email y Contraseña).");
+            return;
+        }
+
+        if (!validarPassword(formData.password)) {
+            setError("La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.");
             return;
         }
 
@@ -119,6 +129,9 @@ function Registro() {
                         <input name="email" type="email" placeholder="Correo electrónico" value={formData.email} onChange={handleChange} required />
                         <input name="username" type="text" placeholder="Nombre de usuario" value={formData.username} onChange={handleChange} required />
                         <input name="password" type="password" placeholder="Contraseña" value={formData.password} onChange={handleChange} required />
+                        <p style={{ fontSize: '12px', color: '#ccc', marginTop: '-10px' }}>
+                            Debe tener mínimo 8 caracteres, mayúscula, minúscula, número y símbolo.
+                        </p>
                         <input name="confirmPassword" type="password" placeholder="Confirmar contraseña" value={formData.confirmPassword} onChange={handleChange} required />
                     </form>
                 </div>
