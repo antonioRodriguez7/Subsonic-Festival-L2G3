@@ -117,3 +117,50 @@
     flex: 1; /* Ocupa la otra mitad */
     background: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
 }
+
+/* --- SEPARADOR Y BOTÓN GOOGLE --- */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 25px 0 15px 0;
+    color: #888;
+    font-size: 14px;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #333;
+}
+
+.divider span {
+    padding: 0 10px;
+}
+
+.btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    background-color: #fff;
+    color: #121212;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-google img {
+    width: 22px;
+    margin-right: 12px;
+}
+
+.btn-google:hover {
+    background-color: #e6e6e6;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}

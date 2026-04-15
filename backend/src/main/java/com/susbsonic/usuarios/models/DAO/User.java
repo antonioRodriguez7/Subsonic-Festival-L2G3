@@ -1,5 +1,6 @@
 package com.susbsonic.usuarios.models.DAO;
 
+import com.susbsonic.usuarios.models.AuthProvider;
 import com.susbsonic.usuarios.models.RoleList;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -60,8 +61,16 @@ public class User implements UserDetails {
     @Column(unique = true, nullable = false)
     public String email;
 
-    @Column(nullable = false)
+    // 1. La contraseña debe poder ser null para usuarios de Google
+    @Column(nullable = true)
     public String password;
+
+    // 2. Nuevo campo para el proveedor
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    // 3. ID único que nos da Google (el campo 'sub')
+    private String providerId;
 
     @Enumerated(EnumType.STRING)
     public RoleList role;
@@ -119,5 +128,8 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
 
 }

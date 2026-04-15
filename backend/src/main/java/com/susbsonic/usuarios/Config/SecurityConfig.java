@@ -23,6 +23,9 @@ public class SecurityConfig {
     private final JwtFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
 
+    // Inyectamos el manejador de éxito de OAuth2
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -64,6 +67,12 @@ public class SecurityConfig {
 
                         // 5. CUALQUIER OTRA RUTA
                         .anyRequest().authenticated()
+                )
+
+                // GOOGLE OAUTH2: Añadimos el flujo de login con OAuth2
+                .oauth2Login(oauth2 -> oauth2
+                        // Cuando Google responde OK, ejecutamos nuestra clase personalizada
+                        .successHandler(oAuth2LoginSuccessHandler)
                 )
 
                 // 4. GESTIÓN DE SESIÓN STATELESS (JWT)
