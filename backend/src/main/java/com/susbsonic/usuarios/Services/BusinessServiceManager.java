@@ -111,22 +111,30 @@ public class BusinessServiceManager {
             throw new RuntimeException("Unauthorized: This is not your service");
         }
 
-        // Si el servicio tiene un espacio asignado, debemos liberarlo antes o marcarlo como disponible
-        if (service.getSpace() != null) {
-            Space space = service.getSpace();
-            space.setIsRented(false); // Liberamos el espacio al borrar el negocio
-            spaceRepository.save(space);
-            service.setSpace(null);
-        }
-
+        // Simplemente borramos el servicio. El espacio seguirá marcado como isRented=true
+        // (ya que fue contratado previamente) pero ahora aparecerá como "libre" en el frontend
+        // para que este proveedor pueda asignarle otro servicio si quiere.
+        
         serviceRepository.delete(service);
     }
 
     public ProviderServiceDTO assignSpaceToService(Long serviceId, Long spaceId) {
-        ProviderService service = serviceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Service not found"));
-        Space space = spaceRepository.findById(spaceId).orElseThrow(() -> new RuntimeException("Space not found"));
+        ProviderService service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new RuntimeException("Service not found"));
+        Space space = spaceRepository.findById(spaceId)
+                .orElseThrow(() -> new RuntimeException("Space not found"));
         
         service.setSpace(space);
+        ProviderService updated = serviceRepository.save(service);
+        
+        return mapToDTO(updated);
+    }
+
+    public ProviderServiceDTO unassignSpaceFromService(Long serviceId) {
+        ProviderService service = serviceRepository.findById(serviceId)
+                .orElseThrow(() -> new RuntimeException("Service not found"));
+        
+        service.setSpace(null);
         ProviderService updated = serviceRepository.save(service);
         
         return mapToDTO(updated);

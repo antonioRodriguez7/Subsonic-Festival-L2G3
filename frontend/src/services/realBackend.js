@@ -277,6 +277,11 @@ export async function assignSpaceToService(serviceId, spaceId) {
     return response.data;
 }
 
+export async function unassignSpaceFromService(serviceId) {
+    const response = await api.delete(`/services/${serviceId}/space`);
+    return response.data;
+}
+
 /* ========== USUARIOS & AUTENTICACIÓN ========== */
 export async function loginUsuario(email, password) {
     const response = await api.post('/auth/login', { email, password });

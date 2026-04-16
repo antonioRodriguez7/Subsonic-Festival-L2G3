@@ -64,6 +64,7 @@ export const updateSpace = real.updateSpace;
 export const deleteSpace = real.deleteSpace;
 export const rentSpace = real.rentSpace;         // PUT /api/spaces/:id (marcar como alquilado)
 export const assignSpaceToService = real.assignSpaceToService;
+export const unassignSpaceFromService = real.unassignSpaceFromService;
 
 /* ------------------------------------------------------------
    5. SPOTIFY SYNC

@@ -10,7 +10,8 @@ import {
     deleteService,
     rentSpace,
     getEspacios,
-    assignSpaceToService
+    assignSpaceToService,
+    unassignSpaceFromService
 } from '../../services/api';
 
 function Perfil_Proveedor() {
@@ -19,7 +20,6 @@ function Perfil_Proveedor() {
 
     const [activeSection, setActiveSection] = useState('MIS_SERVICIOS');
     const [selectedEspacio, setSelectedEspacio] = useState(null);
-    const [idServicioSeleccionado, setIdServicioSeleccionado] = useState(''); // Para elegir servicio al contratar space
 
     const [filtros, setFiltros] = useState({
         zona: [],
@@ -36,6 +36,8 @@ function Perfil_Proveedor() {
 
     const [isEditing, setIsEditing] = useState(false);
     const [editingServiceId, setEditingServiceId] = useState(null);
+    const [expandedServiceId, setExpandedServiceId] = useState(null); // Para ver detalles del espacio asignado
+    const [quickAssignSpaceId, setQuickAssignSpaceId] = useState(''); // Para el selector rápido en la lista
 
     const [formServicio, setFormServicio] = useState({
         nombre: '',
@@ -43,7 +45,8 @@ function Perfil_Proveedor() {
         descripcion: '',
         fechas: '17-20 Julio 2026',
         imagen: null,
-        imagenUrl: ''
+        imagenUrl: '',
+        spaceId: '' // Campo para asignar espacio contratado
     });
 
     const fetchProveedorData = async () => {
@@ -127,7 +130,8 @@ function Perfil_Proveedor() {
             descripcion: servicio.descripcion,
             fechas: servicio.fechas,
             imagen: null,
-            imagenUrl: servicio.imagenUrl || ''
+            imagenUrl: servicio.imagenUrl || '',
+            spaceId: servicio.spaceId || ''
         });
         // Scroll to form
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -136,7 +140,7 @@ function Perfil_Proveedor() {
     const handleCancelEdit = () => {
         setIsEditing(false);
         setEditingServiceId(null);
-        setFormServicio({ nombre: '', tipo: 'Restauración', descripcion: '', fechas: '17-20 Julio 2026', imagen: null, imagenUrl: '' });
+        setFormServicio({ nombre: '', tipo: 'Restauración', descripcion: '', fechas: '17-20 Julio 2026', imagen: null, imagenUrl: '', spaceId: '' });
     };
 
     const handleSaveService = async () => {
@@ -158,17 +162,31 @@ function Perfil_Proveedor() {
                 imagenUrl: finalImagenUrl
             };
 
+            let savedService;
             if (isEditing) {
-                await updateService(editingServiceId, dataToSend);
+                savedService = await updateService(editingServiceId, dataToSend);
+                
+                // Si ha seleccionado un espacio diferente al editar
+                if (formServicio.spaceId) {
+                    await assignSpaceToService(editingServiceId, formServicio.spaceId);
+                }
+                
                 alert("Servicio actualizado correctamente.");
             } else {
-                await createService(dataToSend);
-                alert("Servicio creado correctamente. Ahora puedes asignarlo a un espacio en la sección 'CONTRATAR ESPACIOS'.");
+                savedService = await createService(dataToSend);
+                
+                // Si ha seleccionado un espacio al crear
+                if (formServicio.spaceId && savedService && savedService.id) {
+                    await assignSpaceToService(savedService.id, formServicio.spaceId);
+                }
+                
+                alert("Servicio creado correctamente.");
             }
 
             handleCancelEdit();
             fetchProveedorData();
         } catch (err) {
+            console.error("Error al guardar servicio:", err);
             alert(`Error al ${isEditing ? 'actualizar' : 'crear'} el servicio`);
         }
     };
@@ -184,6 +202,34 @@ function Perfil_Proveedor() {
         }
     };
 
+    const handleUnassignSpace = async (serviceId) => {
+        if (!window.confirm("¿Quieres desvincular este servicio de su espacio actual?")) return;
+        try {
+            await unassignSpaceFromService(serviceId);
+            alert("Espacio desvinculado con éxito.");
+            fetchProveedorData();
+        } catch (err) {
+            console.error("Error al desvincular:", err);
+            alert("Error al desvincular el espacio.");
+        }
+    };
+
+    const handleQuickAssign = async (serviceId) => {
+        if (!quickAssignSpaceId) {
+            alert("Por favor, selecciona un espacio antes de asignar.");
+            return;
+        }
+        try {
+            await assignSpaceToService(serviceId, quickAssignSpaceId);
+            alert("Espacio asignado con éxito.");
+            setQuickAssignSpaceId('');
+            fetchProveedorData();
+        } catch (err) {
+            console.error("Error al asignar espacio:", err);
+            alert("Error al asignar el espacio.");
+        }
+    };
+
     const getNormalizedSpace = (espacio) => {
         return {
             id: espacio.id,
@@ -196,22 +242,14 @@ function Perfil_Proveedor() {
     };
 
     const handleContratarEspacio = async (espacio) => {
-        if (!idServicioSeleccionado) {
-            alert("Por favor, selecciona el servicio que vas a poner en este espacio.");
-            return;
-        }
         try {
             const normalizedSpace = getNormalizedSpace(espacio);
             console.log("Enviando contratación para:", normalizedSpace);
             
             await rentSpace(espacio.id, normalizedSpace);
             
-            // También asignar el espacio al servicio
-            await assignSpaceToService(idServicioSeleccionado, espacio.id);
-            
-            alert(`¡Espacio "${normalizedSpace.name}" contratado y asignado al servicio con éxito!`);
+            alert(`¡Espacio "${normalizedSpace.name}" contratado con éxito!`);
             setSelectedEspacio(null);
-            setIdServicioSeleccionado('');
             fetchProveedorData();
         } catch (err) {
             console.error("Error al contratar:", err);
@@ -287,34 +325,107 @@ function Perfil_Proveedor() {
                                     </div>
                                 ) : (
                                     <div className="espacios-contratados-list">
-                                        {serviciosProveedor.map(servicio => (
-                                            <div key={servicio.id} className="espacio-contratado-item">
-                                                <div className="contratado-header">
-                                                    <h4>{servicio.nombre}</h4>
-                                                    <div className="servicio-actions-btns">
+                                        {serviciosProveedor.map(servicio => {
+                                            // Usamos == para comparar IDs por si vienen como string/number y comprobamos nombre/name
+                                            const espacioAsignado = espaciosContratados.find(e => e.id == servicio.spaceId);
+                                            const nombreEspacio = espacioAsignado ? (espacioAsignado.nombre || espacioAsignado.name) : '';
+                                            const isExpanded = expandedServiceId === servicio.id;
+
+                                            return (
+                                                <div key={servicio.id} className="espacio-contratado-item">
+                                                    <div className="contratado-header">
+                                                        <h4>{servicio.nombre}</h4>
+                                                        <div className="servicio-actions-btns">
+                                                            <button 
+                                                                className="btn-edit-inline" 
+                                                                title="Editar"
+                                                                onClick={() => handleEditClick(servicio)}
+                                                            >
+                                                                ✏️
+                                                            </button>
+                                                            <button 
+                                                                className="btn-delete-inline" 
+                                                                title="Eliminar"
+                                                                onClick={() => handleDeleteService(servicio.id)}
+                                                            >
+                                                                🗑️
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div className="contratado-sub">
+                                                        <span className="tipo-badge">{servicio.tipo}</span>
+                                                        <span className="contratado-detalle">📅 {servicio.fechas}</span>
+                                                    </div>
+                                                    <p className="servicio-asignado-descripcion">{servicio.descripcion}</p>
+                                                    
+                                                    {/* DESPLEGABLE DE ESPACIO ASIGNADO */}
+                                                    <div className="servicio-espacio-asignado-box">
                                                         <button 
-                                                            className="btn-edit-inline" 
-                                                            title="Editar"
-                                                            onClick={() => handleEditClick(servicio)}
+                                                            className={`btn-toggle-espacio ${isExpanded ? 'active' : ''}`}
+                                                            onClick={() => setExpandedServiceId(isExpanded ? null : servicio.id)}
                                                         >
-                                                            ✏️
+                                                            {espacioAsignado ? `📍 Ubicado en: ${nombreEspacio}` : '⚠️ Sin espacio asignado'}
+                                                            <span>{isExpanded ? '▲' : '▼'}</span>
                                                         </button>
-                                                        <button 
-                                                            className="btn-delete-inline" 
-                                                            title="Eliminar"
-                                                            onClick={() => handleDeleteService(servicio.id)}
-                                                        >
-                                                            🗑️
-                                                        </button>
+                                                        
+                                                        {isExpanded && (
+                                                            <div className="espacio-asignado-detalle-expand">
+                                                                {espacioAsignado ? (
+                                                                    <>
+                                                                        <p><strong>Tipo:</strong> {espacioAsignado.caracteristica || espacioAsignado.type}</p>
+                                                                        <p><strong>Tamaño:</strong> {espacioAsignado.tamano || (espacioAsignado.sizeSquareMeters + ' m²')}</p>
+                                                                        <p><strong>Precio:</strong> {espacioAsignado.precio || (espacioAsignado.price + '€')}</p>
+                                                                        <div className="espacio-asignado-actions">
+                                                                            <button 
+                                                                                className="btn-ver-en-mapa"
+                                                                                onClick={() => setActiveSection('ESPACIOS')}
+                                                                            >
+                                                                                Ver en Gestión de Espacios
+                                                                            </button>
+                                                                            <button 
+                                                                                className="btn-unassign-space"
+                                                                                onClick={() => handleUnassignSpace(servicio.id)}
+                                                                            >
+                                                                                ❌ Desvincular Espacio
+                                                                            </button>
+                                                                        </div>
+                                                                    </>
+                                                                ) : (
+                                                                    <div className="quick-assign-wrapper">
+                                                                        <p className="quick-assign-hint">Asigna este servicio a uno de tus espacios contratados:</p>
+                                                                        <div className="quick-assign-controls">
+                                                                            <select 
+                                                                                className="quick-assign-select"
+                                                                                value={quickAssignSpaceId}
+                                                                                onChange={(e) => setQuickAssignSpaceId(e.target.value)}
+                                                                            >
+                                                                                <option value="">-- Seleccionar un espacio libre --</option>
+                                                                                {espaciosContratados.map(e => {
+                                                                                    const isOccupied = serviciosProveedor.some(s => s.spaceId == e.id);
+                                                                                    if (isOccupied) return null;
+                                                                                    return (
+                                                                                        <option key={e.id} value={e.id}>
+                                                                                            {e.nombre || e.name} ({e.caracteristica || e.type})
+                                                                                        </option>
+                                                                                    );
+                                                                                })}
+                                                                            </select>
+                                                                            <button 
+                                                                                className="btn-quick-assign-confirm"
+                                                                                disabled={!quickAssignSpaceId}
+                                                                                onClick={() => handleQuickAssign(servicio.id)}
+                                                                            >
+                                                                                Vincular Parcela
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
-                                                <div className="contratado-sub">
-                                                    <span className="tipo-badge">{servicio.tipo}</span>
-                                                    <span className="contratado-detalle">📅 {servicio.fechas}</span>
-                                                </div>
-                                                <p className="servicio-asignado-descripcion">{servicio.descripcion}</p>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 )}
                             </div>
@@ -349,6 +460,34 @@ function Perfil_Proveedor() {
                                                 <option value="Entretenimiento">Entretenimiento</option>
                                                 <option value="Bebidas">Bebidas</option>
                                                 <option value="Otro">Otro</option>
+                                            </select>
+                                        </div>
+
+                                        <div className="field-group">
+                                            <label>Asignar a Espacio Contratado</label>
+                                            <select
+                                                value={formServicio.spaceId}
+                                                onChange={(e) => setFormServicio({ ...formServicio, spaceId: e.target.value })}
+                                            >
+                                                <option value="">-- Seleccionar Espacio --</option>
+                                                {espaciosContratados.map(espacio => {
+                                                    // Buscamos si ya hay un servicio en este espacio
+                                                    const servicioExistente = serviciosProveedor.find(s => s.spaceId === espacio.id);
+                                                    const isCurrentSpace = formServicio.spaceId === espacio.id;
+                                                    
+                                                    // Si ya tiene un servicio y no es el que estamos editando ahora, lo deshabilitamos
+                                                    const isDisabled = servicioExistente && !isCurrentSpace;
+
+                                                    return (
+                                                        <option 
+                                                            key={espacio.id} 
+                                                            value={espacio.id}
+                                                            disabled={isDisabled}
+                                                        >
+                                                            {espacio.nombre || espacio.name} {isDisabled ? '- YA ASIGNADO' : ''}
+                                                        </option>
+                                                    );
+                                                })}
                                             </select>
                                         </div>
 
@@ -452,29 +591,72 @@ function Perfil_Proveedor() {
                             </button>
                         </aside>
 
-                        {/* Grid de espacios */}
+                        {/* Contenido principal de espacios */}
                         <div className="espacios-content">
-                            <div className="espacios-info-banner">
-                                <p>📍 {espaciosFiltrados.length} parcelas disponibles para tu negocio</p>
+                            <div className="espacios-section-title">
+                                <h3>Parcelas Disponibles</h3>
+                                <div className="espacios-info-banner">
+                                    <p>📍 {espaciosFiltrados.length} parcelas disponibles para tu negocio</p>
+                                </div>
                             </div>
 
                             <div className="espacios-grid">
-                                {espaciosFiltrados.map(espacio => (
-                                    <div
-                                        key={espacio.id}
-                                        className="espacio-card-proveedor"
-                                        onClick={() => setSelectedEspacio(espacio)}
-                                    >
-                                        <span className="zona-badge">{espacio.zonaGeneral || 'Recinto'}</span>
-                                        <h3>{espacio.nombre || espacio.name}</h3>
-                                        <p className="espacio-tipo">{espacio.caracteristica || espacio.type}</p>
-                                        <p className="espacio-detalle">💰 {espacio.precio || (espacio.price + '€')}</p>
-                                        <p className="espacio-detalle">📏 {espacio.tamano || (espacio.sizeSquareMeters + ' m²')}</p>
-                                        <div className="espacio-footer">
-                                            <span className="espacio-ver-mas">Ver detalles y contratar →</span>
+                                {espaciosFiltrados.length === 0 ? (
+                                    <p className="no-espacios">No hay espacios disponibles con estos filtros.</p>
+                                ) : (
+                                    espaciosFiltrados.map(espacio => (
+                                        <div
+                                            key={espacio.id}
+                                            className="espacio-card-proveedor"
+                                            onClick={() => setSelectedEspacio(espacio)}
+                                        >
+                                            <span className="zona-badge">{espacio.zonaGeneral || 'Recinto'}</span>
+                                            <h3>{espacio.nombre || espacio.name}</h3>
+                                            <p className="espacio-tipo">{espacio.caracteristica || espacio.type}</p>
+                                            <p className="espacio-detalle">💰 {espacio.precio || (espacio.price + '€')}</p>
+                                            <p className="espacio-detalle">📏 {espacio.tamano || (espacio.sizeSquareMeters + ' m²')}</p>
+                                            <div className="espacio-footer">
+                                                <span className="espacio-ver-mas">Ver detalles y contratar →</span>
+                                            </div>
                                         </div>
+                                    ))
+                                )}
+                            </div>
+
+                            {/* SECCIÓN DE ESPACIOS CONTRATADOS */}
+                            <div className="espacios-contratados-proveedor-section">
+                                <h3 className="section-title">Mis Espacios Contratados</h3>
+                                {espaciosContratados.length === 0 ? (
+                                    <div className="no-contratados-empty">
+                                        <p>No has contratado ningún espacio todavía.</p>
                                     </div>
-                                ))}
+                                ) : (
+                                    <div className="espacios-grid">
+                                        {espaciosContratados.map(espacio => {
+                                            const tieneServicio = serviciosProveedor.some(s => s.spaceId == espacio.id);
+
+                                            return (
+                                                <div
+                                                    key={espacio.id}
+                                                    className={`espacio-card-proveedor rented ${tieneServicio ? 'occupied' : ''}`}
+                                                >
+                                                    <span className="zona-badge">{espacio.zonaGeneral || 'Recinto'}</span>
+                                                    <h3>{espacio.nombre || espacio.name}</h3>
+                                                    <p className="espacio-tipo">{espacio.caracteristica || espacio.type}</p>
+                                                    <p className="espacio-detalle">💰 {espacio.precio || (espacio.price + '€')}</p>
+                                                    <p className="espacio-detalle">📏 {espacio.tamano || (espacio.sizeSquareMeters + ' m²')}</p>
+                                                    <div className="espacio-footer">
+                                                        {tieneServicio ? (
+                                                            <span className="estado-ocupado">📦 Espacio Ocupado</span>
+                                                        ) : (
+                                                            <span className="estado-alquilado">✅ Ya Contratado</span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -504,36 +686,17 @@ function Perfil_Proveedor() {
 
                                 <div className="modal-section modal-section-full hire-section">
                                     <h4>💼 Contratar este espacio</h4>
-                                    {serviciosProveedor.length === 0 ? (
-                                        <div className="warning-box">
-                                            <p>Debes crear un servicio en "MIS SERVICIOS" antes de poder contratar un espacio.</p>
-                                            <button className="btn-go-create" onClick={() => {setActiveSection('MIS_SERVICIOS'); setSelectedEspacio(null);}}>Ir a crear servicio</button>
-                                        </div>
-                                    ) : (
-                                        <div className="hire-form">
-                                            <label>Selecciona el servicio que ubicarás aquí:</label>
-                                            <select 
-                                                value={idServicioSeleccionado} 
-                                                onChange={(e) => setIdServicioSeleccionado(e.target.value)}
-                                                className="service-select"
+                                    <div className="hire-form">
+                                        <p>Al contratar este espacio, quedará reservado para tu uso exclusivo durante todo el festival.</p>
+                                        <div className="modal-actions-proveedor">
+                                            <button
+                                                className="btn-solicitar-alquiler"
+                                                onClick={() => handleContratarEspacio(selectedEspacio)}
                                             >
-                                                <option value="">-- Elige un servicio --</option>
-                                                {serviciosProveedor.map(s => (
-                                                    <option key={s.id} value={s.id}>{s.nombre} ({s.tipo})</option>
-                                                ))}
-                                            </select>
-                                            
-                                            <div className="modal-actions-proveedor">
-                                                <button
-                                                    className="btn-solicitar-alquiler"
-                                                    disabled={!idServicioSeleccionado}
-                                                    onClick={() => handleContratarEspacio(selectedEspacio)}
-                                                >
-                                                    🚀 Contratar Espacio Ahora
-                                                </button>
-                                            </div>
+                                                🚀 Contratar Espacio Ahora
+                                            </button>
                                         </div>
-                                    )}
+                                    </div>
                                 </div>
                             </div>
                         </div>

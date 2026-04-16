@@ -44,6 +44,11 @@ public class ProviderServiceController {
         return ResponseEntity.ok(serviceManager.assignSpaceToService(serviceId, spaceId));
     }
 
+    @DeleteMapping("/{serviceId}/space")
+    public ResponseEntity<ProviderServiceDTO> unassignSpace(@PathVariable Long serviceId) {
+        return ResponseEntity.ok(serviceManager.unassignSpaceFromService(serviceId));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ProviderServiceDTO> updateService(@PathVariable Long id, @RequestBody ProviderServiceDTO dto) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
