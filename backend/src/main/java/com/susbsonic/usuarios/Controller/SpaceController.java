@@ -1,8 +1,10 @@
 package com.susbsonic.usuarios.Controller;
 
 import com.susbsonic.usuarios.Services.SpaceService;
+import com.susbsonic.usuarios.models.DTO.RentedSpaceDTO;
 import com.susbsonic.usuarios.models.DTO.SpaceDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,7 +52,7 @@ public class SpaceController {
         }
     }
 
-    // --- Endpoints Públicos / Para Proveedores ---
+    // --- Endpoints Públicos ---
 
     @GetMapping("/all")
     public ResponseEntity<List<SpaceDTO>> getAllSpaces() {
@@ -69,5 +71,38 @@ public class SpaceController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // --- Endpoints de Proveedor (requieren JWT) ---
+
+    /**
+     * Alquila un espacio. El proveedor se identifica automáticamente desde el JWT.
+     * Crea una fila en la tabla auxiliar 'espacios_alquilados' y marca isRented = true.
+     * Devuelve el registro de alquiler creado.
+     */
+    @PutMapping("/{id}/rent")
+    public ResponseEntity<RentedSpaceDTO> rentSpace(@PathVariable Long id) {
+        String identifier = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (identifier == null || identifier.equals("anonymousUser")) {
+            return ResponseEntity.status(401).build();
+        }
+        try {
+            return ResponseEntity.ok(spaceService.rentSpace(id, identifier));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
+     * Devuelve los alquileres del proveedor autenticado, con los datos de cada espacio incluidos.
+     * El frontend lo usa para mostrar "Mis Espacios Contratados".
+     */
+    @GetMapping("/my-rented")
+    public ResponseEntity<List<RentedSpaceDTO>> getMyRentedSpaces() {
+        String identifier = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (identifier == null || identifier.equals("anonymousUser")) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(spaceService.getMyRentedSpaces(identifier));
     }
 }

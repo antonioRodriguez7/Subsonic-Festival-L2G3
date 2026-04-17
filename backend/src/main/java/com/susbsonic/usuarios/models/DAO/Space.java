@@ -49,3 +49,4 @@ public class Space {
     @Column(nullable = false)
     private Boolean isRented;
 }
+

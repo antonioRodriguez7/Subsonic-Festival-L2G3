@@ -76,7 +76,7 @@ export const syncSpotifyPlaylist = real.syncSpotifyPlaylist;
    6. LOGÍSTICA ESPECÍFICA PROVEEDORES
    ------------------------------------------------------------ */
 
-export const getEspaciosContratadosProveedor = backend.getEspaciosContratadosProveedor;
+export const getEspaciosContratadosProveedor = real.getEspaciosContratadosProveedor;
 export const getServiciosProveedor = backend.getServiciosProveedor;
 export const createService = real.createService;
 export const updateService = real.updateService;

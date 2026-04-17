@@ -9,6 +9,7 @@ import com.susbsonic.usuarios.models.DAO.User;
 import com.susbsonic.usuarios.models.RoleList;
 import com.susbsonic.usuarios.Repositories.ArtistRepository;
 import com.susbsonic.usuarios.Repositories.ProviderServiceRepository;
+import com.susbsonic.usuarios.Repositories.RentedSpaceRepository;
 import com.susbsonic.usuarios.Repositories.SpaceRepository;
 import com.susbsonic.usuarios.Repositories.TicketCompradoRepository;
 import com.susbsonic.usuarios.Repositories.TicketRepository;
@@ -32,17 +33,22 @@ public class DataSeeder {
             ArtistRepository artistRepository,
             SpaceRepository spaceRepository,
             ProviderServiceRepository providerServiceRepository,
+            RentedSpaceRepository rentedSpaceRepository,
             PasswordEncoder passwordEncoder) {
 
         return args -> {
             // == RESET: Borrar todo en orden seguro (respetando FKs) ==
             System.out.println("Reiniciando base de datos con datos del seeder...");
-            providerServiceRepository.deleteAllInBatch(); // FK: depende de User y Space
-            ticketCompradoRepository.deleteAllInBatch(); // FK: depende de User y Ticket
-            userRepository.deleteAllInBatch();
+            // 1º: tablas auxiliares que dependen de varias entidades
+            rentedSpaceRepository.deleteAllInBatch(); // FK: depende de User y Space
+            providerServiceRepository.deleteAllInBatch();  // FK: depende de User y Space
+            ticketCompradoRepository.deleteAllInBatch();   // FK: depende de User y Ticket
+            // 2º: entidades principales (sin dependencias entre sí)
+            spaceRepository.deleteAllInBatch();
             ticketRepository.deleteAllInBatch();
             artistRepository.deleteAllInBatch();
-            spaceRepository.deleteAllInBatch();
+            userRepository.deleteAllInBatch();
+
 
             // == 1. SEED USUARIOS ==
             User cliente = User.builder()
@@ -177,7 +183,7 @@ No se quien es Marco Trujillo
                     Space.builder().name("Zona Innova").type("Sur").price(2800.0).sizeSquareMeters(600).isRented(false).build(),
                     Space.builder().name("Zona Oeste").type("Oeste").price(2000.0).sizeSquareMeters(400).isRented(false).build(),
                     Space.builder().name("Zona Boutique").type("Norte").price(1500.0).sizeSquareMeters(120).isRented(false).build(),
-                    Space.builder().name("Zona Stage").type("Sur").price(5000.0).sizeSquareMeters(200).isRented(true).build()
+                    Space.builder().name("Zona Stage").type("Sur").price(5000.0).sizeSquareMeters(200).isRented(false).build()
             );
 
             spaceRepository.saveAll(espacios);
@@ -239,6 +245,26 @@ No se quien es Marco Trujillo
             );
             providerServiceRepository.saveAll(servicios);
             System.out.println("Servicios de proveedor creados.");
+
+            // == 6. SEED ESPACIOS ALQUILADOS ==
+            // Asociar esos espacios como alquilados formalmente por el proveedor
+            List<com.susbsonic.usuarios.models.DAO.RentedSpace> alquileres = List.of(
+                    com.susbsonic.usuarios.models.DAO.RentedSpace.builder().provider(proveedor).space(espacioCamping).rentDate(java.time.LocalDateTime.now()).build(),
+                    com.susbsonic.usuarios.models.DAO.RentedSpace.builder().provider(proveedor).space(espacioComida).rentDate(java.time.LocalDateTime.now()).build(),
+                    com.susbsonic.usuarios.models.DAO.RentedSpace.builder().provider(proveedor).space(espacioTransp).rentDate(java.time.LocalDateTime.now()).build(),
+                    com.susbsonic.usuarios.models.DAO.RentedSpace.builder().provider(proveedor).space(espacioMerch).rentDate(java.time.LocalDateTime.now()).build(),
+                    com.susbsonic.usuarios.models.DAO.RentedSpace.builder().provider(proveedor).space(espacioTaquilla).rentDate(java.time.LocalDateTime.now()).build()
+            );
+            rentedSpaceRepository.saveAll(alquileres);
+
+            espacioCamping.setIsRented(true);
+            espacioComida.setIsRented(true);
+            espacioTransp.setIsRented(true);
+            espacioMerch.setIsRented(true);
+            espacioTaquilla.setIsRented(true);
+            spaceRepository.saveAll(List.of(espacioCamping, espacioComida, espacioTransp, espacioMerch, espacioTaquilla));
+            System.out.println("Alquileres de proveedor asignados.");
+
             System.out.println("Base de datos reiniciada correctamente.");
         };
     }

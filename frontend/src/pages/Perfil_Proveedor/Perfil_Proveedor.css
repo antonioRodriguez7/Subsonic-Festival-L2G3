@@ -277,8 +277,6 @@
     grid-template-columns: 1fr 1fr;
     gap: 20px;
     padding: 20px;
-    height: calc(100vh - 100px);
-    overflow-y: auto;
 }
 
 .mis-espacios-left {
@@ -298,7 +296,6 @@
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     flex: 1;
-    overflow-y: auto;
 }
 
 .box-title {
@@ -609,7 +606,7 @@
 /* Estilos para la sección de ESPACIOS (Proveedor) */
 .espacios-container {
     display: flex;
-    height: calc(100vh - 100px);
+    flex: 1;
 }
 
 .espacios-filters {
@@ -617,7 +614,6 @@
     background-color: #121212;
     border-right: 1px solid #333;
     padding: 20px;
-    overflow-y: auto;
 }
 
 .filter-section {
@@ -674,7 +670,6 @@
 .espacios-content {
     flex: 1;
     padding: 20px;
-    overflow-y: auto;
 }
 
 .espacios-search {

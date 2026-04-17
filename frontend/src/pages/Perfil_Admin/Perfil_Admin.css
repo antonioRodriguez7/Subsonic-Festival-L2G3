@@ -283,9 +283,6 @@
 .espacios-container {
     display: flex;
     flex: 1;
-    /* ocupa el espacio disponible en admin-main */
-    min-height: 0;
-    /* CLAVE para que el overflow funcione bien */
 }
 
 .espacios-filters {
@@ -293,7 +290,6 @@
     background-color: #121212;
     border-right: 1px solid #333;
     padding: 20px;
-    overflow-y: auto;
 }
 
 .filter-section {
@@ -350,7 +346,6 @@
 .espacios-content {
     flex: 1;
     padding: 20px;
-    overflow-y: auto;
 }
 
 .espacios-search {
@@ -409,8 +404,8 @@
 
 .espacio-status {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 15px;
+    right: 15px;
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 11px;
@@ -729,7 +724,6 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
-    overflow-y: auto;
     flex: 1;
 }
 

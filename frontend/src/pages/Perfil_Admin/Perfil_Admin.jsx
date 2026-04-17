@@ -72,7 +72,8 @@ function Perfil_Admin() {
                 descripcion: e.description || '',
                 precio: e.price || '',
                 caracteristica: e.feature || '',
-                imagen: e.imageUrl || null
+                imagen: e.imageUrl || null,
+                stock: e.stock !== undefined ? e.stock : ''
             })) : []);
 
             setArtistas(Array.isArray(artistasData) ? artistasData.map(a => {
@@ -237,8 +238,8 @@ function Perfil_Admin() {
                 precio: parseFloat(nuevaEntrada.precio),
                 price: parseFloat(nuevaEntrada.precio),
                 stock: parseInt(nuevaEntrada.stock) || 0,
-                caracteristica: editingTicketId ? nuevaEntrada.caracteristica : "Novedad",
-                feature: editingTicketId ? nuevaEntrada.caracteristica : "Novedad",
+                caracteristica: nuevaEntrada.caracteristica || "Novedad",
+                feature: nuevaEntrada.caracteristica || "Novedad",
                 imageFile: nuevaEntrada.imagen // Pasar el archivo físico
             };
 
@@ -287,7 +288,7 @@ function Perfil_Admin() {
                         price:       parseFloat(entrada.precio) || 0,
                         feature:     entrada.caracteristica || 'Acceso estándar',
                         imageUrl:    imagenFinal || 'https://via.placeholder.com/300',
-                        stock:       entrada.stock ?? 100
+                        stock:       entrada.stock !== '' && entrada.stock !== undefined ? parseInt(entrada.stock, 10) : 100
                     };
 
                     return updateTicket(entrada.id, ticketDTO);
@@ -717,6 +718,15 @@ function Perfil_Admin() {
                                         onChange={e => setNuevaEntrada(p => ({ ...p, stock: e.target.value }))}
                                     />
                                 </div>
+                                <div className="entradas-form-field">
+                                    <label>Etiqueta</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Ej: Acceso estándar"
+                                        value={nuevaEntrada.caracteristica}
+                                        onChange={e => setNuevaEntrada(p => ({ ...p, caracteristica: e.target.value }))}
+                                    />
+                                </div>
                                 <div className="entradas-form-field entradas-form-imagen">
                                     <label>Imagen entrada</label>
                                     <label className="artista-imagen-upload">
@@ -813,6 +823,13 @@ function Perfil_Admin() {
                                                 value={entrada.caracteristica}
                                                 placeholder="Etiqueta"
                                                 onChange={e => handleUpdateEntrada(entrada.id, 'caracteristica', e.target.value)}
+                                            />
+                                            <input
+                                                className="entrada-edit-input"
+                                                type="number"
+                                                value={entrada.stock}
+                                                placeholder="Stock"
+                                                onChange={e => handleUpdateEntrada(entrada.id, 'stock', e.target.value)}
                                             />
                                         </div>
                                     ))}

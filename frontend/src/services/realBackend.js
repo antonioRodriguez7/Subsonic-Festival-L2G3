@@ -229,10 +229,15 @@ export async function updateSpace(id, spaceData) {
     return response.data;
 }
 
-// Alquilar un espacio (Asignar a un servicio/negocio)
-export async function rentSpace(spaceId, spaceData) {
-    // Recibimos el objeto ya normalizado desde el frontend
-    const response = await api.put(`/spaces/${spaceId}`, spaceData);
+// Alquilar un espacio — guarda al proveedor autenticado (via JWT) en la BD
+export async function rentSpace(spaceId) {
+    const response = await api.put(`/spaces/${spaceId}/rent`);
+    return response.data;
+}
+
+// Obtener los espacios contratados por el proveedor autenticado
+export async function getEspaciosContratadosProveedor() {
+    const response = await api.get('/spaces/my-rented');
     return response.data;
 }
 

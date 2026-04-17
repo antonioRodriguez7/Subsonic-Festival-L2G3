@@ -9,7 +9,6 @@ import {
     updateService,
     deleteService,
     rentSpace,
-    getEspacios,
     assignSpaceToService,
     unassignSpaceFromService
 } from '../../services/api';
@@ -52,17 +51,27 @@ function Perfil_Proveedor() {
     const fetchProveedorData = async () => {
         setIsLoading(true);
         try {
-            const [espaciosData, serviciosData] = await Promise.all([
-                getEspacios(),
+            const [alquileres, espaciosLibres, serviciosData] = await Promise.all([
+                getEspaciosContratadosProveedor(), // Devuelve EspacioAlquiladoDTO[]
+                getEspaciosDisponibles(),
                 getServiciosProveedor()
             ]);
-            
-            // Filtramos los que están alquilados vs disponibles según su propiedad
-            const contratados = espaciosData.filter(e => e.isRented === true || e.disponibilidad === 'Reservado');
-            const disponibles = espaciosData.filter(e => e.isRented === false || e.disponibilidad === 'Disponible');
 
-            setEspaciosContratados(contratados);
-            setEspaciosDisponibles(disponibles);
+            // Normalizamos RentedSpaceDTO al formato {id, name, type, price, sizeSquareMeters}
+            // que espera el resto del componente (tarjetas, selects, etc.)
+            const contratadosNormalizados = alquileres.map(a => ({
+                id: a.spaceId,
+                name: a.spaceName,
+                type: a.spaceType,
+                price: a.spacePrice,
+                sizeSquareMeters: a.spaceSizeSquareMeters,
+                isRented: true,
+                alquilerId: a.id,           // ID de la fila en rented_spaces
+                fechaAlquiler: a.rentDate
+            }));
+
+            setEspaciosContratados(contratadosNormalizados);
+            setEspaciosDisponibles(espaciosLibres);
             setServiciosProveedor(serviciosData);
         } catch (err) {
             console.error("Error cargando datos de proveedor:", err);
@@ -116,6 +125,23 @@ function Perfil_Proveedor() {
             if (filtros.tamano.includes('> 500m²') && size > 500) cumpleTamano = true;
 
             if (!cumpleTamano) return false;
+        }
+
+        // 4. Filtro por Precio
+        if (filtros.precio.length > 0) {
+            let precioObj = 0;
+            if (typeof espacio.price === 'number') {
+                precioObj = espacio.price;
+            } else if (espacio.precio) {
+                precioObj = parseFloat(espacio.precio.toString().replace(/[^\d.-]/g, '')) || 0;
+            }
+
+            let cumplePrecio = false;
+            if (filtros.precio.includes('< 2000€') && precioObj < 2000) cumplePrecio = true;
+            if (filtros.precio.includes('2000 - 3000€') && precioObj >= 2000 && precioObj <= 3000) cumplePrecio = true;
+            if (filtros.precio.includes('> 3000€') && precioObj > 3000) cumplePrecio = true;
+
+            if (!cumplePrecio) return false;
         }
 
         return true;
@@ -243,17 +269,14 @@ function Perfil_Proveedor() {
 
     const handleContratarEspacio = async (espacio) => {
         try {
-            const normalizedSpace = getNormalizedSpace(espacio);
-            console.log("Enviando contratación para:", normalizedSpace);
-            
-            await rentSpace(espacio.id, normalizedSpace);
-            
-            alert(`¡Espacio "${normalizedSpace.name}" contratado con éxito!`);
+            // El backend extrae el proveedor del JWT y lo guarda en la BD
+            await rentSpace(espacio.id);
+            alert(`¡Espacio "${espacio.nombre || espacio.name}" contratado con éxito!`);
             setSelectedEspacio(null);
             fetchProveedorData();
         } catch (err) {
             console.error("Error al contratar:", err);
-            alert("Error al contratar el espacio. Revisa la consola (F12) para ver el error técnico.");
+            alert("Error al contratar el espacio. ¿Ya está alquilado?");
         }
     };
 
@@ -556,8 +579,8 @@ function Perfil_Proveedor() {
                         {/* Filtros laterales */}
                         <aside className="espacios-filters">
                             <div className="filter-section">
-                                <h4>Categoría</h4>
-                                {['Foodtruck', 'Escenario', 'Zona VIP', 'Merchandising'].map(z => (
+                                <h4>Zona del Recinto</h4>
+                                {['Norte', 'Sur', 'Este', 'Oeste', 'Centro'].map(z => (
                                     <label key={z}>
                                         <input
                                             type="checkbox"
@@ -570,7 +593,7 @@ function Perfil_Proveedor() {
                             </div>
 
                             <div className="filter-section">
-                                <h4>Superficie</h4>
+                                <h4>Tamaño</h4>
                                 {['< 200m²', '200 - 500m²', '> 500m²'].map(t => (
                                     <label key={t}>
                                         <input
@@ -579,6 +602,20 @@ function Perfil_Proveedor() {
                                             onChange={() => handleFiltroChange('tamano', t)}
                                         />
                                         {t}
+                                    </label>
+                                ))}
+                            </div>
+
+                            <div className="filter-section">
+                                <h4>Precio</h4>
+                                {['< 2000€', '2000 - 3000€', '> 3000€'].map(p => (
+                                    <label key={p}>
+                                        <input
+                                            type="checkbox"
+                                            checked={filtros.precio.includes(p)}
+                                            onChange={() => handleFiltroChange('precio', p)}
+                                        />
+                                        {p}
                                     </label>
                                 ))}
                             </div>
