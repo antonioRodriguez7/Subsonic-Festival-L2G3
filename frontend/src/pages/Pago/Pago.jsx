@@ -6,6 +6,15 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { buyTicket, sendPdfEmail, sendInvoiceEmail } from "../../services/realBackend";
 
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import StripeCheckoutForm from './StripeCheckoutForm';
+import PayPalCheckoutForm from './PayPalCheckoutForm';
+import BizumCheckoutForm from './BizumCheckoutForm';
+
+// Clave pública oficial de test (sandbox) genérica de la documentación oficial de Stripe. (No requiere cuenta real para funcionar su GUI)
+const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+
 function Pago() {
     const { state } = useLocation();
     const navigate = useNavigate();
@@ -69,6 +78,24 @@ function Pago() {
         }
 
         setLoading(false);
+    };
+
+    // Función que llama el componente hijo de Stripe cuando valida la tarjeta satisfactoriamente
+    const processStripeSimulatedPayment = async () => {
+        setMetodo("stripe");
+        await handlePagar();
+    };
+
+    // Función que llama el componente hijo de Paypal
+    const processPaypalSimulatedPayment = async () => {
+        setMetodo("paypal");
+        await handlePagar();
+    };
+
+    // Función que llama el componente hijo de Bizum
+    const processBizumSimulatedPayment = async () => {
+        setMetodo("bizum");
+        await handlePagar();
     };
     return (
         <div className="pago-container">
@@ -138,36 +165,51 @@ function Pago() {
 
                     {/* INFO EXTRA SEGÚN MÉTODO */}
                     {metodo === "paypal" && (
-                        <p className="metodo-info">
-                            Serás redirigido a PayPal para completar el pago.
-                        </p>
+                        <div className="metodo-info paypal-info-box">
+                             <PayPalCheckoutForm 
+                                total={total}
+                                onSuccessfulSimulatedPayment={processPaypalSimulatedPayment}
+                             />
+                        </div>
                     )}
 
                     {metodo === "stripe" && (
-                        <p className="metodo-info">
-                            Pago seguro simulado con Stripe.
-                        </p>
+                        <div className="metodo-info stripe-info-box">
+                            <p>Pago validado y seguro mediante **Stripe Elements** (Simulado)</p>
+                            <Elements stripe={stripePromise}>
+                                <StripeCheckoutForm 
+                                    total={total} 
+                                    onSuccessfulSimulatedPayment={processStripeSimulatedPayment}
+                                    isProcessing={loading} 
+                                />
+                            </Elements>
+                        </div>
                     )}
 
                     {metodo === "bizum" && (
-                        <p className="metodo-info">
-                            Pago rápido mediante Bizum (simulado).
-                        </p>
+                        <div className="metodo-info bizum-info-box">
+                             <BizumCheckoutForm 
+                                total={total}
+                                onSuccessfulSimulatedPayment={processBizumSimulatedPayment}
+                             />
+                        </div>
                     )}
 
-                    {/* BOTÓN PAGAR */}
-                    <button
-                        className="pagar-btn"
-                        onClick={handlePagar}
-                        disabled={loading || !metodo}
-                    >
-                        {loading ? "Procesando..." : `Pagar ${total.toFixed(2)}€`}
-                    </button>
+                    {/* BOTÓN PAGAR GENERAL (Queda deprecado para estos 3 porque usamos sus propios formularios, pero sirve si metes más métodos en el futuro) */}
+                    {(metodo !== "stripe" && metodo !== "paypal" && metodo !== "bizum") && (
+                        <button
+                            className="pagar-btn"
+                            onClick={handlePagar}
+                            disabled={loading || !metodo}
+                        >
+                            {loading ? "Procesando..." : `Pagar ${total.toFixed(2)}€`}
+                        </button>
+                    )}
 
                     {/* TEXTO LOADING */}
                     {loading && (
                         <p className="loading-text">
-                            Procesando pago...
+                            Procesando en curso, por favor no cierres la ventana...
                         </p>
                     )}
 

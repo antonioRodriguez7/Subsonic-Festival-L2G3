@@ -199,3 +199,153 @@
     position: relative;
     z-index: 2;
 }
+
+/* ========================================================================== */
+/* INTEGRACIÓN STRIPE / FORMULARIO DE PAGOS */
+/* ========================================================================== */
+
+.stripe-info-box {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(99, 91, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(99, 91, 255, 0.3);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.paypal-info-box {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(0, 48, 135, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 48, 135, 0.3);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.bizum-info-box {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(0, 160, 130, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 160, 130, 0.3);
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* INPUT BIZUM */
+.bizum-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    font-family: inherit;
+}
+.bizum-input::placeholder {
+    color: #9ca3af;
+}
+
+/* BOTÓN ESPECÍFICO BIZUM */
+.bizum-submit-btn {
+    background: linear-gradient(135deg, #00a082, #00876c);
+    margin-top: 10px;
+}
+.bizum-submit-btn:hover {
+    box-shadow: 0 10px 30px rgba(0, 160, 130, 0.4);
+}
+
+/* ESTADOS DE ESPERA BIZUM */
+.bizum-waiting-container {
+    text-align: center;
+    padding: 20px 0;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.bizum-spinner {
+    width: 45px;
+    height: 45px;
+    margin: 0 auto 20px auto;
+    border: 5px solid rgba(0, 160, 130, 0.2);
+    border-top: 5px solid #00a082;
+    border-radius: 50%;
+    animation: bizumRotar 1s linear infinite;
+}
+
+@keyframes bizumRotar {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.stripe-info-box p {
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #e5e7eb;
+}
+
+.stripe-checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.stripe-subtitle {
+    font-size: 15px;
+    color: #fff;
+    margin: 0;
+    font-weight: 500;
+}
+
+.card-element-container {
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.card-element-container:focus-within {
+    border-color: #635bff;
+    box-shadow: 0 0 10px rgba(99, 91, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.card-error {
+    color: #ff4a4a;
+    font-size: 13px;
+    padding: 8px;
+    background: rgba(255, 74, 74, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 74, 74, 0.2);
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Modificar el botón de submit de Stripe */
+.stripe-submit-btn {
+    background: linear-gradient(135deg, #635bff, #8a2be2);
+    margin-top: 10px;
+}
+
+.stripe-submit-btn:hover {
+    box-shadow: 0 10px 30px rgba(99, 91, 255, 0.4);
+}
+
+.university-notice {
+    font-size: 13.5px;
+    color: #aab2cd;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border-left: 3px solid #ff4b2b;
+    margin-top: -5px;
+    margin-bottom: 5px;
+}
+.university-notice code {
+    background: rgba(0,0,0,0.5);
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: #ffd700;
+}
