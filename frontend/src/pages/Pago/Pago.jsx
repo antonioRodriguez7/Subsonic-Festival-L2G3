@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Pago.css";
-import { generarEntradaPDF } from "../../services/pdf";
+import { generarEntradaPDF, generarFacturaPDF } from "../../services/pdf";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { buyTicket } from "../../services/realBackend";
+import { buyTicket, sendPdfEmail, sendInvoiceEmail } from "../../services/realBackend";
 
 function Pago() {
     const { state } = useLocation();
@@ -43,9 +43,23 @@ function Pago() {
                     await buyTicket(item.id, item.cantidad);
                 }
 
-                await generarEntradaPDF(pedido);
+                // Generar y Enviar Factura
+                const facturaBlob = await generarFacturaPDF(pedido, total);
+                try {
+                    await sendInvoiceEmail(facturaBlob);
+                } catch (e) {
+                    console.error("Error enviando factura:", e);
+                }
 
-                alert("Pago realizado correctamente");
+                // Generar y Enviar Entradas
+                const ticketsBlob = await generarEntradaPDF(pedido);
+                try {
+                    await sendPdfEmail(ticketsBlob);
+                } catch (e) {
+                    console.error("Error enviando entradas:", e);
+                }
+
+                alert("Pago realizado correctamente. Recibirás tu factura y tus entradas en tu correo.");
                 navigate("/perfil");
 
             } catch (e) {

@@ -49,4 +49,28 @@ public class TicketCompradoController {
     public ResponseEntity<List<TicketCompradoDTO>> getAllPurchases() {
         return ResponseEntity.ok(purchaseService.getAllPurchases());
     }
+
+    /**
+     * Endpoint para enviar el PDF de entradas al usuario autenticado.
+     */
+    @PostMapping("/send-email")
+    public ResponseEntity<String> sendPdfEmail(
+            @RequestParam("pdf") org.springframework.web.multipart.MultipartFile pdf,
+            Authentication authentication) {
+        String username = authentication.getName();
+        purchaseService.sendTicketsPdfByEmail(username, pdf);
+        return ResponseEntity.ok("Email enviado correctamente.");
+    }
+
+    /**
+     * Endpoint para enviar el PDF de la factura al usuario autenticado.
+     */
+    @PostMapping("/send-invoice-email")
+    public ResponseEntity<String> sendInvoiceEmail(
+            @RequestParam("pdf") org.springframework.web.multipart.MultipartFile pdf,
+            Authentication authentication) {
+        String username = authentication.getName();
+        purchaseService.sendInvoicePdfByEmail(username, pdf);
+        return ResponseEntity.ok("Factura enviada correctamente.");
+    }
 }

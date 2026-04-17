@@ -184,6 +184,30 @@ export async function buyTicket(ticketId, quantity) {
     return response.data;
 }
 
+export async function sendPdfEmail(pdfBlob) {
+    const formData = new FormData();
+    formData.append("pdf", pdfBlob, "entradas-subsonic.pdf");
+
+    const response = await api.post('/purchases/send-email', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return response.data;
+}
+
+export async function sendInvoiceEmail(pdfBlob) {
+    const formData = new FormData();
+    formData.append("pdf", pdfBlob, "factura-subsonic.pdf");
+
+    const response = await api.post('/purchases/send-invoice-email', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return response.data;
+}
+
 export async function getMyTickets() {
     const userId = localStorage.getItem("user_id");
 
