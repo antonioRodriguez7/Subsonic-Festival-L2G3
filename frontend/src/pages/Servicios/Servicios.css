@@ -158,6 +158,13 @@
     font-size: 0.88rem !important;
 }
 
+.servicio-ubicacion {
+    color: #00e5ff !important;
+    font-weight: 600;
+    font-size: 0.88rem !important;
+    margin-top: 5px !important;
+}
+
 .servicios-info {
     max-width: 1200px;
     margin: 0 auto;

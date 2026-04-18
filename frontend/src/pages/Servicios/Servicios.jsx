@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Servicios.css';
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { getAllServices } from '../../services/api';
+import { getAllServices, getEspacios } from '../../services/api';
 
 const TIPO_ICON = {
     'Restauración': '🍔',
@@ -16,20 +16,25 @@ const TIPO_ICON = {
 function Servicios() {
 
     const [servicios, setServicios] = useState([]);
+    const [espacios, setEspacios] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchServicios = async () => {
+        const fetchData = async () => {
             try {
-                const data = await getAllServices();
-                setServicios(Array.isArray(data) ? data : []);
+                const [serviciosData, espaciosData] = await Promise.all([
+                    getAllServices(),
+                    getEspacios()
+                ]);
+                setServicios(Array.isArray(serviciosData) ? serviciosData : []);
+                setEspacios(Array.isArray(espaciosData) ? espaciosData : []);
             } catch (err) {
-                console.error('Error cargando servicios:', err);
+                console.error('Error cargando datos:', err);
             } finally {
                 setLoading(false);
             }
         };
-        fetchServicios();
+        fetchData();
     }, []);
 
     return (
@@ -55,27 +60,33 @@ function Servicios() {
                             <p>Los servicios del festival se anunciarán próximamente.</p>
                         </div>
                     ) : (
-                        servicios.map(servicio => (
-                            <div key={servicio.id} className="servicio-card servicio-card--dynamic">
-                                {servicio.imagenUrl ? (
-                                    <div className="servicio-card-img">
-                                        <img src={servicio.imagenUrl} alt={servicio.nombre} />
-                                    </div>
-                                ) : (
-                                    <div className="servicio-icon">
-                                        {TIPO_ICON[servicio.tipo] || '✨'}
-                                    </div>
-                                )}
-                                <div className="servicio-card-body">
-                                    <span className="servicio-tipo-badge">{servicio.tipo}</span>
-                                    <h3>{servicio.nombre}</h3>
-                                    {servicio.descripcion && <p>{servicio.descripcion}</p>}
-                                    {servicio.fechas && (
-                                        <p className="servicio-fechas">📅 {servicio.fechas}</p>
+                        servicios.map(servicio => {
+                            const espacioVinculado = espacios.find(e => e.id == servicio.spaceId);
+                            return (
+                                <div key={servicio.id} className="servicio-card servicio-card--dynamic">
+                                    {servicio.imagenUrl ? (
+                                        <div className="servicio-card-img">
+                                            <img src={servicio.imagenUrl} alt={servicio.nombre} />
+                                        </div>
+                                    ) : (
+                                        <div className="servicio-icon">
+                                            {TIPO_ICON[servicio.tipo] || '✨'}
+                                        </div>
                                     )}
+                                    <div className="servicio-card-body">
+                                        <span className="servicio-tipo-badge">{servicio.tipo}</span>
+                                        <h3>{servicio.nombre}</h3>
+                                        {servicio.descripcion && <p>{servicio.descripcion}</p>}
+                                        {espacioVinculado && (
+                                            <p className="servicio-ubicacion">{espacioVinculado.nombre || espacioVinculado.name}</p>
+                                        )}
+                                        {servicio.fechas && (
+                                            <p className="servicio-fechas">{servicio.fechas}</p>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        ))
+                            )
+                        })
                     )}
                 </section>
 

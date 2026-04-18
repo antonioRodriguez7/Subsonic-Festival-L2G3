@@ -50,6 +50,8 @@ function Login() {
 
 // --- OAUTH2 GOOGLE ---
     const handleGoogleLogin = () => {
+        // Borramos la cookie para evitar arrastrar un rol de un intento de registro anterior
+        document.cookie = "oauth_role=; path=/; max-age=0";
         // Redirige al backend de Spring Boot para iniciar el login con Google
         window.location.href = 'http://localhost:8080/oauth2/authorization/google';
     };
