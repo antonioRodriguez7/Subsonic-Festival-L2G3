@@ -42,7 +42,7 @@ function Perfil_Proveedor() {
         nombre: '',
         tipo: 'Restauración',
         descripcion: '',
-        fechas: '17-20 Julio 2026',
+        fechas: '17-19 Julio 2026',
         imagen: null,
         imagenUrl: '',
         spaceId: '' // Campo para asignar espacio contratado
@@ -95,13 +95,13 @@ function Perfil_Proveedor() {
     };
 
     const espaciosFiltrados = espaciosDisponibles.filter(espacio => {
-        
+
         // 1. Filtrar los que NO están disponibles
-        const isActuallyAvailable = 
-            espacio.isRented === false || 
+        const isActuallyAvailable =
+            espacio.isRented === false ||
             espacio.isRented === undefined || // Por si el backend no lo manda, lo asumimos libre si está en esta lista
             espacio.disponibilidad === 'Disponible';
-            
+
         if (!isActuallyAvailable) return false;
 
         // 2. Filtro por Zona o Categoría (type en realBackend)
@@ -166,14 +166,14 @@ function Perfil_Proveedor() {
     const handleCancelEdit = () => {
         setIsEditing(false);
         setEditingServiceId(null);
-        setFormServicio({ nombre: '', tipo: 'Restauración', descripcion: '', fechas: '17-20 Julio 2026', imagen: null, imagenUrl: '', spaceId: '' });
+        setFormServicio({ nombre: '', tipo: 'Restauración', descripcion: '', fechas: '17-19 Julio 2026', imagen: null, imagenUrl: '', spaceId: '' });
     };
 
     const handleSaveService = async () => {
         if (!formServicio.nombre) return;
         try {
             let finalImagenUrl = formServicio.imagenUrl;
-            
+
             if (formServicio.imagen) {
                 // En un caso real, aquí se subiría a S3/Cloudinary y se obtendría la URL real.
                 // Por ahora simulamos con el blob local para que se vea algo.
@@ -191,21 +191,21 @@ function Perfil_Proveedor() {
             let savedService;
             if (isEditing) {
                 savedService = await updateService(editingServiceId, dataToSend);
-                
+
                 // Si ha seleccionado un espacio diferente al editar
                 if (formServicio.spaceId) {
                     await assignSpaceToService(editingServiceId, formServicio.spaceId);
                 }
-                
+
                 alert("Servicio actualizado correctamente.");
             } else {
                 savedService = await createService(dataToSend);
-                
+
                 // Si ha seleccionado un espacio al crear
                 if (formServicio.spaceId && savedService && savedService.id) {
                     await assignSpaceToService(savedService.id, formServicio.spaceId);
                 }
-                
+
                 alert("Servicio creado correctamente.");
             }
 
@@ -344,7 +344,7 @@ function Perfil_Proveedor() {
                                 {serviciosProveedor.length === 0 ? (
                                     <div className="no-servicios-empty">
                                         <p>No tienes servicios creados todavía.</p>
-                                        <p style={{fontSize: '13px', color: '#666'}}>Crea uno a la derecha para poder contratar espacios.</p>
+                                        <p style={{ fontSize: '13px', color: '#666' }}>Crea uno a la derecha para poder contratar espacios.</p>
                                     </div>
                                 ) : (
                                     <div className="espacios-contratados-list">
@@ -359,15 +359,15 @@ function Perfil_Proveedor() {
                                                     <div className="contratado-header">
                                                         <h4>{servicio.nombre}</h4>
                                                         <div className="servicio-actions-btns">
-                                                            <button 
-                                                                className="btn-edit-inline" 
+                                                            <button
+                                                                className="btn-edit-inline"
                                                                 title="Editar"
                                                                 onClick={() => handleEditClick(servicio)}
                                                             >
                                                                 ✏️
                                                             </button>
-                                                            <button 
-                                                                className="btn-delete-inline" 
+                                                            <button
+                                                                className="btn-delete-inline"
                                                                 title="Eliminar"
                                                                 onClick={() => handleDeleteService(servicio.id)}
                                                             >
@@ -380,17 +380,17 @@ function Perfil_Proveedor() {
                                                         <span className="contratado-detalle">📅 {servicio.fechas}</span>
                                                     </div>
                                                     <p className="servicio-asignado-descripcion">{servicio.descripcion}</p>
-                                                    
+
                                                     {/* DESPLEGABLE DE ESPACIO ASIGNADO */}
                                                     <div className="servicio-espacio-asignado-box">
-                                                        <button 
+                                                        <button
                                                             className={`btn-toggle-espacio ${isExpanded ? 'active' : ''}`}
                                                             onClick={() => setExpandedServiceId(isExpanded ? null : servicio.id)}
                                                         >
                                                             {espacioAsignado ? `📍 Ubicado en: ${nombreEspacio}` : '⚠️ Sin espacio asignado'}
                                                             <span>{isExpanded ? '▲' : '▼'}</span>
                                                         </button>
-                                                        
+
                                                         {isExpanded && (
                                                             <div className="espacio-asignado-detalle-expand">
                                                                 {espacioAsignado ? (
@@ -399,13 +399,13 @@ function Perfil_Proveedor() {
                                                                         <p><strong>Tamaño:</strong> {espacioAsignado.tamano || (espacioAsignado.sizeSquareMeters + ' m²')}</p>
                                                                         <p><strong>Precio:</strong> {espacioAsignado.precio || (espacioAsignado.price + '€')}</p>
                                                                         <div className="espacio-asignado-actions">
-                                                                            <button 
+                                                                            <button
                                                                                 className="btn-ver-en-mapa"
                                                                                 onClick={() => setActiveSection('ESPACIOS')}
                                                                             >
                                                                                 Ver en Gestión de Espacios
                                                                             </button>
-                                                                            <button 
+                                                                            <button
                                                                                 className="btn-unassign-space"
                                                                                 onClick={() => handleUnassignSpace(servicio.id)}
                                                                             >
@@ -417,7 +417,7 @@ function Perfil_Proveedor() {
                                                                     <div className="quick-assign-wrapper">
                                                                         <p className="quick-assign-hint">Asigna este servicio a uno de tus espacios contratados:</p>
                                                                         <div className="quick-assign-controls">
-                                                                            <select 
+                                                                            <select
                                                                                 className="quick-assign-select"
                                                                                 value={quickAssignSpaceId}
                                                                                 onChange={(e) => setQuickAssignSpaceId(e.target.value)}
@@ -433,7 +433,7 @@ function Perfil_Proveedor() {
                                                                                     );
                                                                                 })}
                                                                             </select>
-                                                                            <button 
+                                                                            <button
                                                                                 className="btn-quick-assign-confirm"
                                                                                 disabled={!quickAssignSpaceId}
                                                                                 onClick={() => handleQuickAssign(servicio.id)}
@@ -462,7 +462,7 @@ function Perfil_Proveedor() {
                                 </h3>
                                 <form className="admin-form">
                                     <div className="form-grid">
-                                        <div className="field-group" style={{gridColumn: '1 / -1'}}>
+                                        <div className="field-group" style={{ gridColumn: '1 / -1' }}>
                                             <label>Nombre del Negocio</label>
                                             <input
                                                 type="text"
@@ -471,7 +471,7 @@ function Perfil_Proveedor() {
                                                 onChange={(e) => setFormServicio({ ...formServicio, nombre: e.target.value })}
                                             />
                                         </div>
-                                        
+
                                         <div className="field-group">
                                             <label>Tipo de Negocio</label>
                                             <select
@@ -497,13 +497,13 @@ function Perfil_Proveedor() {
                                                     // Buscamos si ya hay un servicio en este espacio
                                                     const servicioExistente = serviciosProveedor.find(s => s.spaceId === espacio.id);
                                                     const isCurrentSpace = formServicio.spaceId === espacio.id;
-                                                    
+
                                                     // Si ya tiene un servicio y no es el que estamos editando ahora, lo deshabilitamos
                                                     const isDisabled = servicioExistente && !isCurrentSpace;
 
                                                     return (
-                                                        <option 
-                                                            key={espacio.id} 
+                                                        <option
+                                                            key={espacio.id}
                                                             value={espacio.id}
                                                             disabled={isDisabled}
                                                         >
@@ -538,7 +538,7 @@ function Perfil_Proveedor() {
                                             </label>
                                         </div>
 
-                                        <div className="field-group" style={{gridColumn: '1 / -1'}}>
+                                        <div className="field-group" style={{ gridColumn: '1 / -1' }}>
                                             <label>Descripción del Servicio</label>
                                             <textarea
                                                 placeholder="Cuéntanos qué ofreces..."
