@@ -40,6 +40,7 @@ export const getUsuarios = backend.getUsuarios;
 export const getUsuarioById = backend.getUsuarioById;
 export const getCurrentUser = backend.getCurrentUser;
 export const updateUser = real.updateUser;
+export const deleteUser = real.deleteUser;
 
 
 /* ------------------------------------------------------------

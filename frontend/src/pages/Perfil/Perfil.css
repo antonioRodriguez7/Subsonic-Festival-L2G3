@@ -194,6 +194,23 @@
     box-shadow: 0 0 15px rgba(223, 24, 138, 0.5);
 }
 
+.btn-eliminar {
+    padding: 15px;
+    background-color: #e74c3c; /* Rojo base */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.btn-eliminar:hover {
+    background-color: #ff4d4d; /* Rojo más brillante */
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.5);
+}
+
 /* Línea divisoria */
 .perfil-divider {
     border: none;

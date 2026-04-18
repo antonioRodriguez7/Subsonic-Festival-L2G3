@@ -345,6 +345,11 @@ export async function updateUser(id, userData) {
     return response.data;
 }
 
+export async function deleteUser(id) {
+    const response = await api.delete(`/users/${id}`);
+    return response.data;
+}
+
 export async function getUsuarios() {
     const response = await api.get('/users/all');
     return response.data;

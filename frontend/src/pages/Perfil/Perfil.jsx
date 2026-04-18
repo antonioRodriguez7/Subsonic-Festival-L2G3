@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Perfil.css';
-import { getCurrentUser, updateUser } from '../../services/api';
+import { getCurrentUser, updateUser, deleteUser } from '../../services/api';
 import { getMyTickets } from "../../services/realBackend";
 
 function Perfil() {
@@ -160,6 +160,22 @@ function Perfil() {
         window.location.href = '/login';
     };
 
+    // 5. ELIMINAR CUENTA
+    const handleDeleteCuenta = async () => {
+        if (window.confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción es irreversible.")) {
+            try {
+                await deleteUser(perfil.id);
+                // Tras borrarla de la BD, cerramos la sesión y limpiamos los datos locales
+                handleLogout();
+            } catch (error) {
+                console.error("Error al eliminar la cuenta:", error);
+                const errorMessage = error.response?.data?.message || 'Error al eliminar la cuenta';
+                setMensaje({ texto: errorMessage, tipo: 'error' });
+                setTimeout(() => setMensaje({ texto: '', tipo: '' }), 4000);
+            }
+        }
+    };
+
     return (
         <div className="perfil-page">
             {mensaje.texto && <div className={`admin-alert ${mensaje.tipo}`} style={{
@@ -241,8 +257,10 @@ function Perfil() {
                                 />
                             </div>
 
-
-                            <button type="button" className="btn-guardar" onClick={handleSave}>Guardar Cambios</button>
+                            <div style={{ display: 'flex', gap: '15px' }}>
+                                <button type="button" className="btn-guardar" onClick={handleSave} style={{ flex: 1 }}>Guardar Cambios</button>
+                                <button type="button" className="btn-eliminar" onClick={handleDeleteCuenta} style={{ flex: 1 }}>Eliminar Cuenta</button>
+                            </div>
                         </form>
                     </div>
                 </div>
