@@ -10,6 +10,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Optional;
 
@@ -18,6 +20,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -45,8 +50,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             newUser.setUsername(email); // Usamos el email como username único inicial
             newUser.setProvider(AuthProvider.GOOGLE);
             newUser.setProviderId(googleId);
-            newUser.setAdmin(false);
-            newUser.setRole(RoleList.ROLE_USER); // Ajusta según el nombre en tu Enum RoleList
+            // Intentar extraer el rol de la cookie si existe
+            RoleList assignedRole = RoleList.ROLE_USER;
+            if (request.getCookies() != null) {
+                for (Cookie cookie : request.getCookies()) {
+                    if ("oauth_role".equals(cookie.getName())) {
+                        try {
+                            assignedRole = RoleList.valueOf(cookie.getValue());
+                        } catch (IllegalArgumentException e) {
+                            // Ignorar si el rol no es válido
+                        }
+                    }
+                }
+            }
+
+            newUser.setAdmin(assignedRole == RoleList.ROLE_ADMIN);
+            newUser.setRole(assignedRole); // Ajustado según la Cookie o el valor por defecto
 
             // 👉 AÑADE ESTA LÍNEA: Generamos una contraseña aleatoria imposible de adivinar
             newUser.setPassword(java.util.UUID.randomUUID().toString());

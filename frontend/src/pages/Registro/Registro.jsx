@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
 import './Registro.css';
 import { registrarUsuario } from '../../services/api';
 
@@ -107,6 +108,20 @@ function Registro() {
         }
     };
 
+    // --- OAUTH2 GOOGLE REGISTRO ---
+    const handleGoogleRegistro = () => {
+        // Obtenemos el rol actual seleccionado en la UI y lo guardamos en una cookie
+        // que el backend podrá leer durante el callback de Google.
+        const role = tipoUsuario === 'ADMINISTRADOR' ? 'ROLE_ADMIN' :
+                     tipoUsuario === 'PROVEEDOR' ? 'ROLE_PROVEEDOR' : 'ROLE_USER';
+        
+        document.cookie = `oauth_role=${role}; path=/; max-age=300`; // Expira en 5 minutos
+        
+        // Redirige al backend de Spring Boot para iniciar el login con Google
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+    };
+    // ------------------------------
+
     return (
         <div className="registro-wrapper">
             <div className="registro-top">
@@ -189,6 +204,17 @@ function Registro() {
                     >
                         {loading ? 'REGISTRANDO...' : 'CREAR CUENTA'}
                     </button>
+
+                    {/* --- OAUTH2 GOOGLE BOTÓN --- */}
+                    <div className="divider" style={{ margin: '15px 0', textAlign: 'center', color: '#888' }}>
+                        <span>O regístrate con</span>
+                    </div>
+                    
+                    <button type="button" className="btn-google" onClick={handleGoogleRegistro} style={{ width: '100%' }}>
+                        <FcGoogle className="google-icon" />
+                        Continuar con Google
+                    </button>
+                    {/* --------------------------- */}
 
                     <p className="login-link">
                         ¿Tienes cuenta?
