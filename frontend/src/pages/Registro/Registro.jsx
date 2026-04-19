@@ -88,10 +88,9 @@ function Registro() {
                 email: formData.email,
                 username: formData.username,
                 password: formData.password,
-                isAdmin: tipoUsuario === 'ADMINISTRADOR',
-                //Mapeamos el string de la UI al ROLE de Java
-                role: tipoUsuario === 'ADMINISTRADOR' ? 'ROLE_ADMIN' :
-                    tipoUsuario === 'PROVEEDOR' ? 'ROLE_PROVEEDOR' : 'ROLE_USER'
+                isAdmin: false,
+                // Mapeamos el string de la UI al ROLE de Java (solo CLIENTE y PROVEEDOR)
+                role: tipoUsuario === 'PROVEEDOR' ? 'ROLE_PROVEEDOR' : 'ROLE_USER'
             };
 
             await registrarUsuario(datosParaEnviar);
@@ -112,8 +111,8 @@ function Registro() {
     const handleGoogleRegistro = () => {
         // Obtenemos el rol actual seleccionado en la UI y lo guardamos en una cookie
         // que el backend podrá leer durante el callback de Google.
-        const role = tipoUsuario === 'ADMINISTRADOR' ? 'ROLE_ADMIN' :
-                     tipoUsuario === 'PROVEEDOR' ? 'ROLE_PROVEEDOR' : 'ROLE_USER';
+        // Solo se permiten ROLE_USER y ROLE_PROVEEDOR en el registro
+        const role = tipoUsuario === 'PROVEEDOR' ? 'ROLE_PROVEEDOR' : 'ROLE_USER';
         
         document.cookie = `oauth_role=${role}; path=/; max-age=300`; // Expira en 5 minutos
         
@@ -181,13 +180,13 @@ function Registro() {
                     <h3 className="section-title">👥 TIPO DE USUARIO</h3>
 
                     <div className="tipo-usuario-selector">
-                        {['CLIENTE', 'PROVEEDOR', 'ADMINISTRADOR'].map((tipo) => (
+                        {['CLIENTE', 'PROVEEDOR'].map((tipo) => (
                             <div
                                 key={tipo}
                                 className={`tipo-card ${tipoUsuario === tipo ? 'active' : ''}`}
                                 onClick={() => setTipoUsuario(tipo)}
                             >
-                                {tipo === 'ADMINISTRADOR' ? 'Admin' : tipo.charAt(0) + tipo.slice(1).toLowerCase()}
+                                {tipo.charAt(0) + tipo.slice(1).toLowerCase()}
                             </div>
                         ))}
                     </div>

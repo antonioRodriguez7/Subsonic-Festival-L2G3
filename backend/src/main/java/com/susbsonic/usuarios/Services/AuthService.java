@@ -54,17 +54,14 @@ public class AuthService {
             throw new RuntimeException("El nombre de usuario ya está en uso");
         }
 
-        // 🔍 LÓGICA DE ROL DINÁMICA
-        // Convertimos el String que viene de React (ej: "ROLE_PROVEEDOR") al Enum de Java
+        // 🔒 LÓGICA DE ROL EN REGISTRO — WHITELIST: solo se permiten ROLE_USER y ROLE_PROVEEDOR.
+        // Cualquier intento de registrarse como ROLE_ADMIN (o cualquier otro rol privilegiado)
+        // es ignorado y se asigna ROLE_USER por defecto.
         RoleList roleToAssign;
-        try {
-            if (registerDTO.getRole() != null && !registerDTO.getRole().isEmpty()) {
-                roleToAssign = RoleList.valueOf(registerDTO.getRole().toUpperCase());
-            } else {
-                roleToAssign = RoleList.ROLE_USER;
-            }
-        } catch (IllegalArgumentException e) {
-            roleToAssign = RoleList.ROLE_USER; // Si el rol no existe, por defecto USER
+        if ("ROLE_PROVEEDOR".equalsIgnoreCase(registerDTO.getRole())) {
+            roleToAssign = RoleList.ROLE_PROVEEDOR;
+        } else {
+            roleToAssign = RoleList.ROLE_USER; // Por defecto, o si es ROLE_ADMIN, o cualquier valor inválido
         }
 
         User user = User.builder()
