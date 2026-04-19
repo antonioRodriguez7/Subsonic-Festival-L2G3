@@ -40,7 +40,6 @@ export async function createArtist(artistData) {
         formData.append("performanceDate", isoDate);
         formData.append("genre", artistData.genero || artistData.genre || "Electronic");
         formData.append("description", artistData.description || "Artista añadido desde el panel");
-        formData.append("stage", artistData.escenario || artistData.stage || "Main Stage");
         formData.append("image", artistData.imageFile);
 
         const response = await api.post('/artists/withImage', formData, {
@@ -56,11 +55,10 @@ export async function createArtist(artistData) {
         imageUrl: artistData.imagenUrl || artistData.imageUrl || "https://via.placeholder.com/300",
         performanceDate: isoDate,
         genre: artistData.genero || artistData.genre || "Electronic",
-        description: artistData.description || "Artista añadido desde el panel",
-        stage: artistData.escenario || artistData.stage || "Main Stage"
+        description: artistData.description || "Artista añadido desde el panel"
     };
 
-    console.log("🚀 Payload final enviado a Java:", dataParaJava);
+    console.log("Payload final enviado a Java:", dataParaJava);
 
     const response = await api.post('/artists', dataParaJava);
     return response.data;
@@ -89,7 +87,6 @@ export async function updateArtist(id, artistData) {
         formData.append("performanceDate", isoDate);
         formData.append("genre", artistData.genero || artistData.genre || "Electronic");
         formData.append("description", artistData.description || "Artista actualizado desde el panel");
-        formData.append("stage", artistData.escenario || artistData.stage || "Main Stage");
         formData.append("image", artistData.imageFile);
 
         const response = await api.put(`/artists/${id}/withImage`, formData, {
@@ -105,8 +102,7 @@ export async function updateArtist(id, artistData) {
         imageUrl: artistData.imagenUrl || artistData.imageUrl,
         performanceDate: isoDate,
         genre: artistData.genero || artistData.genre || "Electronic",
-        description: artistData.description || "Artista actualizado desde el panel",
-        stage: artistData.escenario || artistData.stage || "Main Stage"
+        description: artistData.description || "Artista actualizado desde el panel"
     };
     const response = await api.put(`/artists/${id}`, dataParaJava);
     return response.data;
@@ -115,7 +111,7 @@ export async function updateArtist(id, artistData) {
 /* ========== SPOTIFY (Spotify - 8080) ========== */
 
 export async function syncSpotifyPlaylist() {
-    console.log("🚀 Solicitando sincronización a Java...");
+    console.log("Solicitando sincronización a Java...");
     const response = await api.post('/spotify/sync');
     return response.data;
 }

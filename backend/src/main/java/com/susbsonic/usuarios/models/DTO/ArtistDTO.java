@@ -22,7 +22,6 @@ public class ArtistDTO {
     private String name;              // Nombre del artista o grupo
     private String genre;             // Género musical (ej. Rock, Electrónica)
     private LocalDate performanceDate;// Día de la actuación
-    private String stage;             // Escenario asignado
     private Double cache;             // Caché o precio de contratación (gestión interna)
     private String spotifyUrl;        // Link de Spotify
     private String imageUrl;          // URL de la imagen del artista

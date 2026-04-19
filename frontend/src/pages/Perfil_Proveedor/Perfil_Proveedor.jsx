@@ -390,7 +390,7 @@ function Perfil_Proveedor() {
                                                     </div>
                                                     <div className="contratado-sub">
                                                         <span className="tipo-badge">{servicio.tipo}</span>
-                                                        <span className="contratado-detalle">📅 {servicio.fechas}</span>
+                                                        <span className="contratado-detalle">{servicio.fechas}</span>
                                                     </div>
                                                     <p className="servicio-asignado-descripcion">{servicio.descripcion}</p>
 
@@ -400,7 +400,7 @@ function Perfil_Proveedor() {
                                                             className={`btn-toggle-espacio ${isExpanded ? 'active' : ''}`}
                                                             onClick={() => setExpandedServiceId(isExpanded ? null : servicio.id)}
                                                         >
-                                                            {espacioAsignado ? `📍 Ubicado en: ${nombreEspacio}` : '⚠️ Sin espacio asignado'}
+                                                            {espacioAsignado ? `Ubicado en: ${nombreEspacio}` : 'Sin espacio asignado'}
                                                             <span>{isExpanded ? '▲' : '▼'}</span>
                                                         </button>
 
@@ -422,7 +422,7 @@ function Perfil_Proveedor() {
                                                                                 className="btn-unassign-space"
                                                                                 onClick={() => handleUnassignSpace(servicio.id)}
                                                                             >
-                                                                                ❌ Desvincular Espacio
+                                                                                Desvincular Espacio
                                                                             </button>
                                                                         </div>
                                                                     </>
@@ -537,10 +537,10 @@ function Perfil_Proveedor() {
                                                             alt="preview"
                                                             className="artista-imagen-preview"
                                                         />
-                                                        <span className="artista-imagen-change-label">🖼️ Cambiar imagen</span>
+                                                        <span className="artista-imagen-change-label">Cambiar imagen</span>
                                                     </div>
                                                 ) : (
-                                                    <span>🖼️ Seleccionar imagen</span>
+                                                    <span>Seleccionar imagen</span>
                                                 )}
                                                 <input
                                                     type="file"
@@ -646,7 +646,7 @@ function Perfil_Proveedor() {
                             <div className="espacios-section-title">
                                 <h3>Parcelas Disponibles</h3>
                                 <div className="espacios-info-banner">
-                                    <p>📍 {espaciosFiltrados.length} parcelas disponibles para tu negocio</p>
+                                    <p>{espaciosFiltrados.length} parcelas disponibles para tu negocio</p>
                                 </div>
                             </div>
 
@@ -663,8 +663,8 @@ function Perfil_Proveedor() {
                                             <span className="zona-badge">{espacio.zonaGeneral || 'Recinto'}</span>
                                             <h3>{espacio.nombre || espacio.name}</h3>
                                             <p className="espacio-tipo">{espacio.caracteristica || espacio.type}</p>
-                                            <p className="espacio-detalle">💰 {espacio.precio || (espacio.price + '€')}</p>
-                                            <p className="espacio-detalle">📏 {espacio.tamano || (espacio.sizeSquareMeters + ' m²')}</p>
+                                            <p className="espacio-detalle">Precio: {espacio.precio || (espacio.price + '€')}</p>
+                                            <p className="espacio-detalle">Tamaño: {espacio.tamano || (espacio.sizeSquareMeters + ' m²')}</p>
                                             <div className="espacio-footer">
                                                 <span className="espacio-ver-mas">Ver detalles y contratar →</span>
                                             </div>
@@ -693,12 +693,12 @@ function Perfil_Proveedor() {
                                                     <span className="zona-badge">{espacio.zonaGeneral || 'Recinto'}</span>
                                                     <h3>{espacio.nombre || espacio.name}</h3>
                                                     <p className="espacio-tipo">{espacio.caracteristica || espacio.type}</p>
-                                                    <p className="espacio-detalle">💰 {espacio.precio || (espacio.price + '€')}</p>
-                                                    <p className="espacio-detalle">📏 {espacio.tamano || (espacio.sizeSquareMeters + ' m²')}</p>
+                                                    <p className="espacio-detalle">Precio: {espacio.precio || (espacio.price + '€')}</p>
+                                                    <p className="espacio-detalle">Tamaño: {espacio.tamano || (espacio.sizeSquareMeters + ' m²')}</p>
                                                     <div className="espacio-footer">
                                                         {tieneServicio ? (
                                                             <div className="occupied-info">
-                                                                <span className="estado-ocupado">📦 Espacio Ocupado</span>
+                                                                <span className="estado-ocupado">Espacio Ocupado</span>
                                                                 <button
                                                                     className="btn-cancelar-alquiler"
                                                                     onClick={(e) => {
@@ -711,7 +711,7 @@ function Perfil_Proveedor() {
                                                             </div>
                                                         ) : (
                                                             <div className="rented-info">
-                                                                <span className="estado-alquilado">✅ Ya Contratado</span>
+                                                                <span className="estado-alquilado">Ya Contratado</span>
                                                                 <button
                                                                     className="btn-cancelar-alquiler"
                                                                     onClick={(e) => {
@@ -745,13 +745,13 @@ function Perfil_Proveedor() {
 
                             <div className="modal-grid">
                                 <div className="modal-section">
-                                    <h4>📏 Dimensiones</h4>
+                                    <h4>Dimensiones</h4>
                                     <p><strong>Superficie:</strong> {selectedEspacio.tamano || (selectedEspacio.sizeSquareMeters + ' m²')}</p>
                                     <p><strong>Ubicación:</strong> {selectedEspacio.lugar || selectedEspacio.zonaGeneral}</p>
                                 </div>
 
                                 <div className="modal-section">
-                                    <h4>💰 Precio Alquiler</h4>
+                                    <h4>Precio Alquiler</h4>
                                     <p className="precio-destacado">{selectedEspacio.precio || (selectedEspacio.price + '€')}</p>
                                     <p style={{ fontSize: '0.9em', color: '#aaa' }}>Canon por los 3 días del festival</p>
                                 </div>

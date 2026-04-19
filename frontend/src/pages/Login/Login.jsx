@@ -115,7 +115,7 @@ function Login() {
 
 
 
-                    {/* ✅ AQUÍ ESTÁN LOS ENLACES QUE FALTABAN */}
+                    {/* Enlaces de registro */}
                     <div className="login-links">
                         <a href="#olvido" className="link-olvido" style={{ display: 'block', marginBottom: '10px', fontSize: '14px', textDecoration: 'none', color: '#aaa' }}>
                             ¿Olvidaste la contraseña?

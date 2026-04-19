@@ -50,37 +50,37 @@ function Proveedores() {
                     <h2>¿Por qué ser proveedor de Subsonic?</h2>
                     <div className="benefits-grid">
                         <div className="benefit-card">
-                            <div className="benefit-icon">👥</div>
+                            <div className="benefit-icon"></div>
                             <h3>Alcance Masivo</h3>
                             <p>Más de 80,000 asistentes de toda Europa en 3 días</p>
                         </div>
 
                         <div className="benefit-card">
-                            <div className="benefit-icon">📈</div>
+                            <div className="benefit-icon"></div>
                             <h3>Visibilidad Garantizada</h3>
                             <p>Promoción en redes sociales y marketing directo</p>
                         </div>
 
                         <div className="benefit-card">
-                            <div className="benefit-icon">🎯</div>
+                            <div className="benefit-icon"></div>
                             <h3>Público Objetivo</h3>
                             <p>Audiencia joven, conectada y con poder adquisitivo</p>
                         </div>
 
                         <div className="benefit-card">
-                            <div className="benefit-icon">🤝</div>
+                            <div className="benefit-icon"></div>
                             <h3>Networking</h3>
                             <p>Conecta con otros proveedores y marcas líderes</p>
                         </div>
 
                         <div className="benefit-card">
-                            <div className="benefit-icon">💼</div>
+                            <div className="benefit-icon"></div>
                             <h3>Oportunidades de Negocio</h3>
                             <p>Colaboraciones y proyectos a largo plazo</p>
                         </div>
 
                         <div className="benefit-card">
-                            <div className="benefit-icon">🎉</div>
+                            <div className="benefit-icon"></div>
                             <h3>Experiencia Única</h3>
                             <p>Sé parte de un evento de clase mundial</p>
                         </div>
@@ -91,49 +91,49 @@ function Proveedores() {
                     <h2>Categorías de Proveedores Buscados</h2>
                     <div className="categories-grid">
                         <div className="category-item">
-                            <span className="category-icon">🍔</span>
+                            <span className="category-icon"></span>
                             <h4>Food & Beverage</h4>
                             <p>Foodtrucks, bares, restaurantes y catering</p>
                         </div>
 
                         <div className="category-item">
-                            <span className="category-icon">🛍️</span>
+                            <span className="category-icon"></span>
                             <h4>Merchandising</h4>
                             <p>Ropa, accesorios y productos exclusivos del festival</p>
                         </div>
 
                         <div className="category-item">
-                            <span className="category-icon">🚌</span>
+                            <span className="category-icon"></span>
                             <h4>Transporte</h4>
                             <p>Empresas de autobús, taxi, aparcamiento</p>
                         </div>
 
                         <div className="category-item">
-                            <span className="category-icon">🏥</span>
+                            <span className="category-icon"></span>
                             <h4>Servicios Médicos</h4>
                             <p>Proveedores sanitarios y de seguridad</p>
                         </div>
 
                         <div className="category-item">
-                            <span className="category-icon">🏕️</span>
+                            <span className="category-icon"></span>
                             <h4>Alojamiento</h4>
                             <p>Camping, glamping, hoteles y albergues</p>
                         </div>
 
                         <div className="category-item">
-                            <span className="category-icon">🎪</span>
+                            <span className="category-icon"></span>
                             <h4>Entretenimiento</h4>
                             <p>Actividades, DJ sets, experiencias interactivas</p>
                         </div>
 
                         <div className="category-item">
-                            <span className="category-icon">📱</span>
+                            <span className="category-icon"></span>
                             <h4>Tecnología</h4>
                             <p>Sistemas de pagos, apps, infraestructura digital</p>
                         </div>
 
                         <div className="category-item">
-                            <span className="category-icon">🎨</span>
+                            <span className="category-icon"></span>
                             <h4>Diseño & Marketing</h4>
                             <p>Agencias creativas, publicidad y comunicación</p>
                         </div>

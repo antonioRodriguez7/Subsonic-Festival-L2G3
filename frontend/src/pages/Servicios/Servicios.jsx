@@ -5,12 +5,12 @@ import Footer from "../../components/Footer";
 import { getAllServices, getEspacios } from '../../services/api';
 
 const TIPO_ICON = {
-    'Restauración': '🍔',
-    'Bebidas': '🍹',
-    'Merchandising': '🛍️',
-    'Entretenimiento': '🎭',
-    'Transporte': '🚌',
-    'Otro': '✨',
+    'Restauración': '',
+    'Bebidas': '',
+    'Merchandising': '',
+    'Entretenimiento': '',
+    'Transporte': '',
+    'Otro': '',
 };
 
 function Servicios() {
@@ -56,7 +56,7 @@ function Servicios() {
                         </div>
                     ) : servicios.length === 0 ? (
                         <div className="servicios-empty">
-                            <span>🎪</span>
+                            <span></span>
                             <p>Los servicios del festival se anunciarán próximamente.</p>
                         </div>
                     ) : (
@@ -70,7 +70,7 @@ function Servicios() {
                                         </div>
                                     ) : (
                                         <div className="servicio-icon">
-                                            {TIPO_ICON[servicio.tipo] || '✨'}
+                                            {TIPO_ICON[servicio.tipo] || ''}
                                         </div>
                                     )}
                                     <div className="servicio-card-body">

@@ -137,7 +137,7 @@ function Registro() {
             <div className="registro-container">
                 {/* IZQUIERDA: FORMULARIO ACTUALIZADO */}
                 <div className="registro-left">
-                    <h3 className="section-title">👤 INFORMACIÓN PERSONAL</h3>
+                    <h3 className="section-title">INFORMACIÓN PERSONAL</h3>
 
                     {error && (
                         <p style={{
@@ -177,7 +177,7 @@ function Registro() {
 
                 {/* DERECHA: SELECTOR Y BOTÓN */}
                 <div className="registro-right">
-                    <h3 className="section-title">👥 TIPO DE USUARIO</h3>
+                    <h3 className="section-title">TIPO DE USUARIO</h3>
 
                     <div className="tipo-usuario-selector">
                         {['CLIENTE', 'PROVEEDOR'].map((tipo) => (

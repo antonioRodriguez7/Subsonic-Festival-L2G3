@@ -275,7 +275,6 @@ No se quien es Marco Trujillo
                 .performanceDate(date)
                 .imageUrl(imgUrl)
                 .spotifyUrl(spotifyUrl)
-                .stage("Main Stage")
                 .genre("General")
                 .cache(10000.0)
                 .description("Artista del Subsonic Festival")

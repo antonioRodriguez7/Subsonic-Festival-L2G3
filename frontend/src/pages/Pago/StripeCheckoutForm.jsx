@@ -42,7 +42,7 @@ const StripeCheckoutForm = ({ total, onSuccessfulSimulatedPayment, isProcessing 
         <form onSubmit={handleSubmit} className="stripe-checkout-form">
             <h4 className="stripe-subtitle">Ingresa tu Tarjeta de Pago Seguro</h4>
             
-            <p className="university-notice">💳 Tarjeta de prueba habilitada para este ejemplo: <code>4242 4242 4242 4242</code></p>
+            <p className="university-notice">Tarjeta de prueba habilitada para este ejemplo: <code>4242 4242 4242 4242</code></p>
 
             <div className="card-element-container">
                 <CardElement 
@@ -69,7 +69,7 @@ const StripeCheckoutForm = ({ total, onSuccessfulSimulatedPayment, isProcessing 
             
             {cardError && (
                 <div className="card-error" role="alert">
-                    ⚠️ {cardError}
+                    {cardError}
                 </div>
             )}
             

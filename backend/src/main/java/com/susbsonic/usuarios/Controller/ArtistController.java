@@ -48,7 +48,6 @@ public class ArtistController {
             @RequestParam(required = false) String spotifyUrl,
             @RequestParam(required = false) String performanceDate,
             @RequestParam(required = false) String genre,
-            @RequestParam(required = false) String stage,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) MultipartFile image
     ) {
@@ -68,7 +67,6 @@ public class ArtistController {
             dto.setSpotifyUrl(spotifyUrl);
             dto.setPerformanceDate(parsedDate);
             dto.setGenre(genre);
-            dto.setStage(stage);
             dto.setDescription(description);
             dto.setImageUrl(imageUrl);
 
@@ -131,7 +129,6 @@ public class ArtistController {
             @RequestParam(required = false) String spotifyUrl,
             @RequestParam(required = false) String performanceDate,
             @RequestParam(required = false) String genre,
-            @RequestParam(required = false) String stage,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) MultipartFile image
     ) {
@@ -152,7 +149,6 @@ public class ArtistController {
             dto.setSpotifyUrl(spotifyUrl);
             dto.setPerformanceDate(parsedDate);
             dto.setGenre(genre);
-            dto.setStage(stage);
             dto.setDescription(description);
             dto.setImageUrl(imageUrl);
 

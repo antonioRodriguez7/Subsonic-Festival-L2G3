@@ -42,12 +42,6 @@ public class Artist {
     private LocalDate performanceDate;
 
     /**
-     * Escenario asignado para la actuación.
-     */
-    @Column
-    private String stage;
-
-    /**
      * Caché o coste de contratación del artista (dato interno para el Admin).
      */
     @Column

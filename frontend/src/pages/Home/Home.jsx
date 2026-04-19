@@ -117,22 +117,22 @@ function Home() {
                     <h2 className="experience-title">Vive la Experiencia Subsonic</h2>
                     <div className="experience-grid">
                         <div className="experience-card">
-                            <div className="experience-icon">🎧</div>
+                            <div className="experience-icon"></div>
                             <h3>48 Artistas Internacionales</h3>
                             <p>Lo mejor de la música urbana y electrónica en 3 escenarios.</p>
                         </div>
                         <div className="experience-card">
-                            <div className="experience-icon">🎡</div>
+                            <div className="experience-icon"></div>
                             <h3>3 Escenarios Inmersivos</h3>
                             <p>Producción audiovisual de última generación.</p>
                         </div>
                         <div className="experience-card">
-                            <div className="experience-icon">🍔</div>
+                            <div className="experience-icon"></div>
                             <h3>Zona Food & Drinks</h3>
                             <p>Foodtrucks y barras premium con experiencias gastronómicas.</p>
                         </div>
                         <div className="experience-card">
-                            <div className="experience-icon">🛍️</div>
+                            <div className="experience-icon"></div>
                             <h3>Merchandising Oficial</h3>
                             <p>Camisetas, sudaderas y edición limitada exclusiva del festival.</p>
                         </div>

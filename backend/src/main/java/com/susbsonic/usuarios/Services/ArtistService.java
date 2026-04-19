@@ -32,7 +32,6 @@ public class ArtistService {
                 .name(artist.getName())
                 .genre(artist.getGenre())
                 .performanceDate(artist.getPerformanceDate())
-                .stage(artist.getStage())
                 .cache(artist.getCache())
                 .spotifyUrl(artist.getSpotifyUrl())
                 .imageUrl(artist.getImageUrl())
@@ -45,7 +44,6 @@ public class ArtistService {
                 .name(dto.getName())
                 .genre(dto.getGenre())
                 .performanceDate(dto.getPerformanceDate())
-                .stage(dto.getStage())
                 .cache(dto.getCache())
                 .spotifyUrl(dto.getSpotifyUrl())
                 .imageUrl(dto.getImageUrl())
@@ -104,7 +102,6 @@ public class ArtistService {
         artist.setName(updatedDto.getName());
         artist.setGenre(updatedDto.getGenre());
         artist.setPerformanceDate(updatedDto.getPerformanceDate());
-        artist.setStage(updatedDto.getStage());
         artist.setCache(updatedDto.getCache());
         artist.setSpotifyUrl(updatedDto.getSpotifyUrl());
         // Solo actualizamos imageUrl si se proporciona un valor (evita sobreescribir con null)

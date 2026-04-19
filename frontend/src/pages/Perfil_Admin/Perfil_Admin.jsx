@@ -30,7 +30,7 @@ function Perfil_Admin() {
     // --- ESTADOS PARA FORMULARIOS ---
     const [nuevoArtista, setNuevoArtista] = useState({
         nombre: '', diaSemana: '', diaMes: '', mes: '', spotifyUrl: '', imagen: null,
-        genero: '', escenario: ''
+        genero: ''
     });
 
     const [nuevaEntrada, setNuevaEntrada] = useState({
@@ -99,7 +99,6 @@ function Perfil_Admin() {
                     imagen: urlImagen,
                     imagenUrl: urlImagen,
                     genero: a.genre || '',
-                    escenario: a.stage || ''
                 };
             }) : []);
         } catch (error) {
@@ -146,14 +145,13 @@ function Perfil_Admin() {
                 performanceDate: `${diaSemCalculado} ${nuevoArtista.diaMes} ${nuevoArtista.mes}`,
                 spotifyUrl: nuevoArtista.spotifyUrl,
                 genre: nuevoArtista.genero,
-                stage: nuevoArtista.escenario,
                 imageFile: nuevoArtista.imagen
             };
 
             await createArtist(artistDTO);
             mostrarMensaje("Artista añadido correctamente", "success");
             loadAllData();
-            setNuevoArtista({ nombre: '', diaSemana: '', diaMes: '', mes: '', spotifyUrl: '', imagen: null, genero: '', escenario: '' });
+            setNuevoArtista({ nombre: '', diaSemana: '', diaMes: '', mes: '', spotifyUrl: '', imagen: null, genero: '' });
         } catch (error) {
             mostrarMensaje("Error al añadir artista", "error");
         }
@@ -205,10 +203,10 @@ function Perfil_Admin() {
         setSincronizando(true);
         try {
             await syncSpotifyPlaylist();
-            alert("✅ ¡Playlist actualizada en Spotify con éxito!");
+            alert("¡Playlist actualizada en Spotify con éxito!");
         } catch (error) {
             console.error("Error al sincronizar:", error);
-            alert("❌ Hubo un error al actualizar la playlist.");
+            alert("Hubo un error al actualizar la playlist.");
         } finally {
             setSincronizando(false); // Volvemos a habilitar el botón
         }
@@ -481,19 +479,6 @@ function Perfil_Admin() {
                                         />
                                     </div>
 
-                                    {/* Campo 5: Escenario */}
-                                    <div className="artista-field artista-field-full">
-                                        <label>Escenario</label>
-                                        <select
-                                            value={nuevoArtista.escenario}
-                                            onChange={e => setNuevoArtista(p => ({ ...p, escenario: e.target.value }))}
-                                        >
-                                            <option value="">Seleccionar escenario</option>
-                                            <option value="Main Stage">Main Stage</option>
-                                            <option value="Techno Cave">Techno Cave</option>
-                                            <option value="Urban Zone">Urban Zone</option>
-                                        </select>
-                                    </div>
 
                                     {/* Campo imagen */}
                                     <div className="artista-field artista-field-full">
@@ -506,10 +491,10 @@ function Perfil_Admin() {
                                                         alt="preview"
                                                         className="artista-imagen-preview"
                                                     />
-                                                    <span className="artista-imagen-change-label">🖼️ Cambiar imagen</span>
+                                                    <span className="artista-imagen-change-label">Cambiar imagen</span>
                                                 </div>
                                             ) : (
-                                                <span>🖼️ Seleccionar imagen</span>
+                                                <span>Seleccionar imagen</span>
                                             )}
                                             <input
                                                 type="file"
@@ -540,7 +525,7 @@ function Perfil_Admin() {
 
                             {artistas.length === 0 ? (
                                 <div className="artistas-empty">
-                                    <span className="artistas-empty-icon">🎤</span>
+                                    <span className="artistas-empty-icon"></span>
                                     <p>No hay artistas añadidos todavía.</p>
                                     <p className="artistas-empty-sub">Usa el formulario de arriba para añadir el primer artista.</p>
                                 </div>
@@ -564,9 +549,9 @@ function Perfil_Admin() {
                                                                 className="artista-card-img"
                                                             />
                                                         ) : (
-                                                            <div className="artista-card-img-placeholder">🎤</div>
+                                                            <div className="artista-card-img-placeholder"></div>
                                                         )}
-                                                        <span className="artista-card-img-overlay">🖼️ Cambiar</span>
+                                                        <span className="artista-card-img-overlay">Cambiar</span>
                                                         <input
                                                             type="file"
                                                             accept="image/*"
@@ -585,6 +570,13 @@ function Perfil_Admin() {
                                                     value={artista.nombre}
                                                     placeholder="Nombre del artista"
                                                     onChange={e => handleUpdateArtista(artista.id, 'nombre', e.target.value)}
+                                                />
+
+                                                <input
+                                                    className="entrada-edit-input"
+                                                    value={artista.genero}
+                                                    placeholder="Género musical"
+                                                    onChange={e => handleUpdateArtista(artista.id, 'genero', e.target.value)}
                                                 />
 
                                                 <div className="artista-card-fecha">
@@ -737,10 +729,10 @@ function Perfil_Admin() {
                                                     alt="preview"
                                                     className="artista-imagen-preview"
                                                 />
-                                                <span className="artista-imagen-change-label">🖼️ Cambiar imagen</span>
+                                                <span className="artista-imagen-change-label">Cambiar imagen</span>
                                             </div>
                                         ) : (
-                                            <span>🖼️ Seleccionar imagen</span>
+                                            <span>Seleccionar imagen</span>
                                         )}
                                         <input
                                             type="file"
@@ -764,7 +756,7 @@ function Perfil_Admin() {
 
                             {entradas.length === 0 ? (
                                 <div className="artistas-empty">
-                                    <span className="artistas-empty-icon">🎟️</span>
+                                    <span className="artistas-empty-icon"></span>
                                     <p>No hay entradas creadas todavía.</p>
                                     <p className="artistas-empty-sub">Usa el formulario de arriba para añadir la primera entrada.</p>
                                 </div>
@@ -785,9 +777,9 @@ function Perfil_Admin() {
                                                             className="artista-card-img"
                                                         />
                                                     ) : (
-                                                        <div className="artista-card-img-placeholder">🎟️</div>
+                                                        <div className="artista-card-img-placeholder"></div>
                                                     )}
-                                                    <span className="artista-card-img-overlay">🖼️ Cambiar</span>
+                                                    <span className="artista-card-img-overlay">Cambiar</span>
                                                     <input
                                                         type="file"
                                                         accept="image/*"
@@ -1007,7 +999,7 @@ function Perfil_Admin() {
 
                                 {selectedEspacio.isRented && (
                                     <div className="modal-section negocio-section">
-                                        <h4>🏢 Reservado por Proveedor</h4>
+                                        <h4>Reservado por Proveedor</h4>
                                         <p>Se ha recibido una petición de alquiler para este espacio. Consulta el correo de la administración.</p>
                                     </div>
                                 )}
