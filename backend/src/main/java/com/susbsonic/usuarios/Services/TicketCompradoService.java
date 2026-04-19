@@ -7,10 +7,8 @@ import com.susbsonic.usuarios.models.DTO.TicketCompradoDTO;
 import com.susbsonic.usuarios.Repositories.TicketCompradoRepository;
 import com.susbsonic.usuarios.Repositories.TicketRepository;
 import com.susbsonic.usuarios.Repositories.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import com.susbsonic.usuarios.Services.ImageService;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Controlador REST para la gestión de Entradas (Tickets) del Subsonic Festival.

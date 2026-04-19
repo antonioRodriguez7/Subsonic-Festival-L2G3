@@ -54,7 +54,7 @@ public class SpotifySyncService {
 
         try {
             // 2. Hacemos la petición GET a Spotify
-            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(url, HttpMethod.GET, entity, (Class<Map<String, Object>>) (Class<?>) Map.class);
 
             // 3. Extraemos la lista de canciones ("tracks") del JSON de respuesta
             Map<String, Object> body = response.getBody();
@@ -193,7 +193,7 @@ public class SpotifySyncService {
 
         try {
             // 3. Hacemos la petición POST
-            ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, request, Map.class);
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(url, HttpMethod.POST, request, (Class<Map<String, Object>>) (Class<?>) Map.class);
 
             Map<String, Object> responseBody = response.getBody();
             if (responseBody != null && responseBody.containsKey("access_token")) {

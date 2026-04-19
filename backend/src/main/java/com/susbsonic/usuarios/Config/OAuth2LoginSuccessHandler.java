@@ -1,19 +1,15 @@
 package com.susbsonic.usuarios.Config;
 
 import com.susbsonic.usuarios.Repositories.UserRepository;
-import com.susbsonic.usuarios.models.AuthProvider;
 import com.susbsonic.usuarios.models.DAO.User;
-import com.susbsonic.usuarios.models.RoleList;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 

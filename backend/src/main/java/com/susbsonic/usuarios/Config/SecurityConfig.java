@@ -2,7 +2,6 @@ package com.susbsonic.usuarios.Config;
 
 import com.susbsonic.usuarios.Services.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,12 +23,7 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
-
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
-
-    // Inyectamos el manejador de éxito de OAuth2
-    @Autowired
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Bean
