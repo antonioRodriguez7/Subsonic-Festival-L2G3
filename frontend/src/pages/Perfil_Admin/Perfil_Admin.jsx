@@ -201,18 +201,18 @@ function Perfil_Admin() {
 
 
 
-  const handleSincronizarSpotify = async () => {
-    setSincronizando(true);
-    try {
-      await syncSpotifyPlaylist();
-      alert("✅ ¡Playlist actualizada en Spotify con éxito!");
-    } catch (error) {
-      console.error("Error al sincronizar:", error);
-      alert("❌ Hubo un error al actualizar la playlist.");
-    } finally {
-      setSincronizando(false); // Volvemos a habilitar el botón
-    }
-  };
+    const handleSincronizarSpotify = async () => {
+        setSincronizando(true);
+        try {
+            await syncSpotifyPlaylist();
+            alert("✅ ¡Playlist actualizada en Spotify con éxito!");
+        } catch (error) {
+            console.error("Error al sincronizar:", error);
+            alert("❌ Hubo un error al actualizar la playlist.");
+        } finally {
+            setSincronizando(false); // Volvemos a habilitar el botón
+        }
+    };
 
     // --- LÓGICA ENTRADAS ---
     const handleEditTicketClick = (entrada) => {
@@ -283,12 +283,12 @@ function Perfil_Admin() {
                         : (entrada.imagenUrl || undefined);
 
                     const ticketDTO = {
-                        category:    entrada.categoria,
+                        category: entrada.categoria,
                         description: entrada.descripcion,
-                        price:       parseFloat(entrada.precio) || 0,
-                        feature:     entrada.caracteristica || 'Acceso estándar',
-                        imageUrl:    imagenFinal || 'https://via.placeholder.com/300',
-                        stock:       entrada.stock !== '' && entrada.stock !== undefined ? parseInt(entrada.stock, 10) : 100
+                        price: parseFloat(entrada.precio) || 0,
+                        feature: entrada.caracteristica || 'Acceso estándar',
+                        imageUrl: imagenFinal || 'https://via.placeholder.com/300',
+                        stock: entrada.stock !== '' && entrada.stock !== undefined ? parseInt(entrada.stock, 10) : 100
                     };
 
                     return updateTicket(entrada.id, ticketDTO);
@@ -629,14 +629,14 @@ function Perfil_Admin() {
                                         ))}
                                     </div>
 
-{/* // Spotify Sync Button*/}
-<button 
-    onClick={handleSincronizarSpotify} 
-    disabled={sincronizando}
-    className="btn-sync-spotify"
->
-    {sincronizando ? 'Sincronizando...' : '🎧 Actualizar Playlist de Spotify'}
-</button> 
+                                    {/* // Spotify Sync Button*/}
+                                    <button
+                                        onClick={handleSincronizarSpotify}
+                                        disabled={sincronizando}
+                                        className="btn-sync-spotify"
+                                    >
+                                        {sincronizando ? 'Sincronizando...' : 'Actualizar Playlist de Spotify'}
+                                    </button>
 
 
                                     <div className="entradas-save">

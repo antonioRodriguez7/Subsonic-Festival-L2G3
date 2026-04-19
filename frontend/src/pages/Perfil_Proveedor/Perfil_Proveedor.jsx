@@ -699,7 +699,7 @@ function Perfil_Proveedor() {
                                                         {tieneServicio ? (
                                                             <div className="occupied-info">
                                                                 <span className="estado-ocupado">📦 Espacio Ocupado</span>
-                                                                <button 
+                                                                <button
                                                                     className="btn-cancelar-alquiler"
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
@@ -712,7 +712,7 @@ function Perfil_Proveedor() {
                                                         ) : (
                                                             <div className="rented-info">
                                                                 <span className="estado-alquilado">✅ Ya Contratado</span>
-                                                                <button 
+                                                                <button
                                                                     className="btn-cancelar-alquiler"
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
@@ -765,7 +765,7 @@ function Perfil_Proveedor() {
                                                 className="btn-solicitar-alquiler"
                                                 onClick={() => handleContratarEspacio(selectedEspacio)}
                                             >
-                                                🚀 Contratar Espacio Ahora
+                                                Contratar Espacio Ahora
                                             </button>
                                         </div>
                                     </div>

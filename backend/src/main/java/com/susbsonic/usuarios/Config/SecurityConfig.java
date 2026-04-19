@@ -21,76 +21,88 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtFilter jwtFilter;
-    private final AuthenticationProvider authenticationProvider;
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+        private final JwtFilter jwtFilter;
+        private final AuthenticationProvider authenticationProvider;
+        private final CustomOAuth2UserService customOAuth2UserService;
+        private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                // 1. CONFIGURACIÓN DE CORS MEJORADA
-                .cors(cors -> cors.configurationSource(request -> {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:5174"));
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    config.setAllowedHeaders(List.of("*")); // Permitimos todos los headers para evitar el 403
-                    config.setAllowCredentials(true);
-                    return config;
-                }))
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                // 1. CONFIGURACIÓN DE CORS MEJORADA
+                                .cors(cors -> cors.configurationSource(request -> {
+                                        CorsConfiguration config = new CorsConfiguration();
+                                        config.setAllowedOrigins(
+                                                        List.of("http://localhost:5173", "http://localhost:5174"));
+                                        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                                        config.setAllowedHeaders(List.of("*")); // Permitimos todos los headers para
+                                                                                // evitar el 403
+                                        config.setAllowCredentials(true);
+                                        return config;
+                                }))
 
-                // 2. DESACTIVAR CSRF
-                .csrf(AbstractHttpConfigurer::disable)
+                                // 2. DESACTIVAR CSRF
+                                .csrf(AbstractHttpConfigurer::disable)
 
-                .authorizeHttpRequests(auth -> auth
-                        // 0. Permitir OPTIONS para evitar bloqueos de CORS preflight
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        
-                        // 1. Todo lo relacionado con AUTH es público
-                        .requestMatchers("/api/auth/**").permitAll()
+                                .authorizeHttpRequests(auth -> auth
+                                                // 0. Permitir OPTIONS para evitar bloqueos de CORS preflight
+                                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // 2. CONTENIDO PÚBLICO
-                        .requestMatchers(HttpMethod.GET, "/api/artists/**", "/api/tickets/**", "/api/spaces/**", "/api/services", "/api/services/provider", "/uploads/**").permitAll()
+                                                // 1. Todo lo relacionado con AUTH es público
+                                                .requestMatchers("/api/auth/**").permitAll()
 
-                        // 3. GESTIÓN (Solo Admin)
-                        .requestMatchers(HttpMethod.POST, "/api/artists/**", "/api/tickets/**", "/api/spaces/**").hasAnyAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/artists/**", "/api/tickets/**").hasAnyAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/spaces/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_PROVEEDOR")
-                        
-                        // Permitir a proveedores cancelar sus alquileres
-                        .requestMatchers(HttpMethod.DELETE, "/api/spaces/*/unrent").hasAnyAuthority("ROLE_ADMIN", "ROLE_PROVEEDOR")
-                        
-                        // El borrado físico de la entidad Space sigue siendo solo de Admin
-                        .requestMatchers(HttpMethod.DELETE, "/api/artists/**", "/api/tickets/**", "/api/spaces/**").hasAnyAuthority("ROLE_ADMIN")
-                        
-                        // SERVICIOS PROVEEDORES: Re-aseguramos ahora que funciona
-                        .requestMatchers("/api/services/**").authenticated()
+                                                // 2. CONTENIDO PÚBLICO
+                                                .requestMatchers(HttpMethod.GET, "/api/artists/**", "/api/tickets/**",
+                                                                "/api/spaces/**", "/api/services",
+                                                                "/api/services/provider", "/uploads/**")
+                                                .permitAll()
 
-                        // 4. COMPRAS Y PERFIL: Requiere Token
-                        .requestMatchers("/api/purchases/**", "/api/users/**").authenticated()
-                        .requestMatchers("/api/payments/paypal/**").permitAll()
+                                                // 3. GESTIÓN (Solo Admin)
+                                                .requestMatchers(HttpMethod.POST, "/api/artists/**", "/api/tickets/**",
+                                                                "/api/spaces/**")
+                                                .hasAnyAuthority("ROLE_ADMIN")
+                                                .requestMatchers(HttpMethod.PUT, "/api/artists/**", "/api/tickets/**")
+                                                .hasAnyAuthority("ROLE_ADMIN")
+                                                .requestMatchers(HttpMethod.PUT, "/api/spaces/**")
+                                                .hasAnyAuthority("ROLE_ADMIN", "ROLE_PROVEEDOR")
 
-                        // 5. CUALQUIER OTRA RUTA
-                        .anyRequest().authenticated()
-                )
+                                                // Permitir a proveedores cancelar sus alquileres
+                                                .requestMatchers(HttpMethod.DELETE, "/api/spaces/*/unrent")
+                                                .hasAnyAuthority("ROLE_ADMIN", "ROLE_PROVEEDOR")
 
-                // GOOGLE OAUTH2: Añadimos el flujo de login con OAuth2
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(customOAuth2UserService) // Nuestro servicio que guarda en BD
-                        )
-                        .successHandler(oAuth2LoginSuccessHandler) // Nuestro manejador de éxito
-                )
+                                                // El borrado físico de la entidad Space sigue siendo solo de Admin
+                                                .requestMatchers(HttpMethod.DELETE, "/api/artists/**",
+                                                                "/api/tickets/**", "/api/spaces/**")
+                                                .hasAnyAuthority("ROLE_ADMIN")
 
-                // 4. GESTIÓN DE SESIÓN STATELESS (JWT)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                                                // SERVICIOS PROVEEDORES: Re-aseguramos ahora que funciona
+                                                .requestMatchers("/api/services/**").authenticated()
 
-                // 5. FILTROS Y PROVEEDOR
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                                                // 4. COMPRAS Y PERFIL: Requiere Token
+                                                .requestMatchers("/api/purchases/**", "/api/users/**").authenticated()
+                                                .requestMatchers("/api/payments/paypal/**").permitAll()
 
-        return http.build();
-    }
+                                                // 5. CUALQUIER OTRA RUTA
+                                                .anyRequest().authenticated())
+
+                                // GOOGLE OAUTH2: Añadimos el flujo de login con OAuth2
+                                .oauth2Login(oauth2 -> oauth2
+                                                .userInfoEndpoint(userInfo -> userInfo
+                                                                .userService(customOAuth2UserService) // Nuestro
+                                                                                                      // servicio que
+                                                                                                      // guarda en BD
+                                                )
+                                                .successHandler(oAuth2LoginSuccessHandler) // Nuestro manejador de éxito
+                                )
+
+                                // 4. GESTIÓN DE SESIÓN STATELESS (JWT)
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                                // 5. FILTROS Y PROVEEDOR
+                                .authenticationProvider(authenticationProvider)
+                                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+                return http.build();
+        }
 }
