@@ -3,6 +3,7 @@ package com.susbsonic.usuarios.Controller;
 import com.susbsonic.usuarios.Services.TicketService;
 import com.susbsonic.usuarios.models.DTO.TicketDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
@@ -121,7 +122,10 @@ public class TicketController {
             ticketService.deleteTicket(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            if (e.getMessage().contains("ya ha sido comprada")) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build(); // 409 Conflict
+            }
+            return ResponseEntity.notFound().build(); // 404 Not Found
         }
     }
 

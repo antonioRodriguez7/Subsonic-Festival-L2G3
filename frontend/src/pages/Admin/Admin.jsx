@@ -88,7 +88,11 @@ function Admin() {
                 fetchTickets(); // Re-fetch to show updated data
             } catch (err) {
                 console.error("Error deleting ticket:", err);
-                setError("Error al eliminar la entrada.");
+                if (err.response && err.response.status === 409) {
+                    setError("No se puede eliminar la entrada porque ya ha sido comprada por usuarios.");
+                } else {
+                    setError("Error al eliminar la entrada.");
+                }
             } finally {
                 setLoading(false);
             }

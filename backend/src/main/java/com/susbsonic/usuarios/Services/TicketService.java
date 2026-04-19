@@ -3,6 +3,7 @@ package com.susbsonic.usuarios.Services;
 import com.susbsonic.usuarios.models.DAO.Ticket;
 import com.susbsonic.usuarios.models.DTO.TicketDTO;
 import com.susbsonic.usuarios.Repositories.TicketRepository;
+import com.susbsonic.usuarios.Repositories.TicketCompradoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +18,14 @@ import java.util.stream.Collectors;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
+    private final TicketCompradoRepository ticketCompradoRepository;
 
     /**
      * Constructor para inyectar la dependencia del repositorio.
      */
-    public TicketService(TicketRepository ticketRepository) {
+    public TicketService(TicketRepository ticketRepository, TicketCompradoRepository ticketCompradoRepository) {
         this.ticketRepository = ticketRepository;
+        this.ticketCompradoRepository = ticketCompradoRepository;
     }
 
     // ==========================================
@@ -132,6 +135,13 @@ public class TicketService {
         if (!ticketRepository.existsById(id)) {
             throw new RuntimeException("Entrada no encontrada con ID: " + id);
         }
+
+        // Verificar si hay compras asociadas a este ticket
+        boolean hasPurchases = ticketCompradoRepository.existsByTicketId(id);
+        if (hasPurchases) {
+            throw new RuntimeException("No se puede eliminar la entrada porque ya ha sido comprada por usuarios. Considere marcarla como no disponible en lugar de eliminarla.");
+        }
+
         ticketRepository.deleteById(id);
     }
 }

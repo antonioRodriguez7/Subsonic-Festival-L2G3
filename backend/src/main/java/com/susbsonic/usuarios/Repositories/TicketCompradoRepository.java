@@ -15,4 +15,10 @@ public interface TicketCompradoRepository extends JpaRepository<TicketComprados,
      */
     List<TicketComprados> findByUserId(Long userId);
 
+    /**
+     * Verifica si existe alguna compra asociada a un ticket específico.
+     * Útil para validar si se puede eliminar un ticket.
+     */
+    boolean existsByTicketId(Long ticketId);
+
 }
