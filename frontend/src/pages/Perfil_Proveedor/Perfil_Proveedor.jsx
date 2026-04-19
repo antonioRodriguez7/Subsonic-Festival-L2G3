@@ -9,6 +9,7 @@ import {
     updateService,
     deleteService,
     rentSpace,
+    unrentSpace,
     assignSpaceToService,
     unassignSpaceFromService
 } from '../../services/api';
@@ -253,6 +254,18 @@ function Perfil_Proveedor() {
         } catch (err) {
             console.error("Error al asignar espacio:", err);
             alert("Error al asignar el espacio.");
+        }
+    };
+
+    const handleCancelarAlquiler = async (espacioId) => {
+        if (!window.confirm("¿Estás seguro de que quieres cancelar el contrato de este espacio? Se desvinculará de cualquier servicio asociado.")) return;
+        try {
+            await unrentSpace(espacioId);
+            alert("Contrato cancelado con éxito.");
+            fetchProveedorData();
+        } catch (err) {
+            console.error("Error al cancelar alquiler:", err);
+            alert("Error al cancelar el contrato.");
         }
     };
 
@@ -684,9 +697,31 @@ function Perfil_Proveedor() {
                                                     <p className="espacio-detalle">📏 {espacio.tamano || (espacio.sizeSquareMeters + ' m²')}</p>
                                                     <div className="espacio-footer">
                                                         {tieneServicio ? (
-                                                            <span className="estado-ocupado">📦 Espacio Ocupado</span>
+                                                            <div className="occupied-info">
+                                                                <span className="estado-ocupado">📦 Espacio Ocupado</span>
+                                                                <button 
+                                                                    className="btn-cancelar-alquiler"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleCancelarAlquiler(espacio.id);
+                                                                    }}
+                                                                >
+                                                                    Cancelar Contrato
+                                                                </button>
+                                                            </div>
                                                         ) : (
-                                                            <span className="estado-alquilado">✅ Ya Contratado</span>
+                                                            <div className="rented-info">
+                                                                <span className="estado-alquilado">✅ Ya Contratado</span>
+                                                                <button 
+                                                                    className="btn-cancelar-alquiler"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleCancelarAlquiler(espacio.id);
+                                                                    }}
+                                                                >
+                                                                    Cancelar Contrato
+                                                                </button>
+                                                            </div>
                                                         )}
                                                     </div>
                                                 </div>

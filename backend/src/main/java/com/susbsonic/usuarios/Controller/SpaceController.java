@@ -94,6 +94,23 @@ public class SpaceController {
     }
 
     /**
+     * Cancela el alquiler de un espacio.
+     */
+    @DeleteMapping("/{id}/unrent")
+    public ResponseEntity<Void> unrentSpace(@PathVariable Long id) {
+        String identifier = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (identifier == null || identifier.equals("anonymousUser")) {
+            return ResponseEntity.status(401).build();
+        }
+        try {
+            spaceService.unrentSpace(id, identifier);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
      * Devuelve los alquileres del proveedor autenticado, con los datos de cada espacio incluidos.
      * El frontend lo usa para mostrar "Mis Espacios Contratados".
      */

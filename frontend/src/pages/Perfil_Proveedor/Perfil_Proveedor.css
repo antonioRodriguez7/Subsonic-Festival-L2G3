@@ -1104,6 +1104,32 @@
     letter-spacing: 1px;
 }
 
+.occupied-info, .rented-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.btn-cancelar-alquiler {
+    background: transparent;
+    border: 1px solid #ff4d6d;
+    color: #ff4d6d;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-cancelar-alquiler:hover {
+    background-color: #ff4d6d;
+    color: white;
+    box-shadow: 0 0 10px rgba(255, 77, 109, 0.3);
+}
+
 .no-contratados-empty {
     padding: 80px 40px;
     text-align: center;

@@ -178,7 +178,7 @@ No se quien es Marco Trujillo
             List<Space> espacios = List.of(
                     Space.builder().name("Zona Velar").type("Norte").price(2500.0).sizeSquareMeters(500).isRented(false).build(),
                     Space.builder().name("Zona Paseo Central").type("Centro").price(1800.0).sizeSquareMeters(300).isRented(false).build(),
-                    Space.builder().name("Zona Relax").type("Este").price(3200.0).sizeSquareMeters(800).isRented(true).build(),
+                    Space.builder().name("Zona Relax").type("Este").price(3200.0).sizeSquareMeters(800).isRented(false).build(),
                     Space.builder().name("Zona VIP").type("Centro").price(4500.0).sizeSquareMeters(150).isRented(false).build(),
                     Space.builder().name("Zona Innova").type("Sur").price(2800.0).sizeSquareMeters(600).isRented(false).build(),
                     Space.builder().name("Zona Oeste").type("Oeste").price(2000.0).sizeSquareMeters(400).isRented(false).build(),
@@ -189,83 +189,16 @@ No se quien es Marco Trujillo
             spaceRepository.saveAll(espacios);
             System.out.println("Espacios creados.");
 
+            /* 
+               COMENTADO PARA INICIO LIMPIO:
+               Se eliminan servicios y alquileres pre-generados para que el usuario pueda 
+               gestionar el flujo completo desde el frontend.
+            
             // == 5. SEED SERVICIOS DE PROVEEDOR ==
-            Space espacioCamping  = espacios.get(0); // Zona Velar
-            Space espacioComida   = espacios.get(1); // Zona Paseo Central
-            Space espacioTransp   = espacios.get(2); // Zona Relax
-            Space espacioMerch    = espacios.get(6); // Zona Boutique
-            Space espacioTaquilla = espacios.get(4); // Zona Innova
+            ... (código omitido) ...
+            */
 
-            List<ProviderService> servicios = List.of(
-                    ProviderService.builder()
-                            .nombre("Food & Trucks")
-                            .tipo("Restauraci\u00f3n")
-                            .descripcion("Amplia variedad de foodtrucks y barras premium con opciones para todos los gustos. Cocina internacional, opciones veganas y c\u00f3cteles premium.")
-                            .fechas("17-19 Julio 2026")
-                            .imagenUrl("/servicios/comidarapida.png")
-                            .provider(proveedor)
-                            .space(espacioComida)
-                            .build(),
-                    ProviderService.builder()
-                            .nombre("Transporte Subsonic")
-                            .tipo("Transporte")
-                            .descripcion("Lanzaderas desde las principales ciudades, zona de parking gratuito y punto de taxis y VTC. Facilita tu llegada al festival.")
-                            .fechas("17-19 Julio 2026")
-                            .imagenUrl("/servicios/transporte.jpg")
-                            .provider(proveedor)
-                            .space(espacioTransp)
-                            .build(),
-                    ProviderService.builder()
-                            .nombre("Camping Subsonic")
-                            .tipo("Otro")
-                            .descripcion("Zona de acampada oficial con camping general y glamping. Duchas y ba\u00f1os 24h, zona de descanso y sombra para vivir la experiencia completa.")
-                            .fechas("17-19 Julio 2026")
-                            .imagenUrl("/servicios/camping.jpeg")
-                            .provider(proveedor)
-                            .space(espacioCamping)
-                            .build(),
-                    ProviderService.builder()
-                            .nombre("Merchandising Subsonic")
-                            .tipo("Merchandising")
-                            .descripcion("Ll\u00e9vate un recuerdo \u00fanico del festival. Camisetas y sudaderas oficiales, ediciones limitadas y accesorios exclusivos.")
-                            .fechas("17-19 Julio 2026")
-                            .imagenUrl("/servicios/merchandising.jpg")
-                            .provider(proveedor)
-                            .space(espacioMerch)
-                            .build(),
-                    ProviderService.builder()
-                            .nombre("Taquillas Seguras")
-                            .tipo("Otro")
-                            .descripcion("Guarda tus pertenencias de forma segura. Taquillas individuales y grupales, acceso ilimitado durante el evento y carga de dispositivos.")
-                            .fechas("17-19 Julio 2026")
-                            .imagenUrl("/servicios/taquillas.jpg")
-                            .provider(proveedor)
-                            .space(espacioTaquilla)
-                            .build()
-            );
-            providerServiceRepository.saveAll(servicios);
-            System.out.println("Servicios de proveedor creados.");
-
-            // == 6. SEED ESPACIOS ALQUILADOS ==
-            // Asociar esos espacios como alquilados formalmente por el proveedor
-            List<com.susbsonic.usuarios.models.DAO.RentedSpace> alquileres = List.of(
-                    com.susbsonic.usuarios.models.DAO.RentedSpace.builder().provider(proveedor).space(espacioCamping).rentDate(java.time.LocalDateTime.now()).build(),
-                    com.susbsonic.usuarios.models.DAO.RentedSpace.builder().provider(proveedor).space(espacioComida).rentDate(java.time.LocalDateTime.now()).build(),
-                    com.susbsonic.usuarios.models.DAO.RentedSpace.builder().provider(proveedor).space(espacioTransp).rentDate(java.time.LocalDateTime.now()).build(),
-                    com.susbsonic.usuarios.models.DAO.RentedSpace.builder().provider(proveedor).space(espacioMerch).rentDate(java.time.LocalDateTime.now()).build(),
-                    com.susbsonic.usuarios.models.DAO.RentedSpace.builder().provider(proveedor).space(espacioTaquilla).rentDate(java.time.LocalDateTime.now()).build()
-            );
-            rentedSpaceRepository.saveAll(alquileres);
-
-            espacioCamping.setIsRented(true);
-            espacioComida.setIsRented(true);
-            espacioTransp.setIsRented(true);
-            espacioMerch.setIsRented(true);
-            espacioTaquilla.setIsRented(true);
-            spaceRepository.saveAll(List.of(espacioCamping, espacioComida, espacioTransp, espacioMerch, espacioTaquilla));
-            System.out.println("Alquileres de proveedor asignados.");
-
-            System.out.println("Base de datos reiniciada correctamente.");
+            System.out.println("Base de datos reiniciada correctamente (Espacios Libres).");
         };
     }
 

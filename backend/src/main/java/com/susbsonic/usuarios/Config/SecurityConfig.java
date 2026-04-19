@@ -56,6 +56,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/artists/**", "/api/tickets/**", "/api/spaces/**").hasAnyAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/artists/**", "/api/tickets/**").hasAnyAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/spaces/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_PROVEEDOR")
+                        
+                        // Permitir a proveedores cancelar sus alquileres
+                        .requestMatchers(HttpMethod.DELETE, "/api/spaces/*/unrent").hasAnyAuthority("ROLE_ADMIN", "ROLE_PROVEEDOR")
+                        
+                        // El borrado físico de la entidad Space sigue siendo solo de Admin
                         .requestMatchers(HttpMethod.DELETE, "/api/artists/**", "/api/tickets/**", "/api/spaces/**").hasAnyAuthority("ROLE_ADMIN")
                         
                         // SERVICIOS PROVEEDORES: Re-aseguramos ahora que funciona

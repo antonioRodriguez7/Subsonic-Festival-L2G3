@@ -1,7 +1,9 @@
 package com.susbsonic.usuarios.Services;
 
+import com.susbsonic.usuarios.Repositories.ProviderServiceRepository;
 import com.susbsonic.usuarios.Repositories.RentedSpaceRepository;
 import com.susbsonic.usuarios.Repositories.UserRepository;
+import com.susbsonic.usuarios.models.DAO.ProviderService;
 import com.susbsonic.usuarios.models.DAO.RentedSpace;
 import com.susbsonic.usuarios.models.DAO.Space;
 import com.susbsonic.usuarios.models.DAO.User;
@@ -9,9 +11,11 @@ import com.susbsonic.usuarios.models.DTO.RentedSpaceDTO;
 import com.susbsonic.usuarios.models.DTO.SpaceDTO;
 import com.susbsonic.usuarios.Repositories.SpaceRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -24,13 +28,16 @@ public class SpaceService {
     private final SpaceRepository spaceRepository;
     private final RentedSpaceRepository rentedSpaceRepository;
     private final UserRepository userRepository;
+    private final ProviderServiceRepository providerServiceRepository;
 
     public SpaceService(SpaceRepository spaceRepository,
                         RentedSpaceRepository rentedSpaceRepository,
-                        UserRepository userRepository) {
+                        UserRepository userRepository,
+                        ProviderServiceRepository providerServiceRepository) {
         this.spaceRepository = spaceRepository;
         this.rentedSpaceRepository = rentedSpaceRepository;
         this.userRepository = userRepository;
+        this.providerServiceRepository = providerServiceRepository;
     }
 
     // --- Mapeos ---
@@ -150,6 +157,46 @@ public class SpaceService {
                 .stream()
                 .map(this::mapAlquiladoToDTO)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Cancela el alquiler de un espacio.
+     */
+    @Transactional
+    public void unrentSpace(Long spaceId, String identifier) {
+        System.out.println("--- DEBUG UNRENT ---");
+        System.out.println("Intentando cancelar alquiler para Espacio ID: " + spaceId);
+        System.out.println("Usuario (identifier): " + identifier);
+
+        User provider = resolveUser(identifier);
+        System.out.println("Proveedor encontrado en BD: " + provider.getEmail() + " (ID: " + provider.getId() + ")");
+        
+        // 1. Buscar el registro de alquiler directo
+        RentedSpace alquiler = rentedSpaceRepository.findByProviderIdAndSpaceId(provider.getId(), spaceId)
+                .orElseThrow(() -> {
+                    System.out.println("ERROR: No se encontró el registro de alquiler para ProviderID " + provider.getId() + " y SpaceID " + spaceId);
+                    return new RuntimeException("No tienes este espacio alquilado.");
+                });
+        
+        rentedSpaceRepository.delete(alquiler);
+        System.out.println("Registro en 'rented_spaces' eliminado.");
+
+        // 2. Liberar el espacio
+        Space space = spaceRepository.findById(spaceId)
+                .orElseThrow(() -> new RuntimeException("Espacio no encontrado con ID: " + spaceId));
+        space.setIsRented(false);
+        spaceRepository.save(space);
+        System.out.println("Espacio marcado como disponible (isRented = false).");
+
+        // 3. Desvincular de cualquier servicio asociado
+        Optional<ProviderService> serviceOpt = providerServiceRepository.findBySpaceId(spaceId);
+        if (serviceOpt.isPresent()) {
+            ProviderService service = serviceOpt.get();
+            service.setSpace(null);
+            providerServiceRepository.save(service);
+            System.out.println("Servicio '" + service.getNombre() + "' desvinculado del espacio.");
+        }
+        System.out.println("--- FIN DEBUG UNRENT ---");
     }
 
     // --- Helper ---

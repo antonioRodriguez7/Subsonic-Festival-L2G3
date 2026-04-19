@@ -259,6 +259,12 @@ export async function rentSpace(spaceId) {
     return response.data;
 }
 
+// Cancelar el alquiler de un espacio
+export async function unrentSpace(spaceId) {
+    const response = await api.delete(`/spaces/${spaceId}/unrent`);
+    return response.data;
+}
+
 // Obtener los espacios contratados por el proveedor autenticado
 export async function getEspaciosContratadosProveedor() {
     const response = await api.get('/spaces/my-rented');

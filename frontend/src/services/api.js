@@ -63,7 +63,8 @@ export const deleteTicket = real.deleteTicket;
 export const createSpace = real.createSpace;
 export const updateSpace = real.updateSpace;
 export const deleteSpace = real.deleteSpace;
-export const rentSpace = real.rentSpace;         // PUT /api/spaces/:id (marcar como alquilado)
+export const rentSpace = real.rentSpace;
+export const unrentSpace = real.unrentSpace;
 export const assignSpaceToService = real.assignSpaceToService;
 export const unassignSpaceFromService = real.unassignSpaceFromService;
 

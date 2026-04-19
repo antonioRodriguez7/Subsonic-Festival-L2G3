@@ -14,5 +14,7 @@ public interface RentedSpaceRepository extends JpaRepository<RentedSpace, Long> 
 
     Optional<RentedSpace> findBySpaceId(Long spaceId);
 
+    Optional<RentedSpace> findByProviderIdAndSpaceId(Long providerId, Long spaceId);
+
     boolean existsByProviderIdAndSpaceId(Long providerId, Long spaceId);
 }
