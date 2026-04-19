@@ -60,7 +60,7 @@ public class DataSeeder {
                     .role(RoleList.ROLE_USER)
                     .isAdmin(false)
                     .bio("Asistente habitual al festival desde 2021. Fan del techno y el reggaeton.")
-                    .provider(AuthProvider.LOCAL) // <-- AÑADIDO
+                    .provider(AuthProvider.LOCAL)
                     .build();
 
             User proveedor = User.builder()
@@ -72,7 +72,7 @@ public class DataSeeder {
                     .role(RoleList.ROLE_PROVEEDOR)
                     .isAdmin(false)
                     .bio("Propietaria de Food Trucks and Co. Especializada en street food de calidad.")
-                    .provider(AuthProvider.LOCAL) // <-- AÑADIDO
+                    .provider(AuthProvider.LOCAL)
                     .build();
 
             User admin = User.builder()
@@ -84,7 +84,7 @@ public class DataSeeder {
                     .role(RoleList.ROLE_ADMIN)
                     .isAdmin(true)
                     .bio("Administrador general del Subsonic Festival 2026.")
-                    .provider(AuthProvider.LOCAL) // <-- AÑADIDO
+                    .provider(AuthProvider.LOCAL)
                     .build();
 
             userRepository.saveAll(List.of(cliente, proveedor, admin));

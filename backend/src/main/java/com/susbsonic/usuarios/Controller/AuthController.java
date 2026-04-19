@@ -28,7 +28,7 @@ public class AuthController {
             return ResponseEntity.ok(response);
 
         } catch (RuntimeException e) {
-            // CORRECCIÓN: Usamos Builder para evitar errores de constructor
+
             return ResponseEntity.badRequest()
                     .body(AuthResponseDTO.builder()
                             .message("Error al registrar: " + e.getMessage())
@@ -46,7 +46,7 @@ public class AuthController {
             return ResponseEntity.ok(response);
 
         } catch (RuntimeException e) {
-            // CORRECCIÓN: Usamos Builder y status 401 para credenciales fallidas
+
             return ResponseEntity.status(401)
                     .body(AuthResponseDTO.builder()
                             .message("Error de autenticación: " + e.getMessage())

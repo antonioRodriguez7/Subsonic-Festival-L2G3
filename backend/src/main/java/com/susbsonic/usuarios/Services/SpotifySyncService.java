@@ -38,7 +38,7 @@ public class SpotifySyncService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-// PASO 4: Método para obtener las Top Tracks de un artista usando su ID de Spotify
+// Pilla las Top Tracks de un artista usando su ID de Spotify
 // Pide a Spotify las canciones de un ID concreto
     @SuppressWarnings("unchecked")
     private List<String> obtenerTopTracksDeArtista(String artistId, String accessToken) {
@@ -75,7 +75,7 @@ public class SpotifySyncService {
         return urisCanciones;
     }
 
-    //PASO 5: Método para sobrescribir la playlist con una lista de URIs de canciones
+    // Sobrescribir la playlist con una lista de URIs de canciones
 // Usa playlistId para borrar las canciones viejas y poner las nuevas
     private void sobrescribirPlaylist(List<String> todasLasUris, String accessToken) {
         String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks";
@@ -111,7 +111,7 @@ public class SpotifySyncService {
 
 
 
-            // PASO 1: Renovar el Access Token usando el Refresh Token (Pendiente)
+            // Renovar el Access Token usando el Refresh Token
             String accessToken = obtenerNuevoAccessToken();
 
             // Si falló la obtención del token, abortamos para no dar errores más adelante
@@ -121,12 +121,12 @@ public class SpotifySyncService {
             }
 
 
-            // PASO 2: Obtener todos los artistas de tu base de datos PostgreSQL
+            // Obtener todos los artistas de tu base de datos PostgreSQL
             List<Artist> artistas = artistRepository.findAll();
 
             List<String> listaTotalDeUris = new ArrayList<>();
 
-            // PASO 3: Extraer los IDs de Spotify de sus URLs
+            // Extraer los IDs de Spotify de sus URLs
             // Ejemplo: De "https://open.spotify.com/artist/12345" sacar "12345"
             System.out.println("📊 Extrayendo IDs de Spotify de " + artistas.size() + " artistas...");
             for (Artist artista : artistas) {
@@ -142,7 +142,7 @@ public class SpotifySyncService {
 
                         System.out.println("🔍 Buscando top tracks para: " + artista.getName());
 
-                        // PASO 4: Pedimos a Spotify las canciones de este ID
+                        // Pedimos a Spotify las canciones de este ID
                         List<String> urisDelArtista = obtenerTopTracksDeArtista(artistId, accessToken);
                         listaTotalDeUris.addAll(urisDelArtista);
                     }
@@ -151,7 +151,7 @@ public class SpotifySyncService {
                 }
             }
 
-            // PASO 5: Sobrescribir la playlist con el límite de seguridad de 100
+            // Sobrescribir la playlist con el límite de seguridad de 100
             if (!listaTotalDeUris.isEmpty()) {
                 if (listaTotalDeUris.size() > 100) {
                     System.out.println("⚠️ Limitando la subida a 100 canciones (Límite de Spotify)");

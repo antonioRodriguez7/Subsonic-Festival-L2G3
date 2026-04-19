@@ -10,7 +10,7 @@ function Registro() {
     // 1. Estados actualizados con 'surname' para evitar el error de base de datos
     const [formData, setFormData] = useState({
         name: '',
-        surname: '', // <--- CAMBIO: Agregado para cumplir con el NOT NULL de SQL
+        surname: '',
         email: '',
         username: '',
         password: '',

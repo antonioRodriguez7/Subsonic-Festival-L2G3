@@ -59,7 +59,7 @@ public class JwtService {
 
         return Jwts.builder()
                 .setClaims(extraClaims)
-                // 👇 IMPORTANTE: usamos EMAIL como identificador
+                // Usamos EMAIL como identificador
                 .setSubject(((User) userDetails).getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
