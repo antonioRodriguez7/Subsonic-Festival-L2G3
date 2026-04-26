@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const URL_BASE = 'http://localhost:8080/api';
+const URL_BASE = 'https://subsonic-api-backend-hvd8fzcdg2ffhzd8.spaincentral-01.azurewebsites.net/api';
 
 const api = axios.create({
     baseURL: URL_BASE

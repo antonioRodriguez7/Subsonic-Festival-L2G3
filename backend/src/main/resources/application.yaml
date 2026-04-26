@@ -52,15 +52,16 @@ paypal:
   base-url: https://api-m.sandbox.paypal.com
 
 ---
-  # ==========================================
-  # 2. PERFIL LOCAL (Para programar en tu PC)
+# ==========================================
+  # 2. PERFIL LOCAL / PRODUCCIÓN
   # ==========================================
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/subsonic_db
-    username: postgres
-    password: 12345
+    # Si existe la variable DB_URL en Azure la usa, si no, usa localhost
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/subsonic_db}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:12345}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -68,7 +69,7 @@ spring:
     show-sql: true
 
 app:
-  frontend-url: http://localhost:5173
+  frontend-url: ${APP_FRONTEND_URL:http://localhost:5173}
 
 
 
