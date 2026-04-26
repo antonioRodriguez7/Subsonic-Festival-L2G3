@@ -1,17 +1,9 @@
+# ==========================================
+# 1. CONFIGURACIÓN COMÚN (Todos los entornos)
+# ==========================================
 spring:
   application:
     name: subsonic-usuarios
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/subsonic_db
-    username: postgres
-    password: 12345
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
 
   mail:
     host: smtp.gmail.com
@@ -36,15 +28,10 @@ spring:
               - profile
               - email
 
-
 # Configuración JWT externalizada
 jwt:
   secret: tu_llave_secreta_super_larga_para_el_festival_subsonic
   expiration: 36000000  # 10 horas en milisegundos
-
-
-
-
 
 # ==========================================
 # CONFIGURACIÓN DE LA API DE SPOTIFY
@@ -59,9 +46,40 @@ spotify:
   playlist:
     id: "3mSEthCx9XauDTZMQ0AV67"
 
-
 paypal:
   client-id: AflOCYdbF2GcWXzhclwsNUscftIddp_kUIOjLAVd7O73EC9GOxTFOuOlHUss_3H-SstaAOcsSgoCRdjh
   client-secret: EDZkqZEDrj_ZcS7b2wv6oM21rZizY4r9svXpAOgdH5aqGehUrZdmgEsoBIZLns8J80vdhMFIiI5ov7Sr
   base-url: https://api-m.sandbox.paypal.com
+
+---
+  # ==========================================
+  # 2. PERFIL LOCAL (Para programar en tu PC)
+  # ==========================================
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/subsonic_db
+    username: postgres
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+app:
+  frontend-url: http://localhost:5173
+
+
+
+
+
+
+
+
+
+
+
+
+
 
