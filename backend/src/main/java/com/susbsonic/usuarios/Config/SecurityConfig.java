@@ -2,6 +2,7 @@ package com.susbsonic.usuarios.Config;
 
 import com.susbsonic.usuarios.Services.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,6 +27,10 @@ public class SecurityConfig {
         private final CustomOAuth2UserService customOAuth2UserService;
         private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
+        // URL del frontend: en local es localhost, en Azure se sobreescribe con variable de entorno
+        @Value("${FRONTEND_URL:http://localhost:5173}")
+        private String frontendUrl;
+
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
@@ -33,7 +38,7 @@ public class SecurityConfig {
                                 .cors(cors -> cors.configurationSource(request -> {
                                         CorsConfiguration config = new CorsConfiguration();
                                         config.setAllowedOrigins(
-                                                        List.of("http://localhost:5173", "http://localhost:5174"));
+                                                        List.of("http://localhost:5173", "http://localhost:5174", frontendUrl));
                                         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                                         config.setAllowedHeaders(List.of("*")); // Permitimos todos los headers para
                                                                                 // evitar el 403
