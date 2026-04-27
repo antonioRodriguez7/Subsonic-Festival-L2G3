@@ -53,7 +53,7 @@ function Login() {
         // Borramos la cookie para evitar arrastrar un rol de un intento de registro anterior
         document.cookie = "oauth_role=; path=/; max-age=0";
         // Redirige al backend de Spring Boot para iniciar el login con Google
-        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+        window.location.href = 'https://subsonic-api-backend-hvd8fzcdg2ffhzd8.spaincentral-01.azurewebsites.net/oauth2/authorization/google';
     };
     // ---------------------
 

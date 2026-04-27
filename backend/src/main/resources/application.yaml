@@ -1,17 +1,9 @@
+# ==========================================
+# 1. CONFIGURACIÓN COMÚN (Todos los entornos)
+# ==========================================
 spring:
   application:
     name: subsonic-usuarios
-
-  datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/subsonic_db}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:12345}
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: false
 
   mail:
     host: smtp.gmail.com
@@ -36,13 +28,10 @@ spring:
               - profile
               - email
 
-
 # Configuración JWT externalizada
 jwt:
   secret: ${JWT_SECRET}
   expiration: 36000000  # 10 horas en milisegundos
-
-
 
 # ==========================================
 # CONFIGURACIÓN DE LA API DE SPOTIFY
@@ -57,9 +46,41 @@ spotify:
   playlist:
     id: "3mSEthCx9XauDTZMQ0AV67"
 
-
 paypal:
   client-id: ${PAYPAL_CLIENT_ID}
   client-secret: ${PAYPAL_CLIENT_SECRET}
   base-url: ${PAYPAL_BASE_URL:https://api-m.sandbox.paypal.com}
+
+---
+# ==========================================
+  # 2. PERFIL LOCAL / PRODUCCIÓN
+  # ==========================================
+
+spring:
+  datasource:
+    # Si existe la variable DB_URL en Azure la usa, si no, usa localhost
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/subsonic_db}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:12345}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+app:
+  frontend-url: ${APP_FRONTEND_URL:http://localhost:5173}
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -24,6 +25,10 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Autowired
     private UserRepository userRepository;
 
+    // 👉 INYECTAMOS LA URL DEL FRONTEND DEPENDIENDO DEL PERFIL (Local o Azure)
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
+
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -40,8 +45,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String role = user.getRole().name(); // Extraemos el rol (ej. ROLE_USER)
 
         // 4. Redirigimos a React pasando los 3 datos clave por la URL
-        String targetUrl = "http://localhost:5173/perfil?token=" + token + "&email=" + email + "&role=" + role;
-
+// 👉 USAMOS LA VARIABLE INYECTADA EN LUGAR DE LOCALHOST
+        String targetUrl = frontendUrl + "/perfil?token=" + token + "&email=" + email + "&role=" + role;
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }

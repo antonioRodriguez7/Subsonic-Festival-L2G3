@@ -38,7 +38,11 @@ public class SecurityConfig {
                                 .cors(cors -> cors.configurationSource(request -> {
                                         CorsConfiguration config = new CorsConfiguration();
                                         config.setAllowedOrigins(
-                                                        List.of("http://localhost:5173", "http://localhost:5174", frontendUrl));
+                                                        List.of("http://localhost:5173",
+                                                                "http://localhost:5174",
+                                                                "https://subsonic-festival-web-amcud5c6a3csgrb4.spaincentral-01.azurewebsites.net",
+                                                                "https://subsonic.app"));
+
                                         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                                         config.setAllowedHeaders(List.of("*")); // Permitimos todos los headers para
                                                                                 // evitar el 403

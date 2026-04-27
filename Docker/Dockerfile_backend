@@ -13,4 +13,3 @@ EXPOSE 8080
 
 # 5. El comando exacto que ejecutará Docker al encender el contenedor
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
