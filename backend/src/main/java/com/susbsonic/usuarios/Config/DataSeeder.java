@@ -7,9 +7,13 @@ import com.susbsonic.usuarios.models.DAO.Ticket;
 import com.susbsonic.usuarios.models.DAO.User;
 import com.susbsonic.usuarios.models.RoleList;
 import com.susbsonic.usuarios.Repositories.ArtistRepository;
+import com.susbsonic.usuarios.Repositories.ProviderServiceRepository;
+import com.susbsonic.usuarios.Repositories.RentedSpaceRepository;
 import com.susbsonic.usuarios.Repositories.SpaceRepository;
 import com.susbsonic.usuarios.Repositories.TicketRepository;
 import com.susbsonic.usuarios.Repositories.UserRepository;
+import com.susbsonic.usuarios.models.DAO.ProviderService;
+import com.susbsonic.usuarios.models.DAO.RentedSpace;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +31,8 @@ public class DataSeeder {
             TicketRepository ticketRepository,
             ArtistRepository artistRepository,
             SpaceRepository spaceRepository,
+            ProviderServiceRepository providerServiceRepository,
+            RentedSpaceRepository rentedSpaceRepository,
             PasswordEncoder passwordEncoder) {
 
         return args -> {
@@ -182,6 +188,106 @@ public class DataSeeder {
                 System.out.println("Espacios ya existentes, se omite seed.");
             }
 
+            // == 5. SEED SERVICIOS DE PROVEEDOR ==
+            if (providerServiceRepository.count() == 0) {
+                List<Space> espacios = spaceRepository.findAll();
+                User proveedor = userRepository.findByUsername("laura_m").orElse(null);
+
+                if (espacios.size() >= 7 && proveedor != null) {
+                    Space espacioCamping  = espacios.get(0); // Zona Velar
+                    Space espacioComida   = espacios.get(1); // Zona Paseo Central
+                    Space espacioTransp   = espacios.get(2); // Zona Relax
+                    Space espacioMerch    = espacios.get(6); // Zona Boutique
+                    Space espacioTaquilla = espacios.get(4); // Zona Innova
+
+                    List<ProviderService> servicios = List.of(
+                            ProviderService.builder()
+                                    .nombre("Food & Trucks")
+                                    .tipo("Restauraci\u00f3n")
+                                    .descripcion("Amplia variedad de foodtrucks y barras premium con opciones para todos los gustos. Cocina internacional, opciones veganas y c\u00f3cteles premium.")
+                                    .fechas("17-19 Julio 2026")
+                                    .imagenUrl("/servicios/comidarapida.png")
+                                    .provider(proveedor)
+                                    .space(espacioComida)
+                                    .build(),
+                            ProviderService.builder()
+                                    .nombre("Transporte Subsonic")
+                                    .tipo("Transporte")
+                                    .descripcion("Lanzaderas desde las principales ciudades, zona de parking gratuito y punto de taxis y VTC. Facilita tu llegada al festival.")
+                                    .fechas("17-19 Julio 2026")
+                                    .imagenUrl("/servicios/transporte.jpg")
+                                    .provider(proveedor)
+                                    .space(espacioTransp)
+                                    .build(),
+                            ProviderService.builder()
+                                    .nombre("Camping Subsonic")
+                                    .tipo("Otro")
+                                    .descripcion("Zona de acampada oficial con camping general y glamping. Duchas y ba\u00f1os 24h, zona de descanso y sombra para vivir la experiencia completa.")
+                                    .fechas("17-19 Julio 2026")
+                                    .imagenUrl("/servicios/camping.jpeg")
+                                    .provider(proveedor)
+                                    .space(espacioCamping)
+                                    .build(),
+                            ProviderService.builder()
+                                    .nombre("Merchandising Subsonic")
+                                    .tipo("Merchandising")
+                                    .descripcion("Ll\u00e9vate un recuerdo \u00fanico del festival. Camisetas y sudaderas oficiales, ediciones limitadas y accesorios exclusivos.")
+                                    .fechas("17-19 Julio 2026")
+                                    .imagenUrl("/servicios/merchandising.jpg")
+                                    .provider(proveedor)
+                                    .space(espacioMerch)
+                                    .build(),
+                            ProviderService.builder()
+                                    .nombre("Taquillas Seguras")
+                                    .tipo("Otro")
+                                    .descripcion("Guarda tus pertenencias de forma segura. Taquillas individuales y grupales, acceso ilimitado durante el evento y carga de dispositivos.")
+                                    .fechas("17-19 Julio 2026")
+                                    .imagenUrl("/servicios/taquillas.jpg")
+                                    .provider(proveedor)
+                                    .space(espacioTaquilla)
+                                    .build()
+                    );
+                    providerServiceRepository.saveAll(servicios);
+                    System.out.println("Servicios de proveedor creados.");
+                }
+            } else {
+                System.out.println("Servicios de proveedor ya existentes, se omite seed.");
+            }
+
+            // == 6. SEED ESPACIOS ALQUILADOS ==
+            if (rentedSpaceRepository.count() == 0) {
+                List<Space> espacios = spaceRepository.findAll();
+                User proveedor = userRepository.findByUsername("laura_m").orElse(null);
+
+                if (espacios.size() >= 7 && proveedor != null) {
+                    Space espacioCamping  = espacios.get(0); // Zona Velar
+                    Space espacioComida   = espacios.get(1); // Zona Paseo Central
+                    Space espacioTransp   = espacios.get(2); // Zona Relax
+                    Space espacioMerch    = espacios.get(6); // Zona Boutique
+                    Space espacioTaquilla = espacios.get(4); // Zona Innova
+
+                    List<RentedSpace> alquileres = List.of(
+                            RentedSpace.builder().provider(proveedor).space(espacioCamping).rentDate(java.time.LocalDateTime.now()).build(),
+                            RentedSpace.builder().provider(proveedor).space(espacioComida).rentDate(java.time.LocalDateTime.now()).build(),
+                            RentedSpace.builder().provider(proveedor).space(espacioTransp).rentDate(java.time.LocalDateTime.now()).build(),
+                            RentedSpace.builder().provider(proveedor).space(espacioMerch).rentDate(java.time.LocalDateTime.now()).build(),
+                            RentedSpace.builder().provider(proveedor).space(espacioTaquilla).rentDate(java.time.LocalDateTime.now()).build()
+                    );
+                    rentedSpaceRepository.saveAll(alquileres);
+
+                    espacioCamping.setIsRented(true);
+                    espacioComida.setIsRented(true);
+                    espacioTransp.setIsRented(true);
+                    espacioMerch.setIsRented(true);
+                    espacioTaquilla.setIsRented(true);
+                    spaceRepository.saveAll(List.of(espacioCamping, espacioComida, espacioTransp, espacioMerch, espacioTaquilla));
+                    System.out.println("Alquileres de proveedor asignados.");
+                }
+            } else {
+                System.out.println("Alquileres ya existentes, se omite seed.");
+            }
+
+            System.out.println("Base de datos reiniciada correctamente.");
             System.out.println("Comprobacion de datos iniciales completada.");
         };
     }
