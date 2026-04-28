@@ -117,7 +117,7 @@ function Registro() {
         document.cookie = `oauth_role=${role}; path=/; max-age=300`; // Expira en 5 minutos
         
         // Redirige al backend de Spring Boot para iniciar el login con Google
-        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+        window.location.href = 'https://subsonic-api-backend-hvd8fzcdg2ffhzd8.spaincentral-01.azurewebsites.net/oauth2/authorization/google';
     };
     // ------------------------------
 
