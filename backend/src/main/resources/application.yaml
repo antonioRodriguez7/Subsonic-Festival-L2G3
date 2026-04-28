@@ -8,8 +8,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME:subsonicfestivaloficial@gmail.com}
-    password: ${MAIL_PASSWORD}
+    username: subsonicfestivaloficial@gmail.com
+    password: hdjzsevpafemnvuh
     properties:
       mail:
         smtp:
@@ -22,15 +22,15 @@ spring:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
+            client-id: 1066356702795-ho4rfgnn52465fmscesjkjntb2g7ltqq.apps.googleusercontent.com
+            client-secret: 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
             scope:
               - profile
               - email
 
 # Configuración JWT externalizada
 jwt:
-  secret: ${JWT_SECRET}
+  secret: tu_llave_secreta_super_larga_para_el_festival_subsonic
   expiration: 36000000  # 10 horas en milisegundos
 
 # ==========================================
@@ -39,17 +39,17 @@ jwt:
 
 spotify:
   client:
-    id: ${SPOTIFY_CLIENT_ID:AQUI_PONDRAS_TU_CLIENT_ID}
-    secret: ${SPOTIFY_CLIENT_SECRET:AQUI_PONDRAS_TU_CLIENT_SECRET}
+    id: "AQUI_PONDRAS_TU_CLIENT_ID_MAÑANA"
+    secret: "AQUI_PONDRAS_TU_CLIENT_SECRET_MAÑANA"
   refresh:
-    token: ${SPOTIFY_REFRESH_TOKEN:AQUI_PONDRAS_EL_REFRESH_TOKEN}
+    token: "AQUI_PONDRAS_EL_REFRESH_TOKEN_MAÑANA"
   playlist:
     id: "3mSEthCx9XauDTZMQ0AV67"
 
 paypal:
-  client-id: ${PAYPAL_CLIENT_ID}
-  client-secret: ${PAYPAL_CLIENT_SECRET}
-  base-url: ${PAYPAL_BASE_URL:https://api-m.sandbox.paypal.com}
+  client-id: AflOCYdbF2GcWXzhclwsNUscftIddp_kUIOjLAVd7O73EC9GOxTFOuOlHUss_3H-SstaAOcsSgoCRdjh
+  client-secret: EDZkqZEDrj_ZcS7b2wv6oM21rZizY4r9svXpAOgdH5aqGehUrZdmgEsoBIZLns8J80vdhMFIiI5ov7Sr
+  base-url: https://api-m.sandbox.paypal.com
 
 ---
 # ==========================================

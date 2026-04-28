@@ -2,7 +2,6 @@ package com.susbsonic.usuarios.Config;
 
 import com.susbsonic.usuarios.Services.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,10 +26,6 @@ public class SecurityConfig {
         private final CustomOAuth2UserService customOAuth2UserService;
         private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
-        // URL del frontend: en local es localhost, en Azure se sobreescribe con variable de entorno
-        @Value("${FRONTEND_URL:http://localhost:5173}")
-        private String frontendUrl;
-
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
@@ -42,7 +37,6 @@ public class SecurityConfig {
                                                                 "http://localhost:5174",
                                                                 "https://subsonic-festival-web-amcud5c6a3csgrb4.spaincentral-01.azurewebsites.net",
                                                                 "https://subsonic.app"));
-
                                         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                                         config.setAllowedHeaders(List.of("*")); // Permitimos todos los headers para
                                                                                 // evitar el 403

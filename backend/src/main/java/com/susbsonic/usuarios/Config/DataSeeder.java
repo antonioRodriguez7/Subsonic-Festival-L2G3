@@ -1,19 +1,9 @@
 package com.susbsonic.usuarios.Config;
 
+import com.susbsonic.usuarios.Repositories.*;
 import com.susbsonic.usuarios.models.AuthProvider;
-import com.susbsonic.usuarios.models.DAO.Artist;
-import com.susbsonic.usuarios.models.DAO.Space;
-import com.susbsonic.usuarios.models.DAO.Ticket;
-import com.susbsonic.usuarios.models.DAO.User;
+import com.susbsonic.usuarios.models.DAO.*;
 import com.susbsonic.usuarios.models.RoleList;
-import com.susbsonic.usuarios.Repositories.ArtistRepository;
-import com.susbsonic.usuarios.Repositories.ProviderServiceRepository;
-import com.susbsonic.usuarios.Repositories.RentedSpaceRepository;
-import com.susbsonic.usuarios.Repositories.SpaceRepository;
-import com.susbsonic.usuarios.Repositories.TicketRepository;
-import com.susbsonic.usuarios.Repositories.UserRepository;
-import com.susbsonic.usuarios.models.DAO.ProviderService;
-import com.susbsonic.usuarios.models.DAO.RentedSpace;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -187,7 +177,6 @@ public class DataSeeder {
             } else {
                 System.out.println("Espacios ya existentes, se omite seed.");
             }
-
             // == 5. SEED SERVICIOS DE PROVEEDOR ==
             if (providerServiceRepository.count() == 0) {
                 List<Space> espacios = spaceRepository.findAll();
@@ -288,7 +277,9 @@ public class DataSeeder {
             }
 
             System.out.println("Base de datos reiniciada correctamente.");
-            System.out.println("Comprobacion de datos iniciales completada.");
+
+
+            System.out.println("Comprobación de datos iniciales completada.");
         };
     }
 

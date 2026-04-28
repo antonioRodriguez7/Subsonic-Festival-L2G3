@@ -1,7 +1,5 @@
 # Subsonic Festival L2-G3
 Proyecto de la asignatura PI (Programación en Internet)
-
-* **URL Subsonic Festival:** https://subsonic.app
 <p align="center">
 <h2 align="center">Subsonic Festival</h2>
   <img src="https://newcastlelive.com.au/wp-content/uploads/2024/10/SUB24_Businessdimensions_003-1024x626.jpg">
