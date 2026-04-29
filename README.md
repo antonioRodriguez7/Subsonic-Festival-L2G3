@@ -18,16 +18,16 @@ Proyecto de la asignatura PI (Programación en Internet)
 <details open="open">
   <summary><h2 style="display: inline-block"> 📋 Contenido</h2></summary>
   <ol>
-    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3?tab=readme-ov-file#%EF%B8%8F-acerca-del-proyecto">Acerca del Proyecto</a></li>
-    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3?tab=readme-ov-file#-estructura-del-proyecto">Estructura del Proyecto</a></li>
-    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3?tab=readme-ov-file#%E2%80%8D%EF%B8%8F-prerequisitos">Prerequisitos</a></li>
-    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3?tab=readme-ov-file#%EF%B8%8F-instalaci%C3%B3n">Instalación</a></li>
-    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3?tab=readme-ov-file#%EF%B8%8F-ejecutar-el-proyecto-localmente">Ejecutar el proyecto localmente</a></li>
-    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3?tab=readme-ov-file#-apartados-de-la-app">Apartados de la App</a></li>
-    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3?tab=readme-ov-file#-c%C3%B3mo-se-usa-la-api">¿Cómo se usa la API?</a></li>
-    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3?tab=readme-ov-file#%E2%80%8D%E2%80%8D%E2%80%8D-miembros-del-grupo-3-lab-2">Miembros</a></li>
-    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3?tab=readme-ov-file#%EF%B8%8F-licencia">Licencia</a></li>
-    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3?tab=readme-ov-file#-contacto">Contacto</a></li>
+    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/tree/develop?tab=readme-ov-file#%EF%B8%8F-acerca-del-proyecto">Acerca del Proyecto</a></li>
+    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/tree/develop?tab=readme-ov-file#-estructura-del-proyecto">Estructura del Proyecto</a></li>
+    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/tree/develop?tab=readme-ov-file#%E2%80%8D%EF%B8%8F-prerequisitos">Prerequisitos</a></li>
+    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/tree/develop?tab=readme-ov-file#%EF%B8%8F-instalaci%C3%B3n">Instalación</a></li>
+    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/tree/develop?tab=readme-ov-file#%EF%B8%8F-ejecutar-el-proyecto-localmente">Ejecutar el proyecto localmente</a></li>
+    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/tree/develop?tab=readme-ov-file#-apartados-de-la-app">Apartados de la App</a></li>
+    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/tree/develop?tab=readme-ov-file#-c%C3%B3mo-se-usa-la-api">¿Cómo se usa la API?</a></li>
+    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/tree/develop?tab=readme-ov-file#%E2%80%8D%E2%80%8D%E2%80%8D-miembros-del-grupo-3-lab-2">Miembros</a></li>
+    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/tree/develop?tab=readme-ov-file#%EF%B8%8F-licencia">Licencia</a></li>
+    <li><a href="https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/tree/develop?tab=readme-ov-file#-contacto">Contacto</a></li>
   </ol>
 </details>
 
@@ -46,7 +46,7 @@ Creado por el Grupo 3 (Lab 2), Copyright © 2026 L2-G3 PI.
 
 ### Bases de datos PostgreSQL
 
-![Database Diagram](https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/raw/main/Recursos/Esquema_BBDD.png)
+![Database Diagram](https://github.com/antonioRodriguez7/Subsonic-Festival-L2G3/raw/develop/Recursos/Esquema_BBDD.png)
 
 
 
