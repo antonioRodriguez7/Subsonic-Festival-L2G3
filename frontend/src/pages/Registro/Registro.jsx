@@ -107,17 +107,27 @@ function Registro() {
         }
     };
 
+    // // --- OAUTH2 GOOGLE REGISTRO ---
+    // const handleGoogleRegistro = () => {
+    //     // Obtenemos el rol actual seleccionado en la UI y lo guardamos en una cookie
+    //     // que el backend podrá leer durante el callback de Google.
+    //     // Solo se permiten ROLE_USER y ROLE_PROVEEDOR en el registro
+    //     const role = tipoUsuario === 'PROVEEDOR' ? 'ROLE_PROVEEDOR' : 'ROLE_USER';
+        
+    //     document.cookie = `oauth_role=${role}; path=/; max-age=300`; // Expira en 5 minutos
+        
+    //     // Redirige al backend de Spring Boot para iniciar el login con Google
+    //     window.location.href = 'https://subsonic-api-backend-hvd8fzcdg2ffhzd8.spaincentral-01.azurewebsites.net/oauth2/authorization/google';
+    // };
+    // // ------------------------------
+
     // --- OAUTH2 GOOGLE REGISTRO ---
     const handleGoogleRegistro = () => {
-        // Obtenemos el rol actual seleccionado en la UI y lo guardamos en una cookie
-        // que el backend podrá leer durante el callback de Google.
-        // Solo se permiten ROLE_USER y ROLE_PROVEEDOR en el registro
+        // Obtenemos el rol actual seleccionado en la UI
         const role = tipoUsuario === 'PROVEEDOR' ? 'ROLE_PROVEEDOR' : 'ROLE_USER';
         
-        document.cookie = `oauth_role=${role}; path=/; max-age=300`; // Expira en 5 minutos
-        
-        // Redirige al backend de Spring Boot para iniciar el login con Google
-        window.location.href = 'https://subsonic-api-backend-hvd8fzcdg2ffhzd8.spaincentral-01.azurewebsites.net/oauth2/authorization/google';
+        // Redirigimos a nuestro nuevo "Puente" en el backend pasándole el rol por la URL
+        window.location.href = `https://subsonic-api-backend-hvd8fzcdg2ffhzd8.spaincentral-01.azurewebsites.net/api/auth/google-login?role=${role}`;
     };
     // ------------------------------
 
